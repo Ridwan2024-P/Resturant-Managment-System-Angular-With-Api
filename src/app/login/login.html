@@ -1,89 +1,149 @@
-<div class="div">
-  <hlm-card class="w-full max-w-sm">
-    <hlm-card-header>
-      <h3 class="text-lg font-bold text-gray-900">Login to your account</h3>
-    </hlm-card-header>
-
-    <div hlmCardContent>
-      @if (errorMessage) {
-        <hlm-alert
-          class="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50 mb-2"
-        >
-          <ng-icon name="lucideAlertTriangle" />
-          <h4 hlmAlertTitle>Login Failed</h4>
-          <p hlmAlertDescription>Invalid email or password.</p>
-        </hlm-alert>
-      }
-      <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <div class="flex flex-col gap-6">
-          <div class="grid gap-2">
-            <label class="mb-2" hlmLabel for="email">Username</label>
-
-            <input
-              type="text"
-              id="email"
-              hlmInput
-              placeholder="Enter your username"
-              required
-              formControlName="email"
-              class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:bg-white"
+<div class="page">
+  <aside class="art">
+    <div class="brand-block">
+      <div class="brand">
+        <span class="logo">sg</span>
+        <span class="brand-name">Sego</span>
+      </div>
+      <h2>Login To You Now</h2>
+      <p>User Experience &amp; Interface Design Strategy SaaS Solutions</p>
+      <div class="socials">
+        <a href="#" aria-label="Facebook">
+          <svg viewBox="0 0 320 512" aria-hidden="true">
+            <path
+              d="M279.14 288l14.22-92.66h-88.91v-60.13c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S260.43 0 225.36 0c-73.22 0-121.08 44.38-121.08 124.72v70.62H22.89V288h81.39v224h100.17V288z"
             />
-            @if (
-              loginForm.controls.email.touched && loginForm.controls.email.hasError('required')
-            ) {
-              <p class="text-sm text-red-500">Email is required.</p>
-            }
-
-            @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
-              <p class="text-sm text-red-500">Enter a valid email address.</p>
-            }
-          </div>
-
-          <div class="grid gap-2">
-            <div class="flex items-center">
-              <label hlmLabel for="password">Password</label>
-            </div>
-            <input
-              type="password"
-              id="password"
-              hlmInput
-              formControlName="password"
-              class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:bg-white"
+          </svg>
+        </a>
+        <a href="#" aria-label="Twitter">
+          <svg viewBox="0 0 512 512" aria-hidden="true">
+            <path
+              d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"
             />
-            @if (
-              loginForm.controls.password.touched &&
-              loginForm.controls.password.hasError('required')
-            ) {
-              <p class="text-sm text-red-500">Password is required.</p>
-            }
-          </div>
-        </div>
-      </form>
+          </svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 448 512" aria-hidden="true">
+            <path
+              d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8a53.79 53.79 0 0 1 107.58 0c0 29.7-24.1 54.3-53.79 54.3zM447.9 448h-92.68V302.4c0-34.7-.7-79.2-48.29-79.2-48.29 0-55.69 37.7-55.69 76.7V448h-92.78V148.9h89.08v40.8h1.3c12.4-23.5 42.69-48.3 87.88-48.3 94 0 111.28 61.9 111.28 142.3V448z"
+            />
+          </svg>
+        </a>
+      </div>
     </div>
 
-    <hlm-card-footer class="flex-col gap-2">
-      <button
-        type="submit"
-        class="w-full hlmBtn rounded-lg border px-4 py-2.5 text-sm font-medium bg-black text-white cursor-pointer hover:bg-gray-900"
-        form="login-form"
-      >
-        Login
-      </button>
-      <div class="w-full mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm">
-        <p class="mb-2 font-semibold text-gray-800">Demo Login</p>
+    <svg
+      class="waves"
+      viewBox="0 0 1915 947"
+      preserveAspectRatio="xMaxYMax slice"
+      aria-hidden="true"
+    >
+      <!-- big rose hill -->
+      <path
+        fill="#d27d93"
+        d="M1915 447C1880 436 1835 430 1790 436C1700 448 1650 505 1610 585C1565 675 1530 745 1420 775C1340 792 1250 796 1165 803L1250 830L1915 947Z"
+      />
+      <!-- light pink wave -->
+      <path
+        fill="#e1abc8"
+        d="M885 947L905 757C990 752 1080 765 1180 805C1290 850 1400 905 1560 920C1680 928 1790 925 1915 825V947Z"
+      />
+      <!-- purple wave -->
+      <path
+        fill="#c78aa8"
+        d="M885 947L895 700L913 618C945 660 962 725 980 780C1000 830 1040 865 1100 885C1160 905 1200 925 1222 947Z"
+      />
+    </svg>
+  </aside>
 
-        <div class="space-y-1 text-gray-600">
-          <p>
-            <span class="font-medium text-gray-800">Admin:</span>
-            admin@mail.com/Admin@123
-          </p>
+  <main class="card">
+    <h1>Welcome to Sego</h1>
+    <p class="subtitle">Sign in by entering information below</p>
 
-          <p>
-            <span class="font-medium text-gray-800">Employee:</span>
-            user@gmail.com / 1
-          </p>
-        </div>
+    @if (errorMessage) {
+      <div class="alert" role="alert">
+        <strong>Login failed</strong>
+        <span>{{ errorMessage }}</span>
       </div>
-    </hlm-card-footer>
-  </hlm-card>
+    }
+
+    <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
+      <div class="field">
+        <label for="email">Email <span class="req">*</span></label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          placeholder="demo@example.com"
+          autocomplete="username"
+        />
+        @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('required')) {
+          <p class="error">Email is required.</p>
+        }
+        @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
+          <p class="error">Enter a valid email address.</p>
+        }
+      </div>
+
+      <div class="field">
+        <label for="password">Password <span class="req">*</span></label>
+        <div class="password-wrap">
+          <input
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="••••••"
+            autocomplete="current-password"
+          />
+          <button
+            type="button"
+            class="eye"
+            (click)="togglePassword()"
+            [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              width="20"
+              height="20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <g [style.display]="showPassword ? 'inline' : 'none'">
+                <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </g>
+              <g [style.display]="showPassword ? 'none' : 'inline'">
+                <path
+                  d="M17.9 17.9A10.9 10.9 0 0 1 12 19C5.5 19 2 12 2 12a18.5 18.5 0 0 1 5.1-5.9M9.9 5.2A9.7 9.7 0 0 1 12 5c6.5 0 10 7 10 7a18.6 18.6 0 0 1-2.2 3.2M1 1l22 22"
+                />
+              </g>
+            </svg>
+          </button>
+        </div>
+        @if (
+          loginForm.controls.password.touched && loginForm.controls.password.hasError('required')
+        ) {
+          <p class="error">Password is required.</p>
+        }
+      </div>
+
+      <label class="remember">
+        <input type="checkbox" />
+        <span>Remember my preference</span>
+      </label>
+
+      <button type="submit" class="submit">Sign in</button>
+    </form>
+
+    <p class="signup">Don't have an account? <a href="/signup">Sign up</a></p>
+
+    <div class="demo">
+      <p class="demo-title">Demo login</p>
+      <p><span>Admin:</span> admin&#64;mail.com / Admin&#64;123</p>
+      <p><span>Employee:</span> user&#64;gmail.com / 1</p>
+    </div>
+  </main>
 </div>

@@ -1,9 +1,518 @@
-.div {
-  display: flex;
-  justify-content: center;
-  min-height: 100vh;
-  align-items: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+:host {
+  --bg: #fcfcfc;
+  --panel: #ffdfe0;
+  --navy: #3b3b6d;
+  --text: #6c6c7c;
+  --label: #222230;
+  --pink: #e8799b;
+  --pink-dark: #de6a8d;
+  --border: #d9d9df;
+  --error: #d93a5f;
+
+  display: block;
+  font-family: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text);
 }
-hlm-card-header h3 {
-  text-align: center;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ---------- Page ---------- */
+.page {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ---------- Login card ---------- */
+.card {
+  position: relative;
+  z-index: 1;
+  width: 540px;
+  /* 1915px viewport -> left edge at 406px */
+  margin: 70px 0 0 max(24px, calc(50vw - 551px));
+  padding: 47px 90px 55px 50px;
+  background: #fff;
+  box-shadow: 0 10px 40px rgba(60, 60, 110, 0.08);
+}
+
+.card h1 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.subtitle {
+  margin: 5px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text);
+}
+
+form {
+  margin-top: 30px;
+}
+
+.field {
+  margin-bottom: 17px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 11px;
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 500;
+  color: var(--label);
+}
+
+.req {
+  color: var(--pink);
+}
+
+.field input,
+.password-wrap input {
+  display: block;
+  width: 100%;
+  height: 56px;
+  padding: 0 20px;
+  font: 400 14px/1 'Poppins', sans-serif;
+  color: var(--label);
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input::placeholder {
+  color: #a9a9b3;
+}
+
+.field input:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 3px rgba(232, 121, 155, 0.18);
+}
+
+.password-wrap {
+  position: relative;
+}
+
+.password-wrap input {
+  padding-right: 52px;
+}
+
+.eye {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  color: #666;
+  background: none;
+  border: 0;
+  border-radius: 4px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.eye:hover {
+  color: var(--navy);
+}
+
+.eye:focus-visible {
+  outline: 2px solid var(--pink);
+}
+
+/* Validation */
+.error {
+  margin: 6px 0 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--error);
+}
+
+.alert {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 18px;
+  padding: 10px 14px;
+  font-size: 13px;
+  color: #9b1c3a;
+  background: #fdecef;
+  border: 1px solid #f6c3cf;
+  border-left: 4px solid var(--error);
+  border-radius: 6px;
+}
+
+.alert strong {
+  font-weight: 600;
+}
+
+/* Remember */
+.remember {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin: 24px 0 0;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.remember input {
+  appearance: none;
+  -webkit-appearance: none;
+  flex: none;
+  width: 19px;
+  height: 19px;
+  margin: 2px 0 0;
+  background: #fff;
+  border: 1.5px solid #8b8b97;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.remember input:checked {
+  background: var(--pink)
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E")
+    center / 14px no-repeat;
+  border-color: var(--pink);
+}
+
+.remember input:focus-visible {
+  outline: 2px solid var(--pink);
+  outline-offset: 2px;
+}
+
+/* Submit */
+.submit {
+  display: block;
+  width: 100%;
+  height: 56px;
+  margin-top: 25px;
+  font: 500 15px/1 'Poppins', sans-serif;
+  color: #fff;
+  background: var(--pink);
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+.submit:hover {
+  background: var(--pink-dark);
+}
+
+.submit:active {
+  transform: translateY(1px);
+}
+
+.submit:focus-visible {
+  outline: 3px solid rgba(232, 121, 155, 0.4);
+  outline-offset: 2px;
+}
+
+.signup {
+  margin: 10px 0 0;
+  font-size: 15px;
+  line-height: 22px;
+  color: var(--text);
+}
+
+.signup a {
+  color: var(--pink);
+  text-decoration: none;
+}
+
+.signup a:hover {
+  text-decoration: underline;
+}
+
+/* Demo credentials (not visible in the screenshot; remove the block in HTML to match exactly) */
+.demo {
+  margin-top: 22px;
+  padding-top: 16px;
+  font-size: 13px;
+  line-height: 20px;
+  border-top: 1px dashed var(--border);
+}
+
+.demo p {
+  margin: 0;
+}
+
+.demo-title {
+  margin-bottom: 4px !important;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.demo span {
+  font-weight: 500;
+  color: var(--label);
+}
+
+/* ---------- Right slanted art panel ---------- */
+.art {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: var(--panel);
+  /* slant: top edge 50.5% -> bottom edge 46.2% */
+  clip-path: polygon(50.5% 0, 100% 0, 100% 100%, 46.2% 100%);
+}
+
+.waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.brand-block {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  left: 53.3%;
+  width: min(400px, 44vw);
+  transform: translateY(-50%);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 60px;
+  height: 60px;
+  padding-bottom: 2px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: #fff;
+  background: linear-gradient(145deg, #ef7c9c 0%, #f4b0b0 100%);
+  border-radius: 50%;
+}
+
+.brand-name {
+  font-size: 44px;
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--navy);
+}
+
+.brand-block h2 {
+  margin: 22px 0 0;
+  font-size: 32px;
+  line-height: 44px;
+  font-weight: 500;
+  color: var(--navy);
+}
+
+.brand-block p {
+  margin: 5px 0 0;
+  font-size: 16px;
+  line-height: 27px;
+  color: var(--text);
+}
+
+.socials {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.socials a {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  color: var(--pink);
+  background: #fff4f4;
+  border-radius: 3px;
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+.socials a:hover {
+  background: #fff;
+  transform: translateY(-2px);
+}
+
+.socials a:focus-visible {
+  outline: 2px solid var(--pink);
+}
+
+.socials svg {
+  width: 15px;
+  height: 15px;
+  fill: currentColor;
+}
+
+/* ---------- Responsive ---------- */
+
+/* Tablet: same slanted layout, scaled-down card (compact 40px controls) */
+@media (max-width: 1100px) {
+  .card {
+    width: 56vw;
+    margin: 70px 0 0 8.9vw;
+    padding: 46px calc(24.7vw - 50px) 50px 50px;
+  }
+
+  .card h1 {
+    font-size: 24px;
+    line-height: 30px;
+  }
+
+  .subtitle {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  form {
+    margin-top: 26px;
+  }
+
+  .field {
+    margin-bottom: 16px;
+  }
+
+  .field label {
+    margin-bottom: 10px;
+  }
+
+  .field input,
+  .password-wrap input,
+  .submit {
+    height: 40px;
+  }
+
+  .field input,
+  .password-wrap input {
+    font-size: 13px;
+  }
+
+  .remember {
+    margin-top: 26px;
+    font-size: 13px;
+  }
+
+  .remember input {
+    width: 17px;
+    height: 17px;
+    margin-top: 1px;
+  }
+
+  .submit {
+    margin-top: 26px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .signup {
+    font-size: 13px;
+  }
+
+  .art {
+    clip-path: polygon(60.5% 0, 100% 0, 100% 100%, 49% 100%);
+  }
+
+  .brand-block {
+    left: 60.2vw;
+    width: calc(39.8vw - 24px);
+  }
+
+  .brand-block h2 {
+    margin-top: 26px;
+    font-size: 25px;
+    line-height: 36px;
+  }
+
+  .brand-block p {
+    margin-top: 6px;
+    font-size: 13px;
+    line-height: 24px;
+  }
+
+  .socials {
+    margin-top: 24px;
+  }
+}
+
+/* Phones: card on top, brand panel as full-width banner underneath */
+@media (max-width: 640px) {
+  .page {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: visible;
+  }
+
+  .card {
+    width: min(500px, calc(100% - 60px));
+    margin: 32px auto 0;
+    padding: 30px 30px 32px;
+  }
+
+  .card h1 {
+    font-size: 23px;
+  }
+
+  .art {
+    position: relative;
+    inset: auto;
+    flex: 1 0 auto;
+    margin-top: 31px;
+    clip-path: none;
+    overflow: hidden;
+  }
+
+  .brand-block {
+    position: relative;
+    top: auto;
+    left: auto;
+    width: auto;
+    padding: 27px 30px 48px;
+    transform: none;
+  }
+
+  .brand-block h2 {
+    margin-top: 22px;
+    font-size: 26px;
+    line-height: 36px;
+  }
+
+  .brand-block p {
+    max-width: 300px;
+    font-size: 13px;
+    line-height: 22px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
 }

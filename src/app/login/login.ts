@@ -1,36 +1,11 @@
-import { Component } from '@angular/core';
-import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmCardImports } from '@spartan-ng/helm/card';
-import { HlmInputImports } from '@spartan-ng/helm/input';
-import { HlmLabelImports } from '@spartan-ng/helm/label';
-import {
-  FormControl,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { ChangeDetectorRef, Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HlmAlertImports } from '@spartan-ng/helm/alert';
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideAlertTriangle } from '@ng-icons/lucide';
-import { ChangeDetectorRef } from '@angular/core';
 import { AuthService } from '../services/auth';
 
 @Component({
-  imports: [
-    HlmCardImports,
-    HlmLabelImports,
-    HlmInputImports,
-    HlmAlertImports,
-    NgIcon,
-    HlmButtonImports,
-    FormsModule,
-    ReactiveFormsModule,
-  ],
-  host: { class: 'w-full max-w-md' },
   selector: 'app-login',
-  providers: [provideIcons({ lucideAlertTriangle })],
+  imports: [ReactiveFormsModule],
   styleUrl: './login.css',
   templateUrl: './login.html',
 })
@@ -47,6 +22,11 @@ export class Login {
   });
 
   errorMessage = '';
+  showPassword = false;
+
+  togglePassword(): void {
+    this.showPassword = !this.showPassword;
+  }
 
   onSubmit(): void {
     this.errorMessage = '';
@@ -64,12 +44,8 @@ export class Login {
       password: password,
     };
 
-    console.log('Sending login:', loginData);
-
     this.authService.login(loginData).subscribe({
       next: (response: any) => {
-        console.log('Login response:', response);
-
         if (response.token) {
           localStorage.setItem('token', response.token);
         }
@@ -84,8 +60,6 @@ export class Login {
 
         if (response.user) {
           localStorage.setItem('user', JSON.stringify(response.user));
-
-          console.log('User:', response.user);
         }
 
         const role =
@@ -96,7 +70,6 @@ export class Login {
 
         if (role) {
           localStorage.setItem('role', role);
-          console.log('Role:', role);
         }
 
         localStorage.removeItem('admin');
@@ -115,9 +88,7 @@ export class Login {
 
       error: (error) => {
         console.error('Login error:', error);
-
-        this.errorMessage = 'Invalid username or password';
-
+        this.errorMessage = 'Invalid email or password.';
         this.cdr.detectChanges();
       },
     });
