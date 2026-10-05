@@ -1,0 +1,320 @@
+.top-header {
+  width: 100%;
+  height: 116px;
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 58px;
+
+  border-bottom: 1px solid #eeeeee;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   LEFT SIDE
+========================= */
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.sidebar-toggle {
+  border: none;
+  background: transparent;
+
+  color: #f2769b;
+  font-size: 20px;
+
+  cursor: pointer;
+
+  padding: 0;
+}
+
+.page-title h2 {
+  margin: 0;
+
+  font-size: 28px;
+  font-weight: 700;
+
+  color: #111111;
+
+  line-height: 1.2;
+}
+
+.page-title p {
+  margin: 7px 0 0;
+
+  font-size: 17px;
+  color: #9ba1aa;
+
+  font-weight: 400;
+}
+
+/* =========================
+   RIGHT SIDE
+========================= */
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+/* =========================
+   SEARCH
+========================= */
+
+.search-box {
+  width: 300px;
+  height: 56px;
+
+  background: #fafafa;
+
+  border-radius: 30px;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 20px;
+
+  box-sizing: border-box;
+}
+
+.search-box input {
+  flex: 1;
+
+  border: none;
+  outline: none;
+
+  background: transparent;
+
+  font-size: 14px;
+
+  color: #555;
+}
+
+.search-box input::placeholder {
+  color: #9b9b9b;
+}
+
+.search-box i {
+  font-size: 22px;
+  color: #64788d;
+}
+
+/* =========================
+   ICONS
+========================= */
+
+.header-icon {
+  width: 54px;
+  height: 54px;
+
+  background: #fafafa;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+
+  color: #f2769b;
+
+  font-size: 21px;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.header-icon:hover {
+  background: #fff0f5;
+}
+
+.badge {
+  position: absolute;
+
+  top: -6px;
+  right: -3px;
+
+  min-width: 25px;
+  height: 25px;
+
+  padding: 0 6px;
+
+  border-radius: 20px;
+
+  background: #f2769b;
+
+  color: white;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  margin-left: -2px;
+}
+
+.profile img {
+  width: 58px;
+  height: 58px;
+
+  border-radius: 50%;
+
+  object-fit: cover;
+}
+
+.profile-info h4 {
+  margin: 0;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  color: #111111;
+}
+
+.profile-info span {
+  display: block;
+
+  margin-top: 5px;
+
+  font-size: 13px;
+
+  color: #777777;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.sidebar-toggle {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+  gap: 5px;
+}
+
+.hamburger .line {
+  display: block;
+
+  width: 26px;
+  height: 3px;
+
+  border-radius: 3px;
+
+  background: #ea7a9a;
+}
+
+@media (max-width: 1100px) {
+  .top-header {
+    padding: 0 25px;
+  }
+
+  .search-box {
+    width: 220px;
+  }
+
+  .header-right {
+    gap: 15px;
+  }
+  .search-box {
+    display: none;
+  }
+}
+
+@media (max-width: 764px) {
+  .page-title p {
+    display: none;
+  }
+
+  .search-box {
+    width: 180px;
+  }
+
+  .profile-info {
+    display: none;
+  }
+  .page-title {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .top-header {
+    height: auto;
+    min-height: 90px;
+
+    padding: 15px 20px;
+
+    flex-wrap: wrap;
+
+    gap: 15px;
+  }
+
+  .header-left {
+    gap: 15px;
+  }
+
+  .page-title h2 {
+    font-size: 22px;
+  }
+
+  .header-right {
+    width: 100%;
+    justify-content: flex-end;
+  }
+
+  .search-box {
+    flex: 1;
+  }
+
+  .header-icon {
+    width: 45px;
+    height: 45px;
+  }
+
+  .profile img {
+    width: 45px;
+    height: 45px;
+  }
+}

@@ -1,0 +1,88 @@
+<div class="div">
+  <hlm-card class="w-full max-w-sm">
+    <hlm-card-header>
+      <h3 class="text-lg font-bold text-gray-900">Login to your account</h3>
+    </hlm-card-header>
+
+    <div hlmCardContent>
+      @if (errorMessage) {
+        <hlm-alert
+          class="max-w-md border-amber-200 bg-amber-50 text-amber-900 dark:border-amber-900 dark:bg-amber-950 dark:text-amber-50 mb-2"
+        >
+          <ng-icon name="lucideAlertTriangle" />
+          <h4 hlmAlertTitle>Login Failed</h4>
+          <p hlmAlertDescription>Invalid email or password.</p>
+        </hlm-alert>
+      }
+      <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <div class="flex flex-col gap-6">
+          <div class="grid gap-2">
+            <label class="mb-2" hlmLabel for="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              hlmInput
+              placeholder="m@example.com"
+              required
+              formControlName="email"
+              class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:bg-white"
+            />
+            @if (
+              loginForm.controls.email.touched && loginForm.controls.email.hasError('required')
+            ) {
+              <p class="text-sm text-red-500">Email is required.</p>
+            }
+
+            @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
+              <p class="text-sm text-red-500">Enter a valid email address.</p>
+            }
+          </div>
+
+          <div class="grid gap-2">
+            <div class="flex items-center">
+              <label hlmLabel for="password">Password</label>
+            </div>
+            <input
+              type="password"
+              id="password"
+              hlmInput
+              formControlName="password"
+              class="w-full rounded-lg border border-gray-200 bg-gray-50 px-3 py-2.5 text-sm outline-none transition focus:border-gray-900 focus:bg-white"
+            />
+            @if (
+              loginForm.controls.password.touched &&
+              loginForm.controls.password.hasError('required')
+            ) {
+              <p class="text-sm text-red-500">Password is required.</p>
+            }
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <hlm-card-footer class="flex-col gap-2">
+      <button
+        type="submit"
+        class="w-full hlmBtn rounded-lg border px-4 py-2.5 text-sm font-medium bg-black text-white cursor-pointer hover:bg-gray-900"
+        form="login-form"
+      >
+        Login
+      </button>
+      <div class="w-full mt-3 rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm">
+        <p class="mb-2 font-semibold text-gray-800">Demo Login</p>
+
+        <div class="space-y-1 text-gray-600">
+          <p>
+            <span class="font-medium text-gray-800">Admin:</span>
+            ahsanrid@gmail.com/ 1
+          </p>
+
+          <p>
+            <span class="font-medium text-gray-800">Employee:</span>
+            user@gmail.com / 1
+          </p>
+        </div>
+      </div>
+    </hlm-card-footer>
+  </hlm-card>
+</div>

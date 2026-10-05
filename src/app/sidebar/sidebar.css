@@ -1,0 +1,326 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 345px;
+  min-width: 345px;
+  flex-shrink: 0;
+  transition: width 0.25s ease;
+}
+
+:host ::ng-deep [data-slot='sidebar-container'] {
+  height: 100vh !important;
+  width: 345px !important;
+  min-width: 345px !important;
+  border-right: none !important;
+  transition:
+    width 0.25s ease,
+    min-width 0.25s ease !important;
+}
+
+:host:has(hlm-sidebar[data-state='expanded']) {
+  width: 345px !important;
+  min-width: 345px !important;
+}
+
+:host:has(hlm-sidebar[data-state='expanded']) ::ng-deep [data-slot='sidebar-container'] {
+  width: 345px !important;
+  min-width: 345px !important;
+}
+
+:host:has(hlm-sidebar[data-state='expanded']) .sego-sidebar {
+  width: 345px !important;
+  min-width: 345px !important;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) {
+  width: 80px !important;
+  min-width: 80px !important;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) ::ng-deep [data-slot='sidebar-container'] {
+  width: 80px !important;
+  min-width: 80px !important;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .sego-sidebar {
+  width: 80px !important;
+  min-width: 80px !important;
+}
+
+.sego-sidebar {
+  display: block;
+  width: 345px;
+  min-width: 345px;
+  height: 100vh;
+  flex-shrink: 0;
+  background: #ffffff;
+  transition:
+    width 0.25s ease,
+    min-width 0.25s ease;
+}
+
+.sidebar-content {
+  width: 100%;
+  height: 100vh;
+  background: #ffffff;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  width: 100%;
+  height: 130px;
+  min-height: 130px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 50px;
+  box-sizing: border-box;
+}
+
+.logo-area {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-circle {
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  border-radius: 50%;
+
+  background: linear-gradient(135deg, #ef769b, #f8a5b8);
+
+  color: white;
+  font-size: 21px;
+  font-weight: 700;
+}
+
+.logo-circle span {
+  font-size: 13px;
+  margin-left: 1px;
+}
+
+.logo-text {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  color: #3f4085;
+  white-space: nowrap;
+}
+
+.sidebar-group {
+  flex: 1;
+  padding: 17px 35px 0 43px;
+  box-sizing: border-box;
+}
+
+.sidebar-menu-container {
+  width: 100%;
+}
+
+.sidebar-menu {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.nav-item {
+  width: 100%;
+  height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0 25px 0 13px;
+
+  border: none;
+  border-radius: 10px;
+
+  background: transparent;
+  color: #858585;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-icon {
+  width: 25px;
+  height: 25px;
+  font-size: 24px;
+  color: #858585;
+  flex-shrink: 0;
+}
+
+.nav-label {
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: 0.1px;
+  white-space: nowrap;
+}
+
+.nav-arrow {
+  width: 17px;
+  height: 17px;
+  font-size: 17px;
+  color: #888888;
+}
+
+.nav-item:hover {
+  background: #fafafa;
+  color: #ed7298;
+}
+
+.nav-item:hover .nav-icon,
+.nav-item:hover .nav-arrow {
+  color: #ed7298;
+}
+
+.nav-item.active {
+  color: #ed7298;
+}
+
+.nav-item.active .nav-icon,
+.nav-item.active .nav-arrow {
+  color: #ed7298;
+}
+
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  gap: 5px;
+}
+
+.hamburger .line {
+  display: block;
+
+  width: 26px;
+  height: 3px;
+
+  border-radius: 3px;
+
+  background: #ea7a9a;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .sidebar-header {
+  padding-left: 0;
+  padding-right: 0;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .logo-text {
+  display: none;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .logo-area {
+  gap: 0;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .sidebar-group {
+  padding-left: 14px;
+  padding-right: 14px;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .nav-item {
+  width: 100%;
+  height: auto;
+  padding: 10px 0;
+  justify-content: center;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .nav-left {
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .nav-label {
+  display: block;
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .nav-arrow {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  :host {
+    width: 290px;
+    min-width: 290px;
+  }
+
+  :host:has(hlm-sidebar[data-state='expanded']) {
+    width: 290px !important;
+    min-width: 290px !important;
+  }
+
+  :host:has(hlm-sidebar[data-state='expanded']) ::ng-deep [data-slot='sidebar-container'] {
+    width: 290px !important;
+    min-width: 290px !important;
+  }
+
+  :host:has(hlm-sidebar[data-state='collapsed']) {
+    width: 80px !important;
+    min-width: 80px !important;
+  }
+
+  :host:has(hlm-sidebar[data-state='collapsed']) ::ng-deep [data-slot='sidebar-container'] {
+    width: 80px !important;
+    min-width: 80px !important;
+  }
+
+  .sego-sidebar {
+    width: 290px;
+    min-width: 290px;
+  }
+
+  .sidebar-header {
+    padding-left: 30px;
+    padding-right: 25px;
+  }
+
+  .logo-text {
+    font-size: 32px;
+  }
+
+  .sidebar-group {
+    padding-left: 25px;
+    padding-right: 20px;
+  }
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "email": "ahsanrid@gmail.com",
+    "password": "1",
+    "role":"admin"
+  },
+  {
+    "email": "user@gmail.com",
+    "password": "1",
+     "role":"employee"
+  }
+]

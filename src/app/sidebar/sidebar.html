@@ -1,0 +1,52 @@
+<hlm-sidebar class="sego-sidebar" collapsible="icon">
+  <div hlmSidebarContent class="sidebar-content">
+    <div class="sidebar-header">
+      <div class="logo-area">
+        <div class="logo-circle">S<span>g</span></div>
+
+        <div class="logo-text">Sego</div>
+      </div>
+
+      <div class="sidebar-toggle relative">
+        <button
+          hlmSidebarTrigger
+          type="button"
+          class="absolute inset-0 z-10 cursor-pointer opacity-0"
+        ></button>
+
+        <div class="pointer-events-none flex h-9 w-9 items-center justify-center">
+          <div class="hamburger">
+            <span class="line"></span>
+            <span class="line"></span>
+            <span class="line"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div hlmSidebarGroup class="sidebar-group">
+      <div hlmSidebarGroupContent class="sidebar-menu-container">
+        <ul hlmSidebarMenu class="sidebar-menu">
+          <li hlmSidebarMenuItem *ngFor="let item of visibleNavItems">
+            <button
+              type="button"
+              class="nav-item"
+              [class.active]="activeView === item.id"
+              (click)="selectNav(item.id)"
+            >
+              <div class="nav-left">
+                <ng-icon [name]="item.icon" class="nav-icon" />
+
+                <span class="nav-label">
+                  {{ item.label }}
+                </span>
+              </div>
+
+              <ng-icon name="lucideChevronRight" class="nav-arrow" />
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</hlm-sidebar>

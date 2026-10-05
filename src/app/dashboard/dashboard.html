@@ -1,0 +1,53 @@
+<div hlmSidebarWrapper class="dashboard-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="dashboard-main flex-1 min-w-0">
+    <app-header></app-header>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <div class="stat-content">
+          <h2>$ 459</h2>
+          <p>Total Menus</p>
+        </div>
+
+        <div class="stat-icon">
+          <i class="fa-solid fa-layer-group"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <h2>$ 87,561</h2>
+          <p>Total Revenue</p>
+        </div>
+
+        <div class="stat-icon">
+          <i class="fa-solid fa-dollar-sign"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <h2>247</h2>
+          <p>Total Orders</p>
+        </div>
+
+        <div class="stat-icon">
+          <i class="fa-regular fa-rectangle-list"></i>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-content">
+          <h2>872</h2>
+          <p>Total Customers</p>
+        </div>
+
+        <div class="stat-icon">
+          <i class="fa-regular fa-user"></i>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
