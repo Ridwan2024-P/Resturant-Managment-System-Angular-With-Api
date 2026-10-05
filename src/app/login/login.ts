@@ -3,17 +3,14 @@ import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmCardImports } from '@spartan-ng/helm/card';
 import { HlmInputImports } from '@spartan-ng/helm/input';
 import { HlmLabelImports } from '@spartan-ng/helm/label';
-import { HttpClient } from '@angular/common/http';
 import {
   FormControl,
   FormGroup,
-  FormGroupDirective,
   FormsModule,
-  NgForm,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { RouterLink, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { HlmAlertImports } from '@spartan-ng/helm/alert';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideAlertTriangle } from '@ng-icons/lucide';
@@ -43,49 +40,86 @@ export class Login {
     private cdr: ChangeDetectorRef,
     private authService: AuthService,
   ) {}
+
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
   });
-  // matcher = new MyErrorStateMatcher();
 
-  errorMessage: string = '';
-  onSubmit() {
+  errorMessage = '';
+
+  onSubmit(): void {
     this.errorMessage = '';
+
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
-    const { email, password } = this.loginForm.value;
 
-    this.authService.getUsers().subscribe((users) => {
-      const admin = users.find(
-        (u) => u.email === email && u.password === password && u.role === 'admin',
-      );
-      const employee = users.find(
-        (u) => u.email === email && u.password === password && u.role === 'employee',
-      );
-      localStorage.removeItem('admin');
-      localStorage.removeItem('employee');
+    const email = this.loginForm.controls.email.value ?? '';
+    const password = this.loginForm.controls.password.value ?? '';
 
-      if (admin) {
-        const { password, ...adminData } = admin;
+    const loginData = {
+      userName: email,
+      password: password,
+    };
 
-        localStorage.setItem('admin', JSON.stringify(adminData));
-        localStorage.setItem('role', admin.role);
+    console.log('Sending login:', loginData);
+
+    this.authService.login(loginData).subscribe({
+      next: (response: any) => {
+        console.log('Login response:', response);
+
+        if (response.token) {
+          localStorage.setItem('token', response.token);
+        }
+
+        if (response.refreshToken) {
+          localStorage.setItem('refreshToken', response.refreshToken);
+        }
+
+        if (response.refreshTokenExpiryTime) {
+          localStorage.setItem('refreshTokenExpiryTime', response.refreshTokenExpiryTime);
+        }
+
+        if (response.user) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+
+          console.log('User:', response.user);
+        }
+
+        const role =
+          response.user?.role ??
+          response.user?.Role ??
+          response.user?.userRole ??
+          response.user?.UserRole;
+
+        if (role) {
+          localStorage.setItem('role', role);
+          console.log('Role:', role);
+        }
+
+        localStorage.removeItem('admin');
+        localStorage.removeItem('employee');
+
+        if (role === 'admin') {
+          localStorage.setItem('admin', JSON.stringify(response.user));
+        }
+
+        if (role === 'employee') {
+          localStorage.setItem('employee', JSON.stringify(response.user));
+        }
 
         this.router.navigate(['/dashboard']);
-      } else if (employee) {
-        const { password, ...employeeData } = employee;
+      },
 
-        localStorage.setItem('employee', JSON.stringify(employeeData));
-        localStorage.setItem('role', employee.role);
+      error: (error) => {
+        console.error('Login error:', error);
 
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.errorMessage = 'Invalid email or password';
+        this.errorMessage = 'Invalid username or password';
+
         this.cdr.detectChanges();
-      }
+      },
     });
   }
 }

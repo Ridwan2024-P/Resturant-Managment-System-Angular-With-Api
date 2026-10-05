@@ -6,8 +6,21 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
+  private apiUrl = 'https://bssrms.runasp.net/api/Auth';
+
   constructor(private http: HttpClient) {}
-  getUsers(): Observable<any[]> {
-    return this.http.get<any[]>('/login.json');
+
+  login(data: {
+    userName: string;
+    password: string;
+  }): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/SignIn`,
+      data
+    );
+  }
+
+  logout(): void {
+    localStorage.clear();
   }
 }
