@@ -12,6 +12,7 @@
   width: 345px !important;
   min-width: 345px !important;
   border-right: none !important;
+
   transition:
     width 0.25s ease,
     min-width 0.25s ease !important;
@@ -49,11 +50,16 @@
 
 .sego-sidebar {
   display: block;
+
   width: 345px;
   min-width: 345px;
+
   height: 100vh;
+
   flex-shrink: 0;
+
   background: #ffffff;
+
   transition:
     width 0.25s ease,
     min-width 0.25s ease;
@@ -62,8 +68,11 @@
 .sidebar-content {
   width: 100%;
   height: 100vh;
+
   background: #ffffff;
+
   overflow: hidden;
+
   display: flex;
   flex-direction: column;
 }
@@ -78,6 +87,7 @@
   justify-content: space-between;
 
   padding: 0 50px;
+
   box-sizing: border-box;
 }
 
@@ -102,6 +112,7 @@
   background: linear-gradient(135deg, #ef769b, #f8a5b8);
 
   color: white;
+
   font-size: 21px;
   font-weight: 700;
 }
@@ -114,14 +125,19 @@
 .logo-text {
   font-size: 38px;
   font-weight: 700;
+
   letter-spacing: -1.5px;
+
   color: #3f4085;
+
   white-space: nowrap;
 }
 
 .sidebar-group {
   flex: 1;
+
   padding: 17px 35px 0 43px;
+
   box-sizing: border-box;
 }
 
@@ -134,12 +150,77 @@
 
   display: flex;
   flex-direction: column;
+
   gap: 8px;
 
   margin: 0;
   padding: 0;
 
   list-style: none;
+}
+
+.sidebar-toggle {
+  position: relative;
+
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hamburger {
+  display: flex;
+
+  flex-direction: column;
+  justify-content: center;
+
+  width: 26px;
+  height: 26px;
+
+  gap: 5px;
+}
+
+.hamburger .line {
+  display: block;
+
+  width: 26px;
+  height: 3px;
+
+  border-radius: 3px;
+
+  background: #ea7a9a;
+}
+
+.collapse-arrow {
+  display: none;
+
+  width: 26px;
+  height: 26px;
+
+  align-items: center;
+  justify-content: center;
+}
+
+.collapse-arrow span {
+  font-size: 30px;
+  font-weight: 500;
+
+  line-height: 1;
+
+  color: #ea7a9a;
+}
+
+/* Show arrow when sidebar collapsed */
+:host:has(hlm-sidebar[data-state='collapsed']) .hamburger {
+  display: none;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .collapse-arrow {
+  display: flex;
 }
 
 .nav-item {
@@ -156,6 +237,7 @@
   border-radius: 10px;
 
   background: transparent;
+
   color: #858585;
 
   cursor: pointer;
@@ -168,28 +250,36 @@
 .nav-left {
   display: flex;
   align-items: center;
+
   gap: 20px;
 }
 
 .nav-icon {
   width: 25px;
   height: 25px;
+
   font-size: 24px;
+
   color: #858585;
+
   flex-shrink: 0;
 }
 
 .nav-label {
   font-size: 17px;
   font-weight: 500;
+
   letter-spacing: 0.1px;
+
   white-space: nowrap;
 }
 
 .nav-arrow {
   width: 17px;
   height: 17px;
+
   font-size: 17px;
+
   color: #888888;
 }
 
@@ -212,33 +302,13 @@
   color: #ed7298;
 }
 
-.hamburger {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  width: 26px;
-  height: 26px;
-
-  gap: 5px;
-}
-
-.hamburger .line {
-  display: block;
-
-  width: 26px;
-  height: 3px;
-
-  border-radius: 3px;
-
-  background: #ea7a9a;
-}
-
 :host:has(hlm-sidebar[data-state='collapsed']) .sidebar-header {
   padding-left: 0;
   padding-right: 0;
+
   flex-direction: column;
   justify-content: center;
+
   gap: 10px;
 }
 
@@ -258,19 +328,24 @@
 :host:has(hlm-sidebar[data-state='collapsed']) .nav-item {
   width: 100%;
   height: auto;
+
   padding: 10px 0;
+
   justify-content: center;
 }
 
 :host:has(hlm-sidebar[data-state='collapsed']) .nav-left {
   width: 100%;
+
   flex-direction: column;
   justify-content: center;
+
   gap: 4px;
 }
 
 :host:has(hlm-sidebar[data-state='collapsed']) .nav-label {
   display: block;
+
   font-size: 11px;
   line-height: 1.2;
 }
