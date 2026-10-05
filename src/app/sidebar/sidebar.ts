@@ -74,6 +74,12 @@ export class Sidebar {
       icon: 'lucidePanelsTopLeft',
       adminOnly: false,
     },
+    {
+    id: 'LOGOUT',
+    label: 'Log Out',
+    icon: 'lucideLogOut',
+    adminOnly: false,
+  },
   ];
 
   visibleNavItems: NavItem[] = [];
@@ -91,6 +97,11 @@ export class Sidebar {
   }
 
   selectNav(id: string): void {
+     if (id === 'LOGOUT') {
+      this.logout();
+      return;
+    }
+
     this.activeView = id;
 
     this.navSelected.emit(id);
