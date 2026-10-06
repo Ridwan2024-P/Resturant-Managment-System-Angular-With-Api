@@ -1,13 +1,12 @@
 import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
 import { Router } from '@angular/router';
-
-
+import { FormsModule } from '@angular/forms';
 const IMAGE_BASE: string = '';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -21,7 +20,9 @@ export class Header implements OnInit {
   userRole = '';
   avatarUrl = '';
   imageFailed = false;
+ 
 
+ 
   ngOnInit(): void {
     this.loadUser();
   }
@@ -100,10 +101,7 @@ export class Header implements OnInit {
   }
 
   logout(): void {
-    ['token', 'refreshToken', 'refreshTokenExpiryTime', 'user'].forEach(
-      (key) => localStorage.removeItem(key),
-    );
-    this.menuOpen = false;
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 }
