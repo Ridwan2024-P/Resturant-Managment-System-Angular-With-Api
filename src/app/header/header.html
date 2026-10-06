@@ -5,6 +5,7 @@
       <p>Welcome To Sego Admin!</p>
     </div>
   </div>
+
   <div class="header-right">
     <div class="search-box">
       <input type="text" placeholder="Search here..." />
@@ -26,13 +27,44 @@
       <span class="badge">2</span>
     </div>
 
-    <div class="profile">
-      <img src="imagess/download (1).jpg" alt="Brian Lee" />
+    <div class="profile-wrap">
+      <button
+        type="button"
+        class="profile"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="menuOpen"
+        aria-haspopup="menu"
+      >
+        @if (avatarUrl && !imageFailed) {
+          <img [src]="avatarUrl" [alt]="userName" (error)="imageFailed = true" />
+        } @else {
+          <span class="avatar-fallback">{{ initials }}</span>
+        }
 
-      <div class="profile-info">
-        <h4>Brian Lee</h4>
-        <span>Admin</span>
-      </div>
+        <div class="profile-info">
+          <h4>{{ userName }}</h4>
+          <span>{{ userRole }}</span>
+        </div>
+      </button>
+
+      @if (menuOpen) {
+        <div class="profile-menu" role="menu">
+          <button type="button" role="menuitem" (click)="go('/profile')">
+            <i class="fa-regular fa-user icon-pink"></i>
+            <span>Profile</span>
+          </button>
+
+          <button type="button" role="menuitem" (click)="go('/inbox')">
+            <i class="fa-regular fa-envelope icon-green"></i>
+            <span>Inbox</span>
+          </button>
+
+          <button type="button" role="menuitem" (click)="logout()">
+            <i class="fa-solid fa-arrow-right-from-bracket icon-pink"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      }
     </div>
   </div>
 </header>

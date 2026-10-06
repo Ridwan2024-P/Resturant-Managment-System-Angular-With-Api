@@ -22,7 +22,6 @@ import {
   lucideChevronRight,
   lucideHeadphones,
   lucideShoppingCart,
-  lucideLogOut,
 } from '@ng-icons/lucide';
 
 interface NavItem {
@@ -54,7 +53,7 @@ interface NavItem {
       lucideChevronRight,
       lucideHeadphones,
       lucideShoppingCart,
-      lucideLogOut,
+     
     }),
   ],
 
@@ -74,12 +73,6 @@ export class Sidebar {
       icon: 'lucidePanelsTopLeft',
       adminOnly: false,
     },
-    {
-    id: 'LOGOUT',
-    label: 'Log Out',
-    icon: 'lucideLogOut',
-    adminOnly: false,
-  },
   ];
 
   visibleNavItems: NavItem[] = [];
@@ -97,19 +90,8 @@ export class Sidebar {
   }
 
   selectNav(id: string): void {
-     if (id === 'LOGOUT') {
-      this.logout();
-      return;
-    }
-
     this.activeView = id;
-
     this.navSelected.emit(id);
   }
 
-  logout(): void {
-    localStorage.clear();
-
-    this.router.navigate(['/login']);
-  }
 }
