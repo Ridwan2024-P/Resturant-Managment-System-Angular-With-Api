@@ -1,1 +1,39 @@
-<p>profile works!</p>
+<section class="profile-page">
+  @if (!hasUser) {
+    <div class="empty">
+      <i class="fa-regular fa-circle-user"></i>
+      <p>Not Found Profile data.</p>
+    </div>
+  } @else {
+    <div class="profile-card">
+      <div class="banner"></div>
+
+      <div class="identity">
+        @if (avatarUrl && !imageFailed) {
+          <img class="avatar" [src]="avatarUrl" [alt]="userName" (error)="imageFailed = true" />
+        } @else {
+          <span class="avatar avatar-fallback">{{ initials }}</span>
+        }
+
+        <div class="who">
+          <h2>{{ userName }}</h2>
+        </div>
+      </div>
+
+      <div class="details">
+        <h3>Profile information</h3>
+        <div class="grid">
+          @for (item of details; track item.label) {
+            <div class="detail">
+              <span class="detail-icon"><i [class]="item.icon"></i></span>
+              <div>
+                <small>{{ item.label }}</small>
+                <p>{{ item.value }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</section>
