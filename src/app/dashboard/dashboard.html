@@ -7,8 +7,8 @@
     <div class="stats-container">
       <div class="stat-card">
         <div class="stat-content">
-          <h2>$ 459</h2>
-          <p>Total Menus</p>
+          <h2>{{ todayOrders }}</h2>
+          <p>Today's Orders</p>
         </div>
 
         <div class="stat-icon">
@@ -18,8 +18,8 @@
 
       <div class="stat-card">
         <div class="stat-content">
-          <h2>$ 87,561</h2>
-          <p>Total Revenue</p>
+          <h2>{{ tablesOccupied }}/{{ totalTables }}</h2>
+          <p>Tables Occupied</p>
         </div>
 
         <div class="stat-icon">
@@ -29,8 +29,8 @@
 
       <div class="stat-card">
         <div class="stat-content">
-          <h2>247</h2>
-          <p>Total Orders</p>
+          <h2>{{ tablesAvailable }}</h2>
+          <p>Tables Available</p>
         </div>
 
         <div class="stat-icon">
@@ -40,8 +40,8 @@
 
       <div class="stat-card">
         <div class="stat-content">
-          <h2>872</h2>
-          <p>Total Customers</p>
+          <h2>{{ totalEmployees }}</h2>
+          <p>Total Employees</p>
         </div>
 
         <div class="stat-icon">
@@ -49,95 +49,5 @@
         </div>
       </div>
     </div>
-
-     <div class="dashboard-row">
-
-      <div hlmCard class="dashboard-card">
-        <div hlmCardHeader class="card-header">
-          <div>
-            <h3 hlmCardTitle>Orders Summary</h3>
-            <p hlmCardDescription>Lorem ipsum dolor sit amet, consectetur</p>
-          </div>
-          <div class="order-tabs">
-            @for (t of tabs; track t) {
-              <button type="button" [class.active]="orderTab === t" (click)="orderTab = t">{{ t }}</button>
-            }
-          </div>
-        </div>
-
-        <div hlmCardContent class="order-summary-body">
-          <div class="gauge-wrapper">
-            <div class="gauge"><div class="gauge-inner"><span>85%</span></div></div>
-          </div>
-          <div class="summary-details">
-            <h2>$456,005.56</h2>
-            <p class="from-text">from $500,000.00</p>
-            <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do</p>
-            <button type="button" hlmBtn variant="secondary" class="details-btn">More Details</button>
-          </div>
-        </div>
-
-        <div class="order-stats">
-          <div class="order-stat"><h4>25</h4><span>On Delivery</span></div>
-          <div class="order-stat"><h4>60</h4><span>Delivered</span></div>
-          <div class="order-stat"><h4>7</h4><span>Canceled</span></div>
-        </div>
-      </div>
-
-      <div hlmCard class="dashboard-card revenue-card">
-        <div hlmCardHeader class="revenue-header">
-          <div class="revenue-title">
-            <h3 hlmCardTitle>Revenue</h3>
-            <p hlmCardDescription>Lorem ipsum dolor sit amet, consectetur</p>
-          </div>
-          <div class="revenue-dropdown">
-            <button type="button" hlmBtn class="revenue-period-btn" (click)="periodOpen = !periodOpen">
-              {{ period }} <i class="fa-solid fa-chevron-down"></i>
-            </button>
-            @if (periodOpen) {
-              <div class="revenue-dropdown-menu">
-                @for (p of periods; track p.label) {
-                  <button type="button" (click)="selectPeriod(p.value)">{{ p.label }}</button>
-                }
-              </div>
-            }
-          </div>
-        </div>
-
-        <div class="revenue-information">
-          <div class="income-section">
-            <div class="income-icon"><i class="fa-solid fa-chart-simple"></i></div>
-            <div class="income-content"><span>Income</span><strong>$126,000</strong></div>
-          </div>
-          <div class="food-filter">
-            @for (f of foodFilters; track f) {
-              <button type="button" hlmBtn variant="outline" class="food-filter-btn" [class.active]="foodFilter === f" (click)="foodFilter = f">{{ f }}</button>
-            }
-          </div>
-        </div>
-
-        <div class="revenue-chart-wrapper">
-          <svg [attr.viewBox]="'0 0 ' + chartW + ' ' + chartH" width="100%" height="100%">
-            <defs>
-              <linearGradient id="revFill" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stop-color="#fdd9d9" />
-                <stop offset="100%" stop-color="#fdeeea" />
-              </linearGradient>
-            </defs>
-            @for (t of yTicks; track t.v) {
-              <line [attr.x1]="padL" [attr.x2]="chartW - padR" [attr.y1]="t.y" [attr.y2]="t.y" stroke="#eeeeee" />
-              <text [attr.x]="padL - 10" [attr.y]="t.y + 4" text-anchor="end" font-size="12" fill="#555">{{ t.v }}</text>
-            }
-            <path [attr.d]="areaPath" fill="url(#revFill)" />
-            <path [attr.d]="linePath" fill="none" stroke="#e97598" stroke-width="3" stroke-linecap="round" />
-            @for (m of xLabels; track m.t) {
-              <text [attr.x]="m.x" [attr.y]="chartH - 10" text-anchor="middle" font-size="12" fill="#555">{{ m.t }}</text>
-            }
-          </svg>
-        </div>
-      </div>
-    </div>
-    
   </main>
-
 </div>
