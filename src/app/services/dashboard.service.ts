@@ -1,5 +1,3 @@
-
-
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -58,5 +56,18 @@ export class DashboardService {
       `${this.BASE_URL}/Order/get`,
       { headers }
     );
+  }
+
+  getOrderById(id: string | number): Observable<any> {
+    const token =
+      localStorage.getItem('token') ??
+      localStorage.getItem('accessToken') ??
+      localStorage.getItem('access_token');
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${token}`,
+    });
+
+    return this.http.get<any>(`${this.BASE_URL}/Order/get/${id}`, { headers });
   }
 }

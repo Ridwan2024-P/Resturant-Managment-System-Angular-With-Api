@@ -10,10 +10,7 @@
           <h2>{{ todayOrders }}</h2>
           <p>Today's Orders</p>
         </div>
-
-        <div class="stat-icon">
-          <i class="fa-solid fa-layer-group"></i>
-        </div>
+        <div class="stat-icon"><i class="fa-solid fa-pizza-slice"></i></div>
       </div>
 
       <div class="stat-card">
@@ -21,10 +18,7 @@
           <h2>{{ tablesOccupied }}/{{ totalTables }}</h2>
           <p>Tables Occupied</p>
         </div>
-
-        <div class="stat-icon">
-          <i class="fa-solid fa-dollar-sign"></i>
-        </div>
+        <div class="stat-icon"><i class="fa-solid fa-dollar-sign"></i></div>
       </div>
 
       <div class="stat-card">
@@ -32,10 +26,7 @@
           <h2>{{ tablesAvailable }}</h2>
           <p>Tables Available</p>
         </div>
-
-        <div class="stat-icon">
-          <i class="fa-regular fa-rectangle-list"></i>
-        </div>
+        <div class="stat-icon"><i class="fa-regular fa-rectangle-list"></i></div>
       </div>
 
       <div class="stat-card">
@@ -43,10 +34,103 @@
           <h2>{{ totalEmployees }}</h2>
           <p>Total Employees</p>
         </div>
+        <div class="stat-icon"><i class="fa-regular fa-user"></i></div>
+      </div>
+    </div>
 
-        <div class="stat-icon">
-          <i class="fa-regular fa-user"></i>
+    <div class="dashboard-row">
+      <!-- Recent Orders -->
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div>
+            <h3>Recent Orders</h3>
+            <p>Latest {{ recentOrders.length }} orders</p>
+          </div>
+          <span class="pill-count">{{ todayOrders }} today</span>
         </div>
+
+        <ul class="order-list">
+          @if (loading) {
+            @for (n of [1, 2, 3, 4, 5]; track n) {
+              <li class="order-row skeleton"></li>
+            }
+          } @else {
+            @for (order of recentOrders; track $index) {
+              <li class="order-row">
+                <div class="order-avatar">
+                  <small>Table</small>
+                  <strong>{{ orderTable(order) }}</strong>
+                </div>
+
+                <div class="order-info">
+                  <h5>Order #{{ orderId(order) }}</h5>
+                  <span>
+                    {{ orderItemCount(order) }} items ·
+                    {{ orderDate(order) | date: 'MMM d, h:mm a' }}
+                  </span>
+                </div>
+
+                <div class="order-right">
+                  <strong>{{ orderTotal(order) > 0 ? (orderTotal(order) | number: '1.2-2') : '—' }}</strong>
+                  <span class="status-badge" [attr.data-status]="statusKey(order)">
+                    {{ order.status }}
+                  </span>
+                </div>
+              </li>
+            } @empty {
+              <li class="empty-state">
+                <i class="fa-regular fa-rectangle-list"></i>
+                <p>No recent orders</p>
+              </li>
+            }
+          }
+        </ul>
+      </div>
+
+      <div class="dashboard-card">
+        <div class="card-header">
+          <div>
+            <h3>Top Selling Items</h3>
+            <p>Best sellers by quantity</p>
+          </div>
+          <span class="pill-count">Top {{ topItems.length }}</span>
+        </div>
+
+        <ul class="top-list">
+          @if (loading) {
+            @for (n of [1, 2, 3, 4, 5]; track n) {
+              <li class="top-row skeleton"></li>
+            }
+          } @else {
+            @for (item of topItems; track item.name; let i = $index) {
+              <li class="top-row">
+                <span class="rank-badge" [class.first]="i === 0">{{ i + 1 }}</span>
+
+                @if (item.image) {
+                  <img class="top-img" [src]="item.image" [alt]="item.name" />
+                } @else {
+                  <div class="top-img placeholder">{{ initial(item.name) }}</div>
+                }
+
+                <div class="top-info">
+                  <div class="top-line">
+                    <h5>{{ item.name }}</h5>
+                    <strong>{{ item.revenue > 0 ? (item.revenue | number: '1.2-2') : '—' }}</strong>
+                  </div>
+                  <div class="progress">
+                    <div class="progress-fill" [style.width.%]="(item.qty / maxQty) * 100"></div>
+                  </div>
+                  <span class="sold">{{ item.qty }} sold</span>
+                </div>
+              </li>
+            } @empty {
+              <li class="empty-state">
+                <i class="fa-solid fa-utensils"></i>
+                <p>No sales data yet</p>
+              </li>
+            }
+          }
+        </ul>
       </div>
     </div>
   </main>

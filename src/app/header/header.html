@@ -1,5 +1,18 @@
 <header class="top-header">
   <div class="header-left">
+    <div class="nav-toggle">
+      <button hlmSidebarTrigger type="button" class="nav-toggle-btn" aria-label="Toggle menu"></button>
+      @if (collapsed()) {
+        <div class="collapse-arrow"><span>→</span></div>
+      } @else {
+        <div class="hamburger">
+          <span class="line"></span>
+          <span class="line"></span>
+          <span class="line"></span>
+        </div>
+      }
+    </div>
+
     <div class="page-title">
       <h2>Dashboard</h2>
       <p>Welcome To {{ userName }}</p>

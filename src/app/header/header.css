@@ -7,8 +7,8 @@
   align-items: center;
   justify-content: space-between;
 
-  padding: 0 58px;
-
+  padding: 0 58px 0px 0px;
+  position: sticky;
   border-bottom: 1px solid #eeeeee;
 
   box-sizing: border-box;
@@ -16,7 +16,6 @@
 
 .header-left {
   display: flex;
-  align-items: center;
   gap: 32px;
 }
 
@@ -245,5 +244,98 @@
     width: 45px;
     height: 45px;
     font-size: 16px;
+  }
+}
+
+.nav-toggle {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nav-toggle .nav-toggle-btn {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.nav-toggle .hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  gap: 5px;
+  pointer-events: none;
+}
+
+.nav-toggle .hamburger .line {
+  display: block;
+  width: 26px;
+  height: 3px;
+  border-radius: 3px;
+  background: #ea7a9a;
+}
+
+.nav-toggle .collapse-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  pointer-events: none;
+}
+
+.nav-toggle .collapse-arrow span {
+  font-size: 30px;
+  font-weight: 500;
+  line-height: 1;
+  color: #ea7a9a;
+}
+
+
+@media (max-width: 767px) {
+  .top-header {
+    height: 72px;
+    min-height: 72px;
+    padding: 0 16px;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .header-left {
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .page-title {
+    display: block;
+    min-width: 0;
+  }
+
+  .page-title h2 {
+    font-size: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .page-title p {
+    display: none;
+  }
+
+  .header-right {
+    width: auto;
+    flex-shrink: 0;
+    justify-content: flex-end;
   }
 }

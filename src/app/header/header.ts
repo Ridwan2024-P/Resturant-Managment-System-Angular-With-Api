@@ -1,13 +1,14 @@
-import { Component, ElementRef, HostListener, OnInit, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, computed, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
+import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 import { AdminHeaderService } from '../services/admin-header.service';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [],
+  imports: [HlmSidebarImports],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -15,6 +16,12 @@ export class Header implements OnInit {
   private router = inject(Router);
   private host = inject(ElementRef<HTMLElement>);
   private adminHeaderService = inject(AdminHeaderService);
+  private sidebarService = inject(HlmSidebarService);
+
+  collapsed = computed(
+    () => !this.sidebarService.isMobile() && this.sidebarService.state() === 'collapsed',
+  );
+
   menuOpen = false;
   userName = '';
   avatarUrl = '';
