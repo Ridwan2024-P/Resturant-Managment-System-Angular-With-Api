@@ -3,6 +3,8 @@ import { Login } from './login/login';
 import { Dashboard } from './dashboard/dashboard';
 import { authGuard } from './auth.guard';
 import { Profile } from './header/profile/profile';
+import { Employees } from './employees/employees';
+
 export const routes: Routes = [
      {
         path:'dashboard',component:Dashboard, canActivate: [authGuard],
@@ -14,4 +16,8 @@ export const routes: Routes = [
     },
     { path: 'profile',   loadComponent: () =>
     import('./header/profile/profile').then(m => m.Profile) },
+    {
+       path:'employee',component:Employees, canActivate: [authGuard],
+    }
+    
 ];

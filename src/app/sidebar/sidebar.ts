@@ -27,6 +27,7 @@ interface NavItem {
   label: string;
   icon: string;
   adminOnly: boolean;
+  route:string;
 }
 
 @Component({
@@ -67,47 +68,56 @@ export class Sidebar {
       label: 'Dashboard',
       icon: 'lucidePanelsTopLeft',
       adminOnly: false,
+       route: '/dashboard',
     },
     {
       id: 'EMPLOYEE',
       label: 'Employee',
       icon: 'lucideUsers',
       adminOnly: false,
+      route: '/employee',
+
     },
     {
       id: 'Table',
       label: 'Table',
       icon: 'lucideTable2',
+      route: '/dashboard',
       adminOnly: false,
     },
     {
       id: 'FOOD',
       label: 'Food',
       icon: 'lucideUtensils',
+      route: '/dashboard',
       adminOnly: false,
     },
     {
       id: 'NEW_ORDER',
       label: 'New Order',
       icon: 'lucideShoppingCart',
+      route: '/dashboard',
       adminOnly: false,
     },
     {
       id: 'ORDERS',
       label: 'Orders',
       icon: 'lucideClipboardList',
+      route: '/dashboard',
       adminOnly: false,
     },
     {
       id: 'EXPENSES',
       label: 'Expenses',
       icon: 'lucideDatabase',
+      route: '/dashboard',
       adminOnly: false,
     },
     {
       id: 'REPORT_ANALYSIS',
-      label: 'Report and Analysis',
+      label: 'Report',
       icon: 'lucideClipboardList',
+      route: '/dashboard',
       adminOnly: false,
     },
   ];
@@ -127,7 +137,15 @@ export class Sidebar {
   }
 
   selectNav(id: string): void {
-    this.activeView = id;
+  this.activeView = id;
+
+  const selectedItem = this.visibleNavItems.find(
+    (item) => item.id === id
+  );
+
+  if (selectedItem) {
     this.navSelected.emit(id);
+    this.router.navigate([selectedItem.route]);
   }
+}
 }
