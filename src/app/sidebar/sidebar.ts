@@ -1,13 +1,9 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
-
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
 import {
   lucidePanelsTopLeft,
   lucideAppWindow,
@@ -21,7 +17,9 @@ import {
   lucideLayers3,
   lucideChevronRight,
   lucideHeadphones,
-  lucideShoppingCart,lucideUsers
+  lucideShoppingCart,
+  lucideUsers,
+  lucideUtensils,
 } from '@ng-icons/lucide';
 
 interface NavItem {
@@ -33,11 +31,8 @@ interface NavItem {
 
 @Component({
   selector: 'app-sidebar',
-
   standalone: true,
-
   imports: [CommonModule, HlmButtonImports, HlmSidebarImports, NgIcon],
-
   providers: [
     provideIcons({
       lucidePanelsTopLeft,
@@ -52,11 +47,11 @@ interface NavItem {
       lucideLayers3,
       lucideChevronRight,
       lucideHeadphones,
-      lucideShoppingCart,lucideUsers
-     
+      lucideShoppingCart,
+      lucideUsers,
+      lucideUtensils,
     }),
   ],
-
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
 })
@@ -74,11 +69,47 @@ export class Sidebar {
       adminOnly: false,
     },
     {
-  id: 'EMPLOYEE',
-  label: 'Employee',
-  icon: 'lucideUsers',
-  adminOnly: false,
-},
+      id: 'EMPLOYEE',
+      label: 'Employee',
+      icon: 'lucideUsers',
+      adminOnly: false,
+    },
+    {
+      id: 'Table',
+      label: 'Table',
+      icon: 'lucideTable2',
+      adminOnly: false,
+    },
+    {
+      id: 'FOOD',
+      label: 'Food',
+      icon: 'lucideUtensils',
+      adminOnly: false,
+    },
+    {
+      id: 'NEW_ORDER',
+      label: 'New Order',
+      icon: 'lucideShoppingCart',
+      adminOnly: false,
+    },
+    {
+      id: 'ORDERS',
+      label: 'Orders',
+      icon: 'lucideClipboardList',
+      adminOnly: false,
+    },
+    {
+      id: 'EXPENSES',
+      label: 'Expenses',
+      icon: 'lucideDatabase',
+      adminOnly: false,
+    },
+    {
+      id: 'REPORT_ANALYSIS',
+      label: 'Report and Analysis',
+      icon: 'lucideClipboardList',
+      adminOnly: false,
+    },
   ];
 
   visibleNavItems: NavItem[] = [];
@@ -99,5 +130,4 @@ export class Sidebar {
     this.activeView = id;
     this.navSelected.emit(id);
   }
-
 }
