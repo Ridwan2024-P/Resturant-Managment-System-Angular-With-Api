@@ -22,10 +22,10 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
-    loadComponent: () => import('./header/profile/profile').then((m) => m.Profile),
+    loadComponent: () => import('./header/profile/profile').then((m) => m.Profile), canActivate: [authGuard],
   },
   {
     path: 'employee',
-    loadComponent: () => import('./employees/employees').then((m) => m.Employees),
+    loadComponent: () => import('./employees/employees').then((m) => m.Employees), canActivate: [authGuard],
   },
 ];
