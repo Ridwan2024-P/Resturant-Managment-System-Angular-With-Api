@@ -6,18 +6,26 @@ import { Profile } from './header/profile/profile';
 import { Employees } from './employees/employees';
 
 export const routes: Routes = [
-     {
-        path:'dashboard',component:Dashboard, canActivate: [authGuard],
-    },
-    {
-        path:'', component:Login, pathMatch: 'full'
-    },{
-        path:'login',component:Login
-    },
-    { path: 'profile',   loadComponent: () =>
-    import('./header/profile/profile').then(m => m.Profile) },
-    {
-       path:'employee',component:Employees, canActivate: [authGuard],
-    }
-    
+  {
+    path: 'dashboard',
+    component: Dashboard,
+    canActivate: [authGuard],
+  },
+  {
+    path: '',
+    component: Login,
+    pathMatch: 'full',
+  },
+  {
+    path: 'login',
+    component: Login,
+  },
+  {
+    path: 'profile',
+    loadComponent: () => import('./header/profile/profile').then((m) => m.Profile),
+  },
+  {
+    path: 'employee',
+    loadComponent: () => import('./employees/employees').then((m) => m.Employees),
+  },
 ];
