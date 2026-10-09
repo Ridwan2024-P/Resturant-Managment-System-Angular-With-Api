@@ -21,7 +21,7 @@ import {
   lucideLayers3,
   lucideChevronRight,
   lucideHeadphones,
-  lucideShoppingCart,
+  lucideShoppingCart,lucideUsers
 } from '@ng-icons/lucide';
 
 interface NavItem {
@@ -52,7 +52,7 @@ interface NavItem {
       lucideLayers3,
       lucideChevronRight,
       lucideHeadphones,
-      lucideShoppingCart,
+      lucideShoppingCart,lucideUsers
      
     }),
   ],
@@ -73,6 +73,12 @@ export class Sidebar {
       icon: 'lucidePanelsTopLeft',
       adminOnly: false,
     },
+    {
+  id: 'EMPLOYEE',
+  label: 'Employee',
+  icon: 'lucideUsers',
+  adminOnly: false,
+},
   ];
 
   visibleNavItems: NavItem[] = [];
