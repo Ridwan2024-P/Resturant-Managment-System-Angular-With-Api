@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { ChangeDetectorRef } from '@angular/core';
 import {
   lucidePanelsTopLeft,
   lucideAppWindow,
@@ -27,7 +28,7 @@ interface NavItem {
   label: string;
   icon: string;
   adminOnly: boolean;
-  route:string;
+  route: string;
 }
 
 @Component({
@@ -68,7 +69,7 @@ export class Sidebar {
       label: 'Dashboard',
       icon: 'lucidePanelsTopLeft',
       adminOnly: false,
-       route: '/dashboard',
+      route: '/dashboard',
     },
     {
       id: 'EMPLOYEE',
@@ -76,7 +77,6 @@ export class Sidebar {
       icon: 'lucideUsers',
       adminOnly: false,
       route: '/employee',
-
     },
     {
       id: 'Table',
@@ -124,28 +124,46 @@ export class Sidebar {
 
   visibleNavItems: NavItem[] = [];
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private cdr: ChangeDetectorRef,
+  ) {
     const role = localStorage.getItem('role');
 
     this.visibleNavItems = this.allNavItems.filter((item) => {
       if (item.adminOnly) {
         return role === 'admin';
       }
-
       return true;
+    });
+    this.updateActiveView(this.router.url);
+    this.router.events.subscribe(() => {
+      this.updateActiveView(this.router.url);
     });
   }
 
-  selectNav(id: string): void {
-  this.activeView = id;
-
-  const selectedItem = this.visibleNavItems.find(
-    (item) => item.id === id
-  );
-
-  if (selectedItem) {
-    this.navSelected.emit(id);
-    this.router.navigate([selectedItem.route]);
+  private updateActiveView(url: string): void {
+    const currentUrl = url.split('?')[0].split('#')[0];
+    const activeItem = this.visibleNavItems.find((item) => item.route === currentUrl);
+    if (activeItem) {
+      this.activeView = activeItem.id;
+    }
+    this.cdr.markForCheck();
   }
-}
+  selectNav(id: string): void {
+    const selectedItem = this.visibleNavItems.find((item) => item.id === id);
+
+    if (!selectedItem) {
+      return;
+    }
+
+    this.activeView = id;
+    this.cdr.detectChanges();
+
+    this.navSelected.emit(id);
+
+    if (this.router.url !== selectedItem.route) {
+      void this.router.navigateByUrl(selectedItem.route);
+    }
+  }
 }
