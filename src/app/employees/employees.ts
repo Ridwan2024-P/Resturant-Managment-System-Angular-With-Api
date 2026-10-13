@@ -75,6 +75,12 @@ export class Employees implements OnInit {
   imageFile: File | null = null;
   imagePreview = '';
 
+  isValidBdPhone(phone: string): boolean {
+    const normalizedPhone = phone.replace(/[\s-]/g, '');
+
+    return /^(?:\+?88)?01[3-9]\d{8}$/.test(normalizedPhone);
+  }
+
   failedImages = new Set<string>();
 
   ngOnInit(): void {
@@ -284,30 +290,26 @@ export class Employees implements OnInit {
         console.log('NORMALIZED EMPLOYEES:', this.employees);
       },
 
-       error: (error: HttpErrorResponse) => {
-  this.saving = false;
+      error: (error: HttpErrorResponse) => {
+        this.saving = false;
 
-  const message = String(
-    error.error?.message ??
-    error.error?.title ??
-    ''
-  );
+        const message = String(error.error?.message ?? error.error?.title ?? '');
 
-  if (
-    error.status === 409 ||
-    /email.*already exists|duplicate.*email|unique.*email/i.test(message)
-  ) {
-    this.errorMessage = 'This email address already exists.';
-  } else {
-    this.errorMessage =
-      message ||
-      (error.status === 401
-        ? 'Unauthorized. Please log in again.'
-        : 'Could not save the employee. Please try again.');
-  }
+        if (
+          error.status === 409 ||
+          /email.*already exists|duplicate.*email|unique.*email/i.test(message)
+        ) {
+          this.errorMessage = 'This email address already exists.';
+        } else {
+          this.errorMessage =
+            message ||
+            (error.status === 401
+              ? 'Unauthorized. Please log in again.'
+              : 'Could not save the employee. Please try again.');
+        }
 
-  this.cdr.detectChanges();
-},
+        this.cdr.detectChanges();
+      },
     });
   }
 
@@ -556,8 +558,28 @@ export class Employees implements OnInit {
       this.errorMessage = 'Please complete all required fields correctly.';
       return;
     }
+    const normalizedEmail = this.form.email.trim().toLowerCase();
+
+    const duplicateEmail = this.employees.some((emp) => {
+      const sameEmail = emp.email.trim().toLowerCase() === normalizedEmail;
+      const sameEmployee = String(emp.id) === String(this.editingId);
+
+      return sameEmail && !sameEmployee;
+    });
+
+    if (duplicateEmail) {
+      this.errorMessage = 'This email address is already used by another employee.';
+      return;
+    }
 
     if (this.saving) {
+      return;
+    }
+    const phone = this.form.phoneNumber.trim();
+
+    if (!this.isValidBdPhone(phone)) {
+      this.errorMessage =
+        'Enter a valid Bangladesh phone number (e.g. 01712345678 or +8801712345678).';
       return;
     }
 
