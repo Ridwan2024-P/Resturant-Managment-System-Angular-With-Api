@@ -1,0 +1,312 @@
+<div hlmSidebarWrapper class="table-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="table-main flex-1 min-w-0">
+    <app-header title="Table Management"></app-header>
+
+    <div class="page-body">
+      @if (successMessage) {
+        <div class="notice success">{{ successMessage }}</div>
+      }
+
+      @if (errorMessage && !showModal) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="tbl">
+            <thead>
+              <tr>
+                <th class="col-avatar"></th>
+                <th>Table Number</th>
+                <th>Total Seats</th>
+                <th>Booking Status</th>
+                <th>Assigned Employees</th>
+                <th class="col-actions">
+                  <button type="button" class="add-btn" (click)="openAdd()">
+                    <i class="fa-regular fa-square-plus"></i> Add New Table
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if (loading) {
+                @for (n of [1, 2, 3, 4, 5]; track n) {
+                  <tr class="skeleton-row">
+                    <td colspan="6"></td>
+                  </tr>
+                }
+              } @else {
+                @for (t of tables; track $index; let i = $index) {
+                  <tr>
+                    <td class="col-avatar">
+                      @if (t.image && !failedImages.has(imgKey('t', i, t.id))) {
+                        <img
+                          class="avatar"
+                          [src]="t.image"
+                          [alt]="t.tableNumber"
+                          (error)="onImgError(imgKey('t', i, t.id))"
+                        />
+                      } @else {
+                        <div class="avatar placeholder">
+                          <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+                      }
+                    </td>
+
+                    <td class="strong">{{ t.tableNumber }}</td>
+                    <td>{{ t.seats }}</td>
+                    <td>
+                      <span
+                        class="status"
+                        [class.ok]="isAvailable(t.status)"
+                        [class.no]="!isAvailable(t.status) && t.status !== '-'"
+                      >
+                        {{ t.status }}
+                      </span>
+                    </td>
+
+                    <td>
+                      <div class="emp-stack">
+                        @for (e of t.employees; track $index; let j = $index) {
+                          @if (e.image && !failedImages.has(imgKey('e' + i, j, e.id))) {
+                            <img
+                              class="emp-avatar"
+                              [src]="e.image"
+                              [alt]="e.name"
+                              [title]="e.name"
+                              (error)="onImgError(imgKey('e' + i, j, e.id))"
+                            />
+                          } @else {
+                            <div class="emp-avatar placeholder" [title]="e.name">
+                              <i class="fa-regular fa-user"></i>
+                            </div>
+                          }
+                        }
+
+                        <button
+                          type="button"
+                          class="emp-add"
+                          title="Assign employees"
+                          (click)="openAssign(t)"
+                        >
+                          <i class="fa-solid fa-plus"></i>
+                        </button>
+                      </div>
+                    </td>
+
+                    <td class="col-actions">
+                      <div class="actions">
+                        <button type="button" class="icon-btn" title="Edit" (click)="openEdit(t)">
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+
+                        <button
+                          type="button"
+                          class="icon-btn danger"
+                          title="Delete"
+                          (click)="remove(t)"
+                        >
+                          <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="empty">
+                      <i class="fa-solid fa-table-cells-large"></i>
+                      <p>No tables found</p>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="range">{{ rangeText }}</span>
+
+          <button type="button" class="page-btn" [disabled]="page === 1" (click)="goTo(page - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          @for (p of pageNumbers; track p) {
+            <button type="button" class="page-btn" [class.active]="p === page" (click)="goTo(p)">
+              {{ p }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="page-btn"
+            [disabled]="page === totalPages"
+            (click)="goTo(page + 1)"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <select class="size-select" [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            @for (s of pageSizes; track s) {
+              <option [ngValue]="s">{{ s }} / page</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3>
+          <i class="fa-solid fa-plus"></i>
+          {{ editingId ? 'Edit Table' : 'Add New Table' }}
+        </h3>
+
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (errorMessage) {
+          <div class="notice error">{{ errorMessage }}</div>
+        }
+
+        <div class="top-grid">
+          <div class="names">
+            <div class="field">
+              <label><span class="req">*</span> Table Number</label>
+              <input
+                type="text"
+                placeholder="Table Number"
+                [(ngModel)]="form.tableNumber"
+                [class.invalid]="invalid('tableNumber')"
+              />
+            </div>
+
+            <div class="field">
+              <label><span class="req">*</span> Number of Seats</label>
+              <input
+                type="number"
+                min="1"
+                placeholder="Number of Seats in the table"
+                [(ngModel)]="form.numberOfSeats"
+                [class.invalid]="invalid('numberOfSeats')"
+              />
+            </div>
+          </div>
+
+          <div class="upload-area">
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelected($event)"
+            />
+
+            <button type="button" class="upload-box" (click)="fileInput.click()">
+              @if (imagePreview) {
+                <img [src]="imagePreview" alt="Table" />
+              } @else {
+                <i class="fa-solid fa-plus"></i>
+                <span>Upload Table Image</span>
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="saving">
+          Cancel Operation
+        </button>
+
+        <button type="button" class="btn-primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving...' : editingId ? 'Update Table' : 'Add New Table' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
+@if (showAssign) {
+  <div class="modal-backdrop" (click)="closeAssign()">
+    <div class="modal-box small" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3>
+          <i class="fa-regular fa-user"></i>
+          Assign Employees to Table {{ assignTable?.tableNumber }}
+        </h3>
+
+        <button type="button" class="close-btn" (click)="closeAssign()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (assignError) {
+          <div class="notice error">{{ assignError }}</div>
+        }
+
+        @if (assignLoading) {
+          <p class="muted">Loading employees...</p>
+        } @else {
+          <ul class="pick-list">
+            @for (e of allEmployees; track e.id) {
+              <li
+                class="pick-item"
+                [class.disabled]="alreadyAssigned.has(e.id!)"
+                (click)="toggleEmployee(e.id)"
+              >
+                <input
+                  type="checkbox"
+                  [checked]="alreadyAssigned.has(e.id!) || selectedEmployees.has(e.id!)"
+                  [disabled]="alreadyAssigned.has(e.id!)"
+                  (click)="$event.stopPropagation()"
+                  (change)="toggleEmployee(e.id)"
+                />
+
+                @if (e.image) {
+                  <img class="emp-avatar sm" [src]="e.image" [alt]="e.name" />
+                } @else {
+                  <div class="emp-avatar sm placeholder"><i class="fa-regular fa-user"></i></div>
+                }
+
+                <span>{{ e.name }}</span>
+
+                @if (alreadyAssigned.has(e.id!)) {
+                  <em>assigned</em>
+                }
+              </li>
+            } @empty {
+              <li class="muted">No employees found.</li>
+            }
+          </ul>
+        }
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeAssign()" [disabled]="saving">
+          Cancel Operation
+        </button>
+
+        <button
+          type="button"
+          class="btn-primary"
+          (click)="saveAssign()"
+          [disabled]="saving || assignLoading"
+        >
+          {{ saving ? 'Saving...' : 'Assign Selected' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

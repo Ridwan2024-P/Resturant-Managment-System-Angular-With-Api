@@ -82,7 +82,7 @@ export class Sidebar {
       id: 'Table',
       label: 'Table',
       icon: 'lucideTable2',
-      route: '/dashboard',
+      route: '/tables',
       adminOnly: false,
     },
     {

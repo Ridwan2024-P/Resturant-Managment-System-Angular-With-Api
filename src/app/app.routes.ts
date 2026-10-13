@@ -28,4 +28,8 @@ export const routes: Routes = [
     path: 'employee',
     loadComponent: () => import('./employees/employees').then((m) => m.Employees), canActivate: [authGuard],
   },
+  {
+    path: 'tables',
+    loadComponent: () => import('./tables/tables').then((m) => m.Tables), canActivate: [authGuard],
+  },
 ];
