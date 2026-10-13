@@ -1,1 +1,317 @@
-<p>employees works!</p>
+<div hlmSidebarWrapper class="employee-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="employee-main flex-1 min-w-0">
+    <app-header title="Employee Management"></app-header>
+
+    <div class="page-body">
+      @if (successMessage) {
+        <div class="notice success">{{ successMessage }}</div>
+      }
+
+      @if (errorMessage && !showModal) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="emp-table">
+            <thead>
+              <tr>
+                <th class="col-avatar"></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Designation</th>
+                <th>Join Date</th>
+                <th>Phone</th>
+                <th class="col-actions">
+                  <button type="button" class="add-btn" (click)="openAdd()">
+                    <i class="fa-regular fa-user"></i> Add Employee
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if (loading) {
+                @for (n of [1, 2, 3, 4, 5]; track n) {
+                  <tr class="skeleton-row">
+                    <td colspan="7"></td>
+                  </tr>
+                }
+              } @else {
+                @for (emp of pagedEmployees; track $index; let i = $index) {
+                  <tr>
+                    <td class="col-avatar">
+                      @if (emp.image && !failedImages.has(imgKey(emp, i))) {
+                        <img
+                          class="avatar"
+                          [src]="emp.image"
+                          [alt]="emp.name"
+                          (error)="onImgError(imgKey(emp, i))"
+                        />
+                      } @else {
+                        <div class="avatar placeholder">
+                          <i class="fa-regular fa-user"></i>
+                        </div>
+                      }
+                    </td>
+
+                    <td>
+                      <div class="name-cell">
+                        <span>{{ emp.name }}</span>
+                        <i class="fa-solid fa-star star"></i>
+                      </div>
+                    </td>
+
+                    <td>{{ emp.email }}</td>
+                    <td>{{ emp.designation }}</td>
+                    <td>
+                      {{ emp.joinDate ? (emp.joinDate | date: 'MMM dd, y') : '-' }}
+                    </td>
+                    <td>{{ emp.phone }}</td>
+
+                    <td class="col-actions">
+                      <div class="actions">
+                        <button type="button" class="icon-btn" title="Edit" (click)="openEdit(emp)">
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+
+                        <button
+                          type="button"
+                          class="icon-btn danger"
+                          title="Delete"
+                          (click)="remove(emp)"
+                        >
+                          <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="7" class="empty">
+                      <i class="fa-regular fa-user"></i>
+                      <p>No employees found</p>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="range">{{ rangeText }}</span>
+
+          <button type="button" class="page-btn" [disabled]="page === 1" (click)="goTo(page - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          @for (p of pageNumbers; track p) {
+            <button type="button" class="page-btn" [class.active]="p === page" (click)="goTo(p)">
+              {{ p }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="page-btn"
+            [disabled]="page === totalPages"
+            (click)="goTo(page + 1)"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <select class="size-select" [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            @for (s of pageSizes; track s) {
+              <option [ngValue]="s">{{ s }} / page</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3>
+          <i class="fa-regular fa-user"></i>
+          {{ editingId ? 'Edit Employee' : 'Add New Employee' }}
+        </h3>
+
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (errorMessage) {
+          <div class="notice error">{{ errorMessage }}</div>
+        }
+
+        <div class="top-grid">
+          <div class="names">
+            <div class="field">
+              <label><span class="req">*</span> First Name</label>
+              <input
+                type="text"
+                placeholder="First Name"
+                [(ngModel)]="form.firstName"
+                [class.invalid]="invalid('firstName')"
+              />
+            </div>
+
+            <div class="field">
+              <label>Middle Name</label>
+              <input type="text" placeholder="Middle Name" [(ngModel)]="form.middleName" />
+            </div>
+
+            <div class="field">
+              <label><span class="req">*</span> Last Name</label>
+              <input
+                type="text"
+                placeholder="Last Name"
+                [(ngModel)]="form.lastName"
+                [class.invalid]="invalid('lastName')"
+              />
+            </div>
+          </div>
+
+          <div class="upload-area">
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelected($event)"
+            />
+
+            <button type="button" class="upload-box" (click)="fileInput.click()">
+              @if (imagePreview) {
+                <img [src]="imagePreview" alt="Employee" />
+              } @else {
+                <i class="fa-solid fa-plus"></i>
+                <span>Upload Employee Image</span>
+              }
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-3">
+          <div class="field">
+            <label><span class="req">*</span> Spouse Name</label>
+            <input
+              type="text"
+              placeholder="Spouse Name"
+              [(ngModel)]="form.spouseName"
+              [class.invalid]="invalid('spouseName')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Father's Name</label>
+            <input
+              type="text"
+              placeholder="Father's Name"
+              [(ngModel)]="form.fatherName"
+              [class.invalid]="invalid('fatherName')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Mother's Name</label>
+            <input
+              type="text"
+              placeholder="Mother's Name"
+              [(ngModel)]="form.motherName"
+              [class.invalid]="invalid('motherName')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Designation</label>
+            <input
+              type="text"
+              placeholder="Designation"
+              [(ngModel)]="form.designation"
+              [class.invalid]="invalid('designation')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Email Address</label>
+            <input
+              type="email"
+              placeholder="Email Address"
+              [(ngModel)]="form.email"
+              [class.invalid]="invalid('email')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Phone Number</label>
+            <input
+              type="text"
+              placeholder="Phone Number"
+              [(ngModel)]="form.phoneNumber"
+              [class.invalid]="invalid('phoneNumber')"
+            />
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="field">
+            <label><span class="req">*</span> Gender</label>
+            <select [(ngModel)]="form.gender" [class.invalid]="invalid('gender')">
+              <option value="" disabled>Select gender</option>
+              <option value="1">Male</option>
+              <option value="2">Female</option>
+              <option value="3">Other</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Date of Birth</label>
+            <input
+              type="date"
+              [(ngModel)]="form.dateOfBirth"
+              [class.invalid]="invalid('dateOfBirth')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Date of Join</label>
+            <input
+              type="date"
+              [(ngModel)]="form.dateOfJoin"
+              [class.invalid]="invalid('dateOfJoin')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> NID Card Number</label>
+            <input
+              type="text"
+              placeholder="NID Card Number"
+              [(ngModel)]="form.nidCardNumber"
+              [class.invalid]="invalid('nidCardNumber')"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="saving">
+          Cancel Operation
+        </button>
+
+        <button type="button" class="btn-primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving...' : editingId ? 'Update Employee' : 'Add New Employee' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
