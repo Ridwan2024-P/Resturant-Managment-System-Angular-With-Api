@@ -110,7 +110,7 @@ export class Sidebar {
       id: 'EXPENSES',
       label: 'Expenses',
       icon: 'lucideDatabase',
-      route: '/dashboard',
+      route: '/expense',
       adminOnly: false,
     },
     {

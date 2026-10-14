@@ -36,4 +36,8 @@ export const routes: Routes = [
     path: 'food',
     loadComponent: () => import('./foods/foods').then((m) => m.Foods), canActivate: [authGuard],
   },
+   {
+    path: 'expense',
+    loadComponent: () => import('./expenses/expenses').then((m) => m.Expenses),canActivate: [authGuard],
+  },
 ];

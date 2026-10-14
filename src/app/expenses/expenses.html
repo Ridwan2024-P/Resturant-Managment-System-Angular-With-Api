@@ -1,0 +1,194 @@
+<div hlmSidebarWrapper class="expense-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="expense-main flex-1 min-w-0">
+    <app-header title="Expense Management"></app-header>
+
+    <div class="page-body">
+      @if (successMessage) {
+        <div class="notice success">{{ successMessage }}</div>
+      }
+
+      @if (errorMessage && !showModal) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="expense-table">
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Notes</th>
+                <th class="col-actions">
+                  <button type="button" class="add-btn" (click)="openAdd()">
+                    <i class="fa-solid fa-circle-plus"></i> Add Expense
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if (loading) {
+                @for (n of [1, 2, 3, 4, 5]; track n) {
+                  <tr class="skeleton-row">
+                    <td colspan="6"></td>
+                  </tr>
+                }
+              } @else {
+                @for (exp of expenses; track $index) {
+                  <tr>
+                    <td class="title-cell">{{ exp.title }}</td>
+                    <td>
+                      <span class="chip">{{ exp.category }}</span>
+                    </td>
+                    <td class="amount-cell">৳ {{ exp.amount }}</td>
+                    <td>{{ exp.date ? (exp.date | date: 'MMM d, y') : '-' }}</td>
+                    <td class="notes-cell" [title]="exp.notes">{{ exp.notes || '-' }}</td>
+
+                    <td class="col-actions">
+                      <div class="actions">
+                        <button type="button" class="icon-btn" title="Edit" (click)="openEdit(exp)">
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="icon-btn danger"
+                          title="Delete"
+                          (click)="remove(exp)"
+                        >
+                          <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="6" class="empty">
+                      <i class="fa-solid fa-receipt"></i>
+                      <p>No expenses found</p>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="range">{{ rangeText }}</span>
+
+          <button type="button" class="page-btn" [disabled]="page === 1" (click)="goTo(page - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          @for (p of pageNumbers; track p) {
+            <button type="button" class="page-btn" [class.active]="p === page" (click)="goTo(p)">
+              {{ p }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="page-btn"
+            [disabled]="page === totalPages"
+            (click)="goTo(page + 1)"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <select class="size-select" [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            @for (s of pageSizes; track s) {
+              <option [ngValue]="s">{{ s }} / page</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3>
+          <i class="fa-solid fa-plus"></i>
+          {{ editingId ? 'Edit Expense' : 'Add New Expense' }}
+        </h3>
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (errorMessage) {
+          <div class="notice error">{{ errorMessage }}</div>
+        }
+
+        <div class="grid-2">
+          <div class="field">
+            <label><span class="req">*</span> Title</label>
+            <input
+              type="text"
+              placeholder="e.g. Monthly Rent, Vegetable Purchase"
+              [(ngModel)]="form.title"
+              [class.invalid]="invalid('title')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Amount (৳)</label>
+            <input
+              type="number"
+              min="0"
+              placeholder="0.00"
+              [(ngModel)]="form.amount"
+              [class.invalid]="invalid('amount')"
+            />
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Category</label>
+            <select [(ngModel)]="form.category" [class.invalid]="invalid('category')">
+              <option value="" disabled>Select a category</option>
+              @for (c of categories; track c) {
+                <option [value]="c">{{ c }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label><span class="req">*</span> Expense Date</label>
+            <input
+              type="date"
+              [(ngModel)]="form.expenseDate"
+              [class.invalid]="invalid('expenseDate')"
+            />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Notes</label>
+          <textarea
+            class="notes-input"
+            placeholder="Optional notes about this expense"
+            [(ngModel)]="form.notes"
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="saving">
+          Cancel
+        </button>
+        <button type="button" class="btn-primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving...' : editingId ? 'Update Expense' : 'Add Expense' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
