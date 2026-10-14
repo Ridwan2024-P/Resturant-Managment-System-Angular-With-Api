@@ -52,4 +52,7 @@ export const routes: Routes = [
     path: 'report',
     loadComponent: () => import('./report/report').then((m) => m.Reports),canActivate: [authGuard],
   },
+  {
+  path: '**',redirectTo: 'login',
+}
 ];
