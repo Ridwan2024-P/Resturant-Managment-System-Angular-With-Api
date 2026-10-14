@@ -1,1 +1,249 @@
-<p>orders works!</p>
+<div hlmSidebarWrapper class="orders-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="orders-main flex-1 min-w-0">
+    <app-header title="Order Management"></app-header>
+
+    @if (toast) {
+      <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ toast }}</div>
+    }
+
+    <div class="page-body">
+      <div class="toolbar">
+        <div class="filter">
+          <button type="button" class="filter-btn" (click)="toggleFilter($event)">
+            {{ filterLabel }} <i class="fa-solid fa-chevron-down"></i>
+          </button>
+
+          @if (filterOpen) {
+            <ul class="menu filter-menu" (click)="$event.stopPropagation()">
+              <li [class.active]="filterStatus === null" (click)="applyFilter(null)">All</li>
+              @for (s of statuses; track s.label; let i = $index) {
+                <li [class.active]="filterStatus === i" (click)="applyFilter(i)">{{ s.label }}</li>
+              }
+            </ul>
+          }
+        </div>
+      </div>
+
+      @if (errorMessage) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="orders-grid">
+        @if (loading) {
+          @for (n of [1, 2, 3]; track n) {
+            <div class="order-card skeleton"></div>
+          }
+        } @else {
+          @for (order of orders; track order.id) {
+            <article class="order-card">
+              <header class="card-top">
+                <div>
+                  <h3>{{ order.orderNumber }}</h3>
+                  <p>{{ order.date ? (order.date | date: 'MMM d, y h:mm a') : '-' }}</p>
+                </div>
+
+                <div class="card-actions">
+                  <div class="status-wrap">
+                    <button
+                      type="button"
+                      class="icon-btn"
+                      title="Change status"
+                      (click)="toggleStatusMenu(order, $event)"
+                    >
+                      <i class="fa-solid fa-right-left"></i>
+                    </button>
+
+                    @if (statusMenuFor === order.id) {
+                      <ul class="menu status-menu" (click)="$event.stopPropagation()">
+                        @for (s of statuses; track s.label; let i = $index) {
+                          <li [class.active]="order.status === i" (click)="changeStatus(order, i, $event)">
+                            {{ s.label }}
+                          </li>
+                        }
+                      </ul>
+                    }
+                  </div>
+
+                  <button type="button" class="icon-btn" title="Edit" (click)="openEdit(order)">
+                    <i class="fa-regular fa-pen-to-square"></i>
+                  </button>
+
+                  <button type="button" class="icon-btn danger" title="Delete" (click)="remove(order)">
+                    <i class="fa-regular fa-trash-can"></i>
+                  </button>
+                </div>
+              </header>
+
+              <div class="card-items">
+                @for (item of order.items; track $index; let i = $index) {
+                  <div class="item-row">
+                    @if (imageOf(item) && !failedImages.has(imgKey(order, i))) {
+                      <img
+                        class="item-img"
+                        [src]="imageOf(item)"
+                        [alt]="item.name"
+                        (error)="onImgError(imgKey(order, i))"
+                      />
+                    } @else {
+                      <div class="item-img placeholder"><i class="fa-solid fa-utensils"></i></div>
+                    }
+
+                    <div class="item-info">
+                      <h5>{{ item.name }}</h5>
+                      <span>{{ item.totalPrice }} ৳</span>
+                    </div>
+
+                    <span class="item-qty">QTY. {{ item.quantity }}</span>
+                  </div>
+                } @empty {
+                  <p class="no-items">No items</p>
+                }
+              </div>
+
+              <footer class="card-foot">
+                <div class="foot-left">
+                  <span class="small">Total Quantity: <strong>{{ totalQuantity(order) }}</strong></span>
+                  <span class="amount">
+                    Total Amount (৳): <strong>{{ totalAmount(order) }}৳</strong>
+                  </span>
+                </div>
+
+                <div class="foot-right">
+                  <span class="status-text" [attr.data-status]="order.status">{{ statusLabel(order) }}</span>
+                  <span class="table-no">{{ order.tableNumber }}</span>
+                </div>
+              </footer>
+            </article>
+          } @empty {
+            <div class="empty">
+              <i class="fa-solid fa-clipboard-list"></i>
+              <p>No orders found</p>
+            </div>
+          }
+        }
+      </div>
+
+      <div class="pagination">
+        <span class="range">{{ rangeText }}</span>
+
+        <button type="button" class="page-btn" [disabled]="page === 1" (click)="goTo(page - 1)">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+
+        @for (p of pageNumbers; track p) {
+          <button type="button" class="page-btn" [class.active]="p === page" (click)="goTo(p)">
+            {{ p }}
+          </button>
+        }
+
+        <button
+          type="button"
+          class="page-btn"
+          [disabled]="page === totalPages"
+          (click)="goTo(page + 1)"
+        >
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </main>
+</div>
+
+@if (editing) {
+  <div class="modal-backdrop" (click)="closeEdit()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3><i class="fa-regular fa-pen-to-square"></i> Edit Order - {{ editing.orderNumber }}</h3>
+        <button type="button" class="close-btn" (click)="closeEdit()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (modalError) {
+          <div class="notice error">{{ modalError }}</div>
+        }
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Order Number</label>
+            <input type="text" [value]="editing.orderNumber" disabled />
+          </div>
+          <div class="field">
+            <label>Table Number</label>
+            <input type="text" [value]="editing.tableNumber" disabled />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input type="tel" [(ngModel)]="editPhone" />
+        </div>
+
+        <div class="field">
+          <label>Add Food Item</label>
+          <div class="add-row">
+            <select [(ngModel)]="addFoodId">
+              <option [ngValue]="null" disabled>Select a food item to add</option>
+              @for (f of foods; track f.id) {
+                <option [ngValue]="f.id">{{ f.name }} - {{ f.finalPrice }} ৳</option>
+              }
+            </select>
+            <button type="button" class="btn-add" (click)="addFood()" [disabled]="addFoodId === null">
+              <i class="fa-solid fa-plus"></i> Add
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Order Items</label>
+          <div class="edit-items">
+            @for (item of editItems; track $index) {
+              <div class="edit-row">
+                @if (imageOf(item)) {
+                  <img class="edit-img" [src]="imageOf(item)" [alt]="item.name" />
+                } @else {
+                  <div class="edit-img placeholder"><i class="fa-solid fa-utensils"></i></div>
+                }
+
+                <div class="edit-info">
+                  <strong>{{ item.name }}</strong>
+                  <span>Unit Price: {{ item.unitPrice }} ৳</span>
+                  <div class="qty-line">
+                    <label>
+                      Quantity:
+                      <input
+                        type="number"
+                        min="1"
+                        [ngModel]="item.quantity"
+                        (ngModelChange)="setQuantity(item, $event)"
+                      />
+                    </label>
+                    <span>Total: {{ item.totalPrice }} ৳</span>
+                  </div>
+                </div>
+
+                <button type="button" class="trash" (click)="removeEditItem(item)" title="Remove">
+                  <i class="fa-regular fa-trash-can"></i>
+                </button>
+              </div>
+            } @empty {
+              <p class="no-items">No items in this order</p>
+            }
+          </div>
+        </div>
+
+        <div class="edit-total">Total Amount: <strong>{{ editTotal }} ৳</strong></div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeEdit()" [disabled]="saving">Cancel</button>
+        <button type="button" class="btn-primary" (click)="saveEdit()" [disabled]="saving">
+          {{ saving ? 'Saving...' : 'Update Order' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
