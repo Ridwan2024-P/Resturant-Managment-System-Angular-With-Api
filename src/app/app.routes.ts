@@ -42,6 +42,6 @@ export const routes: Routes = [
   },
   {
     path: 'new-order',
-    loadComponent: () => import('./new-orders/new-orders').then((m) => m.NewOrders),canActivate: [authGuard],
+    loadComponent: () => import('./new-orders/new-orders').then((m) => m.NewOrder),canActivate: [authGuard],
   },
 ];

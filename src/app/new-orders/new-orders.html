@@ -1,1 +1,241 @@
-<p>new-orders works!</p>
+<div hlmSidebarWrapper class="order-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="order-main flex-1 min-w-0">
+    <app-header title="Create New Order"></app-header>
+
+    <div class="page-body">
+      @if (successMessage) {
+        <div class="notice success">{{ successMessage }}</div>
+      }
+
+      @if (errorMessage) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="order-card">
+        <!-- Tables -->
+        <section class="tables-col">
+          <h4 class="col-title">SELECT A TABLE ({{ tables.length }})</h4>
+
+          <div class="tables-scroll">
+            @if (loadingTables) {
+              @for (n of [1, 2, 3]; track n) {
+                <div class="table-card skeleton"></div>
+              }
+            } @else {
+              @for (t of tables; track t.id) {
+                <button
+                  type="button"
+                  class="table-card"
+                  [class.selected]="t.id === selectedTableId"
+                  (click)="selectTable(t)"
+                >
+                  <div class="table-thumb">
+                    @if (t.image && !failedImages.has('t' + t.id)) {
+                      <img [src]="t.image" [alt]="t.number" (error)="onImgError('t' + t.id)" />
+                    } @else {
+                      <i class="fa-regular fa-image"></i>
+                    }
+                  </div>
+                  <span class="table-name">
+                    {{ t.number }}
+                    @if (t.seats) {
+                      <small>({{ t.seats }} Seats)</small>
+                    }
+                  </span>
+                  @if (t.occupied) {
+                    <span class="occupied-tag">Occupied</span>
+                  }
+                </button>
+              } @empty {
+                <div class="empty">
+                  <i class="fa-solid fa-chair"></i>
+                  <p>No tables found</p>
+                </div>
+              }
+            }
+          </div>
+        </section>
+
+        @if (selectedTable) {
+          <section class="foods-col">
+            <div class="foods-head">
+              <h4 class="col-title left">ADD FOOD TO CART ({{ filteredFoods.length }})</h4>
+
+              <div class="search-box">
+                <input type="text" placeholder="Search Food" [(ngModel)]="search" />
+                <button type="button" aria-label="Search">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="foods-scroll">
+              @if (loadingFoods) {
+                @for (n of [1, 2, 3]; track n) {
+                  <div class="food-card skeleton"></div>
+                }
+              } @else {
+                @for (food of filteredFoods; track food.id) {
+                  <article class="food-card">
+                    @if (food.image && !failedImages.has('f' + food.id)) {
+                      <img
+                        class="food-img"
+                        [src]="food.image"
+                        [alt]="food.name"
+                        (error)="onImgError('f' + food.id)"
+                      />
+                    } @else {
+                      <div class="food-img placeholder"><i class="fa-solid fa-utensils"></i></div>
+                    }
+
+                    <div class="food-info">
+                      <div>
+                        <h3>{{ food.name }}</h3>
+                        <p>{{ food.description }}</p>
+                      </div>
+
+                      <div class="price-row">
+                        <div class="prices">
+                          <span class="price"
+                            >Price - {{ food.finalPrice }}৳{{ hasDiscount(food) ? '!' : '' }}</span
+                          >
+                          @if (hasDiscount(food)) {
+                            <span class="old-price">{{ food.price }}৳</span>
+                          }
+                        </div>
+
+                        <button type="button" class="add-cart-btn" (click)="addToCart(food)">
+                          Add To Cart
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                } @empty {
+                  <div class="empty">
+                    <i class="fa-solid fa-utensils"></i>
+                    <p>No food found</p>
+                  </div>
+                }
+              }
+            </div>
+          </section>
+        } @else {
+          <section class="select-first">
+            <svg viewBox="0 0 220 160" width="220" height="160" aria-hidden="true">
+              <rect x="6" y="14" width="140" height="30" rx="6" fill="#fff" stroke="#c9c9d2" />
+              <circle cx="24" cy="29" r="8" fill="#ea7a9a" />
+              <path d="M20 29l3 3 6-6" stroke="#fff" stroke-width="2" fill="none" />
+              <rect x="40" y="22" width="60" height="4" rx="2" fill="#d6d6de" />
+              <rect x="40" y="32" width="90" height="4" rx="2" fill="#d6d6de" />
+              <rect x="6" y="54" width="140" height="30" rx="6" fill="#fff" stroke="#e0e0e6" />
+              <circle cx="24" cy="69" r="8" fill="#e8e8ee" />
+              <rect x="40" y="62" width="60" height="4" rx="2" fill="#ececf1" />
+              <rect x="40" y="72" width="90" height="4" rx="2" fill="#ececf1" />
+              <rect x="6" y="94" width="140" height="30" rx="6" fill="#fff" stroke="#e0e0e6" />
+              <circle cx="24" cy="109" r="8" fill="#e8e8ee" />
+              <rect x="40" y="102" width="60" height="4" rx="2" fill="#ececf1" />
+              <rect x="40" y="112" width="90" height="4" rx="2" fill="#ececf1" />
+              <circle cx="186" cy="52" r="9" fill="#2f3347" />
+              <path d="M174 64h24l4 34h-32z" fill="#2f3347" />
+              <path d="M184 64l2 22 2-22z" fill="#ea7a9a" />
+              <rect x="178" y="98" width="8" height="46" fill="#2f3347" />
+              <rect x="190" y="98" width="8" height="46" fill="#2f3347" />
+              <line x1="150" y1="146" x2="214" y2="146" stroke="#d6d6de" />
+            </svg>
+            <p>Select A Table First!</p>
+          </section>
+        }
+      </div>
+    </div>
+
+    <button type="button" class="cart-fab" (click)="openCart()" aria-label="Open cart">
+      <i class="fa-solid fa-cart-shopping"></i>
+      <span class="cart-badge">{{ cartCount }}</span>
+    </button>
+  </main>
+</div>
+
+@if (cartOpen) {
+  <div class="drawer-backdrop" (click)="closeCart()"></div>
+}
+
+<aside class="drawer" [class.open]="cartOpen">
+  <div class="drawer-head">
+    <h3><i class="fa-solid fa-cart-shopping"></i> Order Cart</h3>
+    <button type="button" class="close-btn" (click)="closeCart()" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+    @for (line of cart; track line.food.id) {
+      <div class="cart-line">
+        @if (line.food.image && !failedImages.has('f' + line.food.id)) {
+          <img class="cart-img" [src]="line.food.image" [alt]="line.food.name" />
+        } @else {
+          <div class="cart-img placeholder"><i class="fa-solid fa-utensils"></i></div>
+        }
+
+        <div class="cart-info">
+          <div class="cart-top">
+            <span class="cart-name">{{ line.food.name }}</span>
+            <button type="button" class="icon-btn" title="Remove" (click)="removeLine(line)">
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+
+          <div class="cart-bottom">
+            <label>
+              Qty.
+              <input
+                type="number"
+                min="1"
+                [ngModel]="line.quantity"
+                (ngModelChange)="setQuantity(line, $event)"
+              />
+            </label>
+            <span class="cart-price">Price: {{ line.food.finalPrice * line.quantity }} ৳</span>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Your cart is empty</p>
+      </div>
+    }
+  </div>
+
+  <div class="drawer-foot">
+    <div class="subtotal">
+      <span>Sub-Total</span>
+      <strong>{{ subTotal }} ৳</strong>
+    </div>
+
+    <div class="checkout">
+      @if (selectedTable) {
+        <p class="for-table">
+          Table: <strong>{{ selectedTable.number }}</strong>
+        </p>
+      }
+
+      @if (cartError) {
+        <div class="notice error">{{ cartError }}</div>
+      }
+
+      <label class="phone-label">Phone Number (Optional)</label>
+      <input
+        type="tel"
+        class="phone-input"
+        placeholder="Enter customer phone number"
+        [(ngModel)]="phone"
+      />
+
+      <button type="button" class="confirm-btn" (click)="confirmOrder()" [disabled]="placing">
+        {{ placing ? 'Placing order...' : 'Confirm Order' }}
+      </button>
+    </div>
+  </div>
+</aside>
