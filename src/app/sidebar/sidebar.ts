@@ -96,7 +96,7 @@ export class Sidebar {
       id: 'NEW_ORDER',
       label: 'New Order',
       icon: 'lucideShoppingCart',
-      route: '/dashboard',
+      route: '/new-order',
       adminOnly: false,
     },
     {
