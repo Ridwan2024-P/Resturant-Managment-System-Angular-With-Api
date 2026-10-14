@@ -1,0 +1,288 @@
+<div hlmSidebarWrapper class="reports-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="reports-main flex-1 min-w-0">
+    <app-header title="Report & Analytics"></app-header>
+
+    <div class="page-body" [class.is-loading]="loading">
+      @if (errorMessage) {
+        <div class="notice error">
+          {{ errorMessage }}
+          <button type="button" class="retry" (click)="load()">Retry</button>
+        </div>
+      }
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Sales &amp; Revenue</h3>
+
+          <div class="period">
+            <select [(ngModel)]="month" (ngModelChange)="onPeriodChange()">
+              @for (m of months; track m; let i = $index) {
+                <option [ngValue]="i + 1">{{ m }}</option>
+              }
+            </select>
+            <select [(ngModel)]="year" (ngModelChange)="onPeriodChange()">
+              @for (y of years; track y) {
+                <option [ngValue]="y">{{ y }}</option>
+              }
+            </select>
+          </div>
+        </div>
+
+        <div class="cards-grid">
+          <div class="mini-card">
+            <div class="icon green"><i class="fa-solid fa-cart-shopping"></i></div>
+            <div>
+              <span class="label">Today's Sales</span>
+              <strong class="count">{{ data.todaysSales }}</strong>
+              <span class="sub green-text">৳{{ data.todaysSalesAmount | number: '1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon orange"><i class="fa-regular fa-calendar"></i></div>
+            <div>
+              <span class="label">Monthly Sales</span>
+              <strong class="count">{{ data.monthlySales }}</strong>
+              <span class="sub green-text">৳{{ data.monthlySalesAmount | number: '1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon blue"><i class="fa-solid fa-chart-column"></i></div>
+            <div>
+              <span class="label">Yearly Sales</span>
+              <strong class="count">{{ data.yearlySales }}</strong>
+              <span class="sub green-text">৳{{ data.yearlySalesAmount | number: '1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div>
+              <span class="label">Today's Expenses</span>
+              <strong class="money red-text">৳{{ data.todaysExpenses | number: '1.0-0' }}</strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div>
+              <span class="label">Monthly Expenses</span>
+              <strong class="money red-text">৳{{ data.monthlyExpenses | number: '1.0-0' }}</strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div>
+              <span class="label">Yearly Expenses</span>
+              <strong class="money red-text">৳{{ data.yearlyExpenses | number: '1.0-0' }}</strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div>
+              <span class="label">Today's Revenue</span>
+              <strong class="money" [class.red-text]="data.todaysRevenue < 0">
+                ৳{{ data.todaysRevenue | number: '1.0-0' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div>
+              <span class="label">Monthly Revenue</span>
+              <strong class="money" [class.red-text]="data.monthlyRevenue < 0">
+                ৳{{ data.monthlyRevenue | number: '1.0-0' }}
+              </strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div>
+              <span class="label">Yearly Revenue</span>
+              <strong class="money" [class.red-text]="data.yearlyRevenue < 0">
+                ৳{{ data.yearlyRevenue | number: '1.0-0' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    
+      <section class="panel">
+        <div class="panel-head"><h3>Visual Overview</h3></div>
+
+        <div class="charts-row">
+          <div class="chart-box bar-box">
+            <h4>Sales, Expenses &amp; Revenue Comparison</h4>
+
+            <div class="bar-wrap">
+              <svg [attr.viewBox]="'0 0 ' + chartW + ' ' + chartH" class="bar-svg" role="img">
+                @for (g of groups; track g.label) {
+                  @if (g.shaded) {
+                    <rect
+                      [attr.x]="g.x"
+                      [attr.y]="plotTop"
+                      [attr.width]="g.width"
+                      [attr.height]="plotBottom - plotTop"
+                      fill="#ececec"
+                    />
+                  }
+                  <text
+                    [attr.x]="g.x + g.width / 2"
+                    [attr.y]="chartH - 14"
+                    text-anchor="middle"
+                    class="axis-text"
+                  >
+                    {{ g.label }}
+                  </text>
+                }
+
+                @for (t of ticks; track t.label) {
+                  <line
+                    [attr.x1]="plotLeft"
+                    [attr.x2]="plotRight"
+                    [attr.y1]="t.y"
+                    [attr.y2]="t.y"
+                    stroke="#dcdcdc"
+                  />
+                  <text
+                    [attr.x]="plotLeft - 10"
+                    [attr.y]="t.y + 4"
+                    text-anchor="end"
+                    class="axis-text"
+                  >
+                    {{ t.label }}
+                  </text>
+                }
+
+                <text
+                  [attr.transform]="'translate(14,' + (plotTop + plotBottom) / 2 + ') rotate(-90)'"
+                  text-anchor="middle"
+                  class="axis-text"
+                >
+                  Amount (৳)
+                </text>
+
+                @for (b of bars; track $index) {
+                  <rect
+                    [attr.x]="b.x"
+                    [attr.y]="b.y"
+                    [attr.width]="b.w"
+                    [attr.height]="b.h"
+                    [attr.fill]="b.color"
+                    rx="3"
+                  >
+                    <title>{{ b.label }}</title>
+                  </rect>
+                }
+
+                <line
+                  [attr.x1]="plotLeft"
+                  [attr.x2]="plotRight"
+                  [attr.y1]="zeroY"
+                  [attr.y2]="zeroY"
+                  stroke="#9a9aa8"
+                />
+              </svg>
+
+              <div class="legend side">
+                <strong>Legend</strong>
+                <span><i [style.background]="colors.sales"></i> Sales</span>
+                <span><i [style.background]="colors.expenses"></i> Expenses</span>
+                <span><i [style.background]="colors.revenue"></i> Revenue</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-box donut-box">
+            <h4>Total Sales vs Expenses</h4>
+
+            <div class="donut-wrap">
+              @if (slices.length) {
+                <svg viewBox="0 0 260 260" class="donut-svg" role="img">
+                  <g transform="rotate(-90 130 130)">
+                    @for (s of slices; track s.label) {
+                      <circle
+                        cx="130"
+                        cy="130"
+                        [attr.r]="donutR"
+                        fill="none"
+                        [attr.stroke]="s.color"
+                        stroke-width="30"
+                        [attr.stroke-dasharray]="s.dash"
+                        [attr.stroke-dashoffset]="s.offset"
+                      >
+                        <title>
+                          {{ s.label }}: ৳{{ s.value | number: '1.0-0' }} ({{ s.percent }}%)
+                        </title>
+                      </circle>
+                    }
+                  </g>
+                </svg>
+              } @else {
+                <p class="no-data">No sales or expenses yet</p>
+              }
+            </div>
+
+            <div class="legend bottom">
+              @for (s of slices; track s.label) {
+                <span>
+                  <i [style.background]="s.color"></i> {{ s.label }}: ৳{{
+                    s.value | number: '1.0-0'
+                  }}
+                  ({{ s.percent }}%)
+                </span>
+              }
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-head">
+          <h3>Overall Report</h3>
+
+          <div class="legend inline">
+            <strong>Legend</strong>
+            <span><i [style.background]="colors.sales"></i> Total Sales</span>
+            <span><i [style.background]="colors.expenses"></i> Total Expenses</span>
+          </div>
+        </div>
+
+        <div class="overall-grid">
+          <div class="mini-card">
+            <div class="icon purple"><i class="fa-solid fa-chart-line"></i></div>
+            <div>
+              <span class="label">Total Sales</span>
+              <strong class="count">{{ data.totalSales }}</strong>
+              <span class="sub green-text">৳{{ data.totalSalesAmount | number: '1.0-0' }}</span>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon red"><i class="fa-solid fa-arrow-trend-down"></i></div>
+            <div>
+              <span class="label">Total Expenses</span>
+              <strong class="money red-text">৳{{ data.totalExpenses | number: '1.0-0' }}</strong>
+            </div>
+          </div>
+
+          <div class="mini-card">
+            <div class="icon teal"><i class="fa-solid fa-arrow-trend-up"></i></div>
+            <div>
+              <span class="label">Total Revenue</span>
+              <strong class="money" [class.red-text]="data.totalRevenue < 0">
+                ৳{{ data.totalRevenue | number: '1.0-0' }}
+              </strong>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>

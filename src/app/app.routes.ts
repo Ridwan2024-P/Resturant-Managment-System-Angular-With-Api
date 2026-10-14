@@ -48,4 +48,8 @@ export const routes: Routes = [
     path: 'order',
     loadComponent: () => import('./orders/orders').then((m) => m.Orders),canActivate: [authGuard],
   },
+   {
+    path: 'report',
+    loadComponent: () => import('./report/report').then((m) => m.Reports),canActivate: [authGuard],
+  },
 ];

@@ -117,7 +117,7 @@ export class Sidebar {
       id: 'REPORT_ANALYSIS',
       label: 'Report',
       icon: 'lucideClipboardList',
-      route: '/dashboard',
+      route: '/report',
       adminOnly: false,
     },
   ];
