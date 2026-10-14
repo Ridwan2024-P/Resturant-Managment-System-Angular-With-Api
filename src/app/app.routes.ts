@@ -32,4 +32,8 @@ export const routes: Routes = [
     path: 'tables',
     loadComponent: () => import('./tables/tables').then((m) => m.Tables), canActivate: [authGuard],
   },
+  {
+    path: 'food',
+    loadComponent: () => import('./foods/foods').then((m) => m.Foods), canActivate: [authGuard],
+  },
 ];

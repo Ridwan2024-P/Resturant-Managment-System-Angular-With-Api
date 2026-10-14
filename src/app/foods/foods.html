@@ -1,0 +1,240 @@
+<div hlmSidebarWrapper class="food-wrapper min-h-screen">
+  <app-sidebar (navSelected)="selectNav($event)"></app-sidebar>
+
+  <main class="food-main flex-1 min-w-0">
+    <app-header title="Food Item Management"></app-header>
+
+    <div class="page-body">
+      @if (successMessage) {
+        <div class="notice success">{{ successMessage }}</div>
+      }
+
+      @if (errorMessage && !showModal) {
+        <div class="notice error">{{ errorMessage }}</div>
+      }
+
+      <div class="table-card">
+        <div class="table-scroll">
+          <table class="food-table">
+            <thead>
+              <tr>
+                <th class="col-avatar"></th>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Discount Type</th>
+                <th>Discount</th>
+                <th>Discounted Price</th>
+                <th class="col-actions">
+                  <button type="button" class="add-btn" (click)="openAdd()">
+                    <i class="fa-solid fa-circle-plus"></i> Add Food Item
+                  </button>
+                </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              @if (loading) {
+                @for (n of [1, 2, 3, 4, 5]; track n) {
+                  <tr class="skeleton-row">
+                    <td colspan="7"></td>
+                  </tr>
+                }
+              } @else {
+                @for (food of foods; track $index; let i = $index) {
+                  <tr>
+                    <td class="col-avatar">
+                      @if (food.image && !failedImages.has(imgKey(food, i))) {
+                        <img
+                          class="avatar"
+                          [src]="food.image"
+                          [alt]="food.name"
+                          (error)="onImgError(imgKey(food, i))"
+                        />
+                      } @else {
+                        <div class="avatar placeholder"><i class="fa-solid fa-utensils"></i></div>
+                      }
+                    </td>
+
+                    <td class="name-cell">{{ food.name }}</td>
+                    <td>{{ food.price }}</td>
+                    <td>{{ food.discountType === 'None' ? '-' : food.discountType }}</td>
+                    <td>{{ discountLabel(food) }}</td>
+                    <td>{{ food.discountedPrice }}</td>
+
+                    <td class="col-actions">
+                      <div class="actions">
+                        <button
+                          type="button"
+                          class="icon-btn"
+                          title="Edit"
+                          (click)="openEdit(food)"
+                        >
+                          <i class="fa-regular fa-pen-to-square"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="icon-btn danger"
+                          title="Delete"
+                          (click)="remove(food)"
+                        >
+                          <i class="fa-regular fa-trash-can"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                } @empty {
+                  <tr>
+                    <td colspan="7" class="empty">
+                      <i class="fa-solid fa-utensils"></i>
+                      <p>No food items found</p>
+                    </td>
+                  </tr>
+                }
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <div class="pagination">
+          <span class="range">{{ rangeText }}</span>
+
+          <button type="button" class="page-btn" [disabled]="page === 1" (click)="goTo(page - 1)">
+            <i class="fa-solid fa-chevron-left"></i>
+          </button>
+
+          @for (p of pageNumbers; track p) {
+            <button type="button" class="page-btn" [class.active]="p === page" (click)="goTo(p)">
+              {{ p }}
+            </button>
+          }
+
+          <button
+            type="button"
+            class="page-btn"
+            [disabled]="page === totalPages"
+            (click)="goTo(page + 1)"
+          >
+            <i class="fa-solid fa-chevron-right"></i>
+          </button>
+
+          <select class="size-select" [ngModel]="pageSize" (ngModelChange)="changePageSize($event)">
+            @for (s of pageSizes; track s) {
+              <option [ngValue]="s">{{ s }} / page</option>
+            }
+          </select>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+@if (showModal) {
+  <div class="modal-backdrop" (click)="closeModal()">
+    <div class="modal-box" (click)="$event.stopPropagation()">
+      <div class="modal-head">
+        <h3>
+          <i class="fa-solid fa-plus"></i>
+          {{ editingId ? 'Edit Food Item' : 'Add New Food Item' }}
+        </h3>
+        <button type="button" class="close-btn" (click)="closeModal()" aria-label="Close">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        @if (errorMessage) {
+          <div class="notice error">{{ errorMessage }}</div>
+        }
+
+        <div class="top-grid">
+          <div class="left-col">
+            <div class="field">
+              <label><span class="req">*</span> Food Name</label>
+              <input
+                type="text"
+                placeholder="Food Name"
+                [(ngModel)]="form.name"
+                [class.invalid]="invalid('name')"
+              />
+            </div>
+
+            <div class="field grow">
+              <label><span class="req">*</span> Description</label>
+              <textarea
+                placeholder="Description"
+                [(ngModel)]="form.description"
+                [class.invalid]="invalid('description')"
+              ></textarea>
+            </div>
+          </div>
+
+          <div class="upload-area">
+            <input
+              #fileInput
+              type="file"
+              accept="image/*"
+              hidden
+              (change)="onFileSelected($event)"
+            />
+
+            <button type="button" class="upload-box" (click)="fileInput.click()">
+              @if (imagePreview) {
+                <img [src]="imagePreview" alt="Food" />
+              } @else {
+                <i class="fa-solid fa-plus"></i>
+                <span>Upload Food Image</span>
+              }
+            </button>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="field">
+            <label><span class="req">*</span> Price</label>
+            <input
+              type="number"
+              min="0"
+              placeholder="Price"
+              [(ngModel)]="form.price"
+              [class.invalid]="invalid('price')"
+            />
+          </div>
+
+          <div class="field">
+            <label>Select Discount Type</label>
+            <select [(ngModel)]="form.discountType" (ngModelChange)="onDiscountTypeChange()">
+              <option value="None">None</option>
+              <option value="Percentage">Percentage</option>
+              <option value="Flat">Flat</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Discount In</label>
+            <input
+              type="number"
+              min="0"
+              [disabled]="discountDisabled"
+              [(ngModel)]="form.discount"
+              [class.invalid]="invalid('discount')"
+            />
+          </div>
+
+          <div class="field">
+            <label>Discounted Price</label>
+            <input type="number" disabled [ngModel]="formDiscountedPrice" />
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="btn-cancel" (click)="closeModal()" [disabled]="saving">
+          Cancel Operation
+        </button>
+        <button type="button" class="btn-primary" (click)="save()" [disabled]="saving">
+          {{ saving ? 'Saving...' : editingId ? 'Update Food Item' : 'Add New Food Item' }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

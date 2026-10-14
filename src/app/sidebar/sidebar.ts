@@ -89,7 +89,7 @@ export class Sidebar {
       id: 'FOOD',
       label: 'Food',
       icon: 'lucideUtensils',
-      route: '/dashboard',
+      route: '/food',
       adminOnly: false,
     },
     {
