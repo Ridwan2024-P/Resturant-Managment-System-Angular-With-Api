@@ -103,7 +103,7 @@ export class Sidebar {
       id: 'ORDERS',
       label: 'Orders',
       icon: 'lucideClipboardList',
-      route: '/dashboard',
+      route: '/order',
       adminOnly: false,
     },
     {
