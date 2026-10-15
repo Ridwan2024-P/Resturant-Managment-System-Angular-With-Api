@@ -1,7 +1,7 @@
 .top-header {
   width: 100%;
   height: 116px;
-  background: #ffffff;
+  background: var(--card);
 
   display: flex;
   align-items: center;
@@ -166,7 +166,7 @@
   width: 200px;
   padding: 12px 0;
 
-  background: #ffffff;
+  background: var(--card);
   border-radius: 8px;
   box-shadow: 0 8px 30px rgba(60, 60, 100, 0.14);
 
@@ -338,4 +338,19 @@
     flex-shrink: 0;
     justify-content: flex-end;
   }
+}
+
+
+
+
+
+.theme-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--foreground);
+  cursor: pointer;
+  margin-right: 12px;
 }

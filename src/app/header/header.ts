@@ -4,6 +4,9 @@ import { Router } from '@angular/router';
 import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
 
 import { AdminHeaderService } from '../services/admin-header.service';
+import { ThemeService } from '../services/theme.service';
+
+
 
 @Component({
   selector: 'app-header',
@@ -17,6 +20,7 @@ export class Header implements OnInit {
   private host = inject(ElementRef<HTMLElement>);
   private adminHeaderService = inject(AdminHeaderService);
   private sidebarService = inject(HlmSidebarService);
+  themeService = inject(ThemeService);
 
   collapsed = computed(
     () => !this.sidebarService.isMobile() && this.sidebarService.state() === 'collapsed',

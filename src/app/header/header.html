@@ -22,7 +22,9 @@
   <div class="header-right">
    
 
-   
+   <button type="button" class="theme-btn" (click)="themeService.toggle()" aria-label="Toggle theme">
+  <i [class]="themeService.theme() === 'dark' ? 'fa-solid fa-sun' : 'fa-solid fa-moon'"></i>
+</button>
     <div class="profile-wrap">
       <button
         type="button"

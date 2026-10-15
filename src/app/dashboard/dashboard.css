@@ -4,7 +4,7 @@
   min-width: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  background-color: #f8f9fb;
+  background-color: var(--card);
 }
 
 .dashboard-wrapper > app-sidebar {
@@ -110,7 +110,7 @@ app-header {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--card);
   border: 1px solid #f8dfe6;
 }
 
@@ -130,7 +130,7 @@ app-header {
 }
 
 .dashboard-card {
-  background: #ffffff;
+  background: var(--card);
   border-radius: 8px;
   padding: 25px 30px;
   box-sizing: border-box;
@@ -188,7 +188,7 @@ app-header {
   padding: 14px 18px;
   border: 1px solid #f1e6ea;
   border-radius: 12px;
-  background: #ffffff;
+  background: var(--card);
   transition:
     box-shadow 0.2s ease,
     transform 0.2s ease,
@@ -237,7 +237,7 @@ app-header {
   margin: 0 0 6px;
   font-size: 15px;
   font-weight: 600;
-  color: #111;
+  color: var(--foreground);
 }
 
 .order-info span {
@@ -363,7 +363,7 @@ app-header {
   margin: 0;
   font-size: 15px;
   font-weight: 600;
-  color: #111;
+  color: var(--foreground);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -437,7 +437,7 @@ app-header {
 }
 
 .dashboard-card [hlmCardDescription] {
-  color: #111;
+  color: var(--foreground);
 }
 
 @media (min-width: 768px) and (max-width: 1024px) {
