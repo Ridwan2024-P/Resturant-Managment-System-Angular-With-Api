@@ -109,7 +109,7 @@
 
   border-radius: 50%;
 
-  background: linear-gradient(135deg, #ef769b, #f8a5b8);
+  background: linear-gradient(135deg, var(--theme-primary-sidebar-logo-dark), var(--theme-primary-sidebar-logo-light));
 
   color: white;
 
@@ -285,21 +285,21 @@
 
 .nav-item:hover {
   background: #fafafa;
-  color: #ed7298;
+  color: var( sidebar);
 }
 
 .nav-item:hover .nav-icon,
 .nav-item:hover .nav-arrow {
-  color: #ed7298;
+  color: var( --theme-primary-sidebar-hover);
 }
 
 .nav-item.active {
-  color: #ed7298;
+  color: var( --theme-primary-sidebar-hover);
 }
 
 .nav-item.active .nav-icon,
 .nav-item.active .nav-arrow {
-  color: #ed7298;
+  color: var( --theme-primary-sidebar-hover);
 }
 
 :host:has(hlm-sidebar[data-state='collapsed']) .sidebar-header {
