@@ -61,7 +61,7 @@ app-header {
 
 /* ---------- table card ---------- */
 .table-card {
-  background: #ffffff;
+  background: var(--theme-on-primary);
   border-radius: 10px;
   box-shadow: 0 2px 14px rgba(20, 20, 40, 0.05);
   overflow: hidden;
@@ -86,7 +86,7 @@ app-header {
   letter-spacing: 0.4px;
   text-transform: uppercase;
   color: #1c1c28;
-  background: #ffffff;
+  background: var(--theme-on-primary);
   border-bottom: 1px solid #eeeeee;
   white-space: nowrap;
 }
@@ -127,7 +127,7 @@ app-header {
   align-items: center;
   justify-content: center;
   background: #e6e6ea;
-  color: #ffffff;
+  color: var(--theme-on-primary);
   font-size: 20px;
 }
 
@@ -151,19 +151,20 @@ app-header {
   align-items: center;
   gap: 8px;
   padding: 9px 16px;
-  border: 1px solid #f2a3b8;
   border-radius: 8px;
-  background: #fdeef3;
-  color: #e5547f;
+
   font-size: 13px;
   font-weight: 600;
   text-transform: none;
   letter-spacing: 0;
   cursor: pointer;
   white-space: nowrap;
+   border: 1px solid var(--theme-primary-border);
+  background: var(--theme-primary-addbutton-background);
+  color: var(--theme-primary-addbutton-color);
 }
 .add-btn:hover {
-  background: #fbdde7;
+  background: var(--theme-primary-addbutton-hover);
 }
 
 .actions {
@@ -180,17 +181,17 @@ app-header {
   justify-content: center;
   border: 1px solid #eeeeee;
   border-radius: 8px;
-  background: #ffffff;
+  background: var(--theme-on-primary);
   color: #3a3a4a;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .icon-btn:hover {
   color: var(--theme-primary);
-  border-color: #f2a3b8;
+  border-color: var(--theme-primary-border);
 }
 .icon-btn.danger:hover {
-  color: #d93a5f;
+  color: var(--theme-primary);
 }
 
 /* ---------- empty / skeleton ---------- */
@@ -243,15 +244,15 @@ app-header {
   padding: 0 8px;
   border: 1px solid #eeeeee;
   border-radius: 6px;
-  background: #ffffff;
+  background: var;
   color: #6b6b7b;
   font-size: 12px;
   cursor: pointer;
 }
 .page-btn.active {
-  background: #ea7a9a;
-  border-color: #ea7a9a;
-  color: #ffffff;
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
+  color: var( --theme-on-primary);
   font-weight: 700;
 }
 .page-btn:disabled {
@@ -263,9 +264,9 @@ app-header {
   height: 32px;
   padding: 0 10px;
   margin-left: 10px;
-  border: 1px solid #f2a3b8;
+  border: 1px solid var(--theme-primary-border);
   border-radius: 6px;
-  background: #ffffff;
+  background: var( --theme-on-primary);
   color: #6b6b7b;
   font-size: 12px;
 }
@@ -289,7 +290,7 @@ app-header {
   display: flex;
   flex-direction: column;
   border-radius: 12px;
-  background: #ffffff;
+  background: var( --theme-on-primary);
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   overflow: hidden;
 }
@@ -355,7 +356,7 @@ app-header {
   padding: 8px;
   border: 1px solid #e3e3ea;
   border-radius: 8px;
-  background: #ffffff;
+  background: var( --theme-on-primary);
   color: #3a3a4a;
   font-size: 13px;
   text-align: center;
@@ -408,7 +409,7 @@ app-header {
   padding: 0 12px;
   border: 1px solid #e3e3ea;
   border-radius: 6px;
-  background: #ffffff;
+  background: var( --theme-on-primary);
   color: #3a3a4a;
   font-size: 13px;
   box-sizing: border-box;
@@ -421,7 +422,7 @@ app-header {
 }
 .field input.invalid,
 .field select.invalid {
-  border-color: #e5484d;
+  border-color: var(--theme-primary-border);
 }
 
 .modal-foot {
@@ -442,13 +443,13 @@ app-header {
 }
 .btn-cancel {
   border: 1px solid #e3e3ea;
-  background: #ffffff;
+  background: var( --theme-on-primary);
   color: #1c1c28;
 }
 .btn-primary {
   border: 1px solid var(--theme-primary);
   background: var(--theme-primary);
-  color: #ffffff;
+  color: var( --theme-on-primary);
 }
 .btn-primary:hover {
   background: #e2668b;

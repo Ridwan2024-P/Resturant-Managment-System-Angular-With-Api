@@ -151,10 +151,10 @@ app-header {
   align-items: center;
   gap: 8px;
   padding: 9px 16px;
-  border: 1px solid #f2a3b8;
   border-radius: 8px;
-  background: #fdeef3;
-  color: #e5547f;
+  border: 1px solid var(--theme-primary-border);
+  background: var(--theme-primary-addbutton-background);
+  color: var(--theme-primary-addbutton-color);
   font-size: 13px;
   font-weight: 600;
   text-transform: none;
@@ -163,7 +163,7 @@ app-header {
   white-space: nowrap;
 }
 .add-btn:hover {
-  background: #fbdde7;
+  background: var( --theme-primary-addbutton-hover);
 }
 
 .actions {
