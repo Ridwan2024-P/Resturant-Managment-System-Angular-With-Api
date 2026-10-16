@@ -23,7 +23,7 @@
   border: none;
   background: transparent;
 
-  color: #f2769b;
+  color: var(--theme-primary);
   font-size: 20px;
 
   cursor: pointer;
@@ -153,7 +153,7 @@
 
 .profile:focus-visible,
 .profile-menu button:focus-visible {
-  outline: 2px solid #f2769b;
+  outline: 2px solid var(--theme-primary);
   outline-offset: 3px;
 }
 
@@ -204,7 +204,7 @@
 }
 
 .icon-pink {
-  color: #f2769b;
+  color: var(--theme-primary);
 }
 
 .icon-green {
@@ -232,7 +232,7 @@
   flex-shrink: 0;
 
   border-radius: 50%;
-  background: #f2769b;
+  background: var(--theme-primary);
 
   color: #ffffff;
   font-size: 20px;
