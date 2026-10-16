@@ -9,16 +9,15 @@
 :root {
   color-scheme: light;
 
+  --theme-primary-sidebar-logo-dark: #ef769b;
+  --theme-primary-sidebar-logo-light: #f8a5b8;
+  --theme-primary-sidebar-hover: #ed7298;
 
-  --theme-primary-sidebar-logo-dark:#ef769b;
-   --theme-primary-sidebar-logo-light:#f8a5b8;
-   --theme-primary-sidebar-hover:#ed7298;
+  --theme-primary-addbutton-color: #e5547f;
+  --theme-primary-addbutton-background: #fdeef3;
+  --theme-primary-addbutton-hover: #fbdde7;
 
-   --theme-primary-addbutton-color:#e5547f;
-   --theme-primary-addbutton-background:#fdeef3;
-    --theme-primary-addbutton-hover:#fbdde7 ;
-   
-
+  --theme-button-hover: #e2668b;
 
   --theme-primary: #ea7a9a;
   --theme-primary-hover: #d96385;

@@ -187,10 +187,10 @@ app-header {
 }
 .icon-btn:hover {
   color: var(--theme-primary);
-  border-color: #f2a3b8;
+  border-color: var( --theme-primary-hover);
 }
 .icon-btn.danger:hover {
-  color: #d93a5f;
+  color: var( --theme-primary-hover);
 }
 
 

@@ -452,7 +452,7 @@ app-header {
   color: var( --theme-on-primary);
 }
 .btn-primary:hover {
-  background: #e2668b;
+  background: var(--theme-button-hover);
 }
 .btn-primary:disabled,
 .btn-cancel:disabled {
