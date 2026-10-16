@@ -285,7 +285,7 @@
 
 .nav-item:hover {
   background: #fafafa;
-  color: var( sidebar);
+  color: var(  --theme-primary-sidebar-hover);
 }
 
 .nav-item:hover .nav-icon,

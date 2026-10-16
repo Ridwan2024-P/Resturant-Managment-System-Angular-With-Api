@@ -151,9 +151,9 @@ app-header {
   align-items: center;
   gap: 8px;
   padding: 9px 16px;
-  border: 1px solid var(--theme-primary);
+  border: 1px solid #f2a3b8;
   border-radius: 8px;
-  background: var(--theme-primary);
+  background: #fdeef3;
   color: #e5547f;
   font-size: 13px;
   font-weight: 600;
@@ -187,7 +187,7 @@ app-header {
 }
 .icon-btn:hover {
   color: var(--theme-primary);
-  border-color: var(--theme-primary);
+  border-color: #f2a3b8;
 }
 .icon-btn.danger:hover {
   color: #d93a5f;
@@ -249,8 +249,8 @@ app-header {
   cursor: pointer;
 }
 .page-btn.active {
-  background: var(--theme-primary);
-  border-color: var(--theme-primary);
+  background: #ea7a9a;
+  border-color: #ea7a9a;
   color: #ffffff;
   font-weight: 700;
 }
@@ -263,7 +263,7 @@ app-header {
   height: 32px;
   padding: 0 10px;
   margin-left: 10px;
-  border: 1px solid var(--theme-primary);
+  border: 1px solid #f2a3b8;
   border-radius: 6px;
   background: #ffffff;
   color: #6b6b7b;
