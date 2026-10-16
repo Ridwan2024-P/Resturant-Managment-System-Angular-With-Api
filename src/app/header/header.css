@@ -282,7 +282,7 @@
   width: 26px;
   height: 3px;
   border-radius: 3px;
-  background: #ea7a9a;
+  background: var(--theme-primary);
 }
 
 .nav-toggle .collapse-arrow {
@@ -298,7 +298,7 @@
   font-size: 30px;
   font-weight: 500;
   line-height: 1;
-  color: #ea7a9a;
+  color: var(--theme-primary);
 }
 
 

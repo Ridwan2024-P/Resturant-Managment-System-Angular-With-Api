@@ -48,7 +48,12 @@ app-header {
 .stat-card {
   height: 150px;
   border-radius: 7px;
-  background: linear-gradient(110deg, #e96f9a 0%, #f49aa5 48%, #fac5b5 100%);
+  background: linear-gradient(
+    110deg,
+    var(--theme-primary) 0%,
+    var(--theme-primary-mid) 48%,
+    var(--theme-primary-light) 100%
+  );
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -80,7 +85,7 @@ app-header {
   align-items: center;
   justify-content: center;
   position: relative;
-  color: #ed7196;
+  color: var(--theme-primary);
   font-size: 27px;
   flex-shrink: 0;
 }
@@ -117,7 +122,7 @@ app-header {
 .stat-icon i {
   position: relative;
   z-index: 2;
-  color: #ed7196;
+  color: var(--theme-primary);
 }
 
 .dashboard-row {
@@ -162,8 +167,8 @@ app-header {
 }
 
 .pill-count {
-  background: #fde7ee;
-  color: #eb7899;
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary);
   font-size: 13px;
   font-weight: 600;
   padding: 8px 16px;
@@ -186,7 +191,7 @@ app-header {
   align-items: center;
   gap: 18px;
   padding: 14px 18px;
-  border: 1px solid #f1e6ea;
+  border: 1px solid var(--theme-primary-line);
   border-radius: 12px;
   background: var(--card);
   transition:
@@ -197,7 +202,7 @@ app-header {
 }
 
 .order-row:hover {
-  border-color: #f6c4d3;
+  border-color: var(--theme-primary-light);
   box-shadow: 0 6px 18px rgba(233, 111, 154, 0.12);
   transform: translateY(-1px);
 }
@@ -207,7 +212,12 @@ app-header {
   height: 58px;
   flex-shrink: 0;
   border-radius: 14px;
-  background: linear-gradient(135deg, #e96f9a 0%, #f49aa5 55%, #fac5b5 100%);
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary) 0%,
+    var(--theme-primary-mid) 55%,
+    var(--theme-primary-light) 100%
+  );
   color: #fff;
   display: flex;
   flex-direction: column;
@@ -266,8 +276,8 @@ app-header {
   font-size: 12px;
   font-weight: 600;
   text-transform: capitalize;
-  background: #fde7ee;
-  color: #eb7899;
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary);
 }
 
 .status-badge[data-status='completed'],
@@ -295,7 +305,7 @@ app-header {
   align-items: center;
   gap: 16px;
   padding: 14px 18px;
-  border: 1px solid #f1e6ea;
+  border: 1px solid var(--theme-primary-line);
   border-radius: 12px;
   transition:
     box-shadow 0.2s ease,
@@ -305,7 +315,7 @@ app-header {
 }
 
 .top-row:hover {
-  border-color: #f6c4d3;
+  border-color: var(--theme-primary-light);
   box-shadow: 0 6px 18px rgba(233, 111, 154, 0.12);
   transform: translateY(-1px);
 }
@@ -315,7 +325,7 @@ app-header {
   height: 30px;
   flex-shrink: 0;
   border-radius: 50%;
-  background: #f6f1f3;
+  background: var(--theme-primary-faint);
   color: #888;
   font-size: 14px;
   font-weight: 700;
@@ -325,7 +335,7 @@ app-header {
 }
 
 .rank-badge.first {
-  background: linear-gradient(135deg, #e96f9a, #fac5b5);
+  background: linear-gradient(135deg, var(--theme-primary), var(--theme-primary-light));
   color: #fff;
 }
 
@@ -338,8 +348,8 @@ app-header {
 }
 
 .top-img.placeholder {
-  background: #fde7ee;
-  color: #eb7899;
+  background: var(--theme-primary-soft);
+  color: var(--theme-primary);
   font-size: 22px;
   font-weight: 700;
   display: flex;
@@ -372,13 +382,13 @@ app-header {
 .top-line strong {
   font-size: 15px;
   font-weight: 700;
-  color: #eb7899;
+  color: var(--theme-primary);
   flex-shrink: 0;
 }
 
 .progress {
   height: 7px;
-  background: #f6f1f3;
+  background: var(--theme-primary-faint);
   border-radius: 10px;
   margin: 10px 0 6px;
   overflow: hidden;
@@ -387,7 +397,7 @@ app-header {
 .progress-fill {
   height: 100%;
   border-radius: 10px;
-  background: linear-gradient(90deg, #e96f9a, #fac5b5);
+  background: linear-gradient(90deg, var(--theme-primary), var(--theme-primary-light));
   transition: width 0.6s ease;
 }
 
@@ -405,7 +415,7 @@ app-header {
 .empty-state i {
   font-size: 38px;
   margin-bottom: 12px;
-  color: #f6c4d3;
+  color: var(--theme-primary-light);
 }
 
 .empty-state p {
@@ -416,7 +426,12 @@ app-header {
 .skeleton {
   height: 86px;
   border: none;
-  background: linear-gradient(90deg, #f6f1f3 25%, #fbf7f9 50%, #f6f1f3 75%);
+  background: linear-gradient(
+    90deg,
+    var(--theme-primary-faint) 25%,
+    #fbf7f9 50%,
+    var(--theme-primary-faint) 75%
+  );
   background-size: 200% 100%;
   animation: shimmer 1.2s infinite;
 }
@@ -615,7 +630,6 @@ app-header {
     width: 100%;
   }
 }
-
 
 .status-badge[data-status='confirmed'] {
   background: #e8f0fe;

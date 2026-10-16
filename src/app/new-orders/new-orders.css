@@ -144,8 +144,8 @@ app-header {
   background: #fdf7f9;
 }
 .table-card.selected {
-  background: #fdeef3;
-  border: 2px solid #ea7a9a;
+  background: var(--theme-primary);
+  border: 2px solid var(--theme-primary);
   padding: 17px 13px 13px;
 }
 .table-thumb {
@@ -201,7 +201,7 @@ app-header {
   width: 205px;
   height: 40px;
   padding: 0 12px;
-  border: 1px solid #ea7a9a;
+  border: 1px solid var(--theme-primary);
   border-right: 0;
   border-radius: 6px 0 0 6px;
   outline: none;
@@ -213,7 +213,7 @@ app-header {
   height: 40px;
   border: 0;
   border-radius: 0 6px 6px 0;
-  background: #ea7a9a;
+  background: var(--theme-primary);
   color: #fff;
   cursor: pointer;
 }
@@ -236,8 +236,8 @@ app-header {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 .food-img.placeholder {
-  background: #fdeef3;
-  color: #ea7a9a;
+  background: var(--theme-primary);
+  color: var(--theme-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -286,7 +286,7 @@ app-header {
   padding: 0 38px;
   border: 0;
   border-radius: 6px;
-  background: #ea7a9a;
+  background: var(--theme-primary);
   color: #fff;
   font-size: 15px;
   font-weight: 600;
@@ -361,7 +361,7 @@ app-header {
   align-items: center;
   justify-content: space-between;
   padding: 18px 20px;
-  border-bottom: 3px solid #ea7a9a;
+  border-bottom: 3px solid var(--theme-primary);
 }
 .drawer-head h3 {
   margin: 0;
@@ -399,8 +399,8 @@ app-header {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 .cart-img.placeholder {
-  background: #fdeef3;
-  color: #ea7a9a;
+  background: var(--theme-primary);
+  color: var(--theme-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -458,7 +458,7 @@ app-header {
 }
 
 .drawer-foot {
-  background: #fdeef3;
+  background: var(--theme-primary);
 }
 .subtotal {
   display: flex;
@@ -498,7 +498,7 @@ app-header {
   margin-bottom: 18px;
 }
 .phone-input:focus {
-  border-color: #ea7a9a;
+  border-color: var(--theme-primary);
   box-shadow: 0 0 0 3px rgba(234, 122, 154, 0.15);
 }
 .confirm-btn {
@@ -506,7 +506,7 @@ app-header {
   height: 54px;
   border: 0;
   border-radius: 6px;
-  background: #ea7a9a;
+  background: var(--theme-primary);
   color: #fff;
   font-size: 22px;
   cursor: pointer;
@@ -584,7 +584,7 @@ app-header {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: #fdeef3;
+  background: var(--theme-primary);
   border-radius: 8px;
   min-height: 0;
 }

@@ -186,7 +186,7 @@ app-header {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
 }
 .icon-btn:hover {
-  color: #ea7a9a;
+  color: var(--theme-primary);
   border-color: #f2a3b8;
 }
 .icon-btn.danger:hover {
@@ -249,8 +249,8 @@ app-header {
   cursor: pointer;
 }
 .page-btn.active {
-  background: #ea7a9a;
-  border-color: #ea7a9a;
+  background: var(--theme-primary);
+  border-color: var(--theme-primary);
   color: #ffffff;
   font-weight: 700;
 }
@@ -363,8 +363,8 @@ app-header {
   overflow: hidden;
 }
 .upload-box:hover {
-  border-color: #ea7a9a;
-  color: #ea7a9a;
+  border-color: var(--theme-primary);
+  color: var(--theme-primary);
 }
 .upload-box img {
   width: 100%;
@@ -416,7 +416,7 @@ app-header {
 }
 .field input:focus,
 .field select:focus {
-  border-color: #ea7a9a;
+  border-color: var(--theme-primary);
   box-shadow: 0 0 0 3px rgba(234, 122, 154, 0.15);
 }
 .field input.invalid,
@@ -446,8 +446,8 @@ app-header {
   color: #1c1c28;
 }
 .btn-primary {
-  border: 1px solid #ea7a9a;
-  background: #ea7a9a;
+  border: 1px solid var(--theme-primary);
+  background: var(--theme-primary);
   color: #ffffff;
 }
 .btn-primary:hover {
@@ -558,9 +558,9 @@ app-header {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1px dashed #ea7a9a;
+  border: 1px dashed var(--theme-primary);
   background: #fdeef3;
-  color: #ea7a9a;
+  color: var(--theme-primary);
   cursor: pointer;
 }
 .emp-add:hover {
