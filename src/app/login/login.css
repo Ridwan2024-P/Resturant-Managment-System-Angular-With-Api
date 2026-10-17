@@ -6,7 +6,7 @@
   --navy: #3b3b6d;
   --text: #6c6c7c;
   --label: #222230;
-  --pink: #e8799b;
+  --pink: var( --theme-primary);
   --pink-dark: #de6a8d;
   --border: #d9d9df;
   --error: #d93a5f;
@@ -22,7 +22,7 @@
   box-sizing: border-box;
 }
 
-/* ---------- Page ---------- */
+
 .page {
   position: relative;
   display: flex;
@@ -32,12 +32,12 @@
   background: var(--bg);
 }
 
-/* ---------- Login card ---------- */
+
 .card {
   position: relative;
   z-index: 1;
   width: 540px;
-  /* 1915px viewport -> left edge at 406px */
+  
   margin: 70px 0 0 max(24px, calc(50vw - 551px));
   padding: 47px 90px 55px 50px;
   background: #fff;

@@ -1,3 +1,4 @@
+
 :host {
   display: block;
   height: 100vh;
@@ -15,7 +16,7 @@
 
   transition:
     width 0.25s ease,
-    min-width 0.25s ease !important;
+    min-width 0.25s ease;
 }
 
 :host:has(hlm-sidebar[data-state='expanded']) {
@@ -66,15 +67,17 @@
 }
 
 .sidebar-content {
+  background: var(--card);
   width: 100%;
   height: 100vh;
-
-  background: var(--card);
-
-  overflow: hidden;
-
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
   display: flex;
   flex-direction: column;
+}
+.sidebar-content::-webkit-scrollbar {
+  display: none;
 }
 
 .sidebar-header {
@@ -109,7 +112,11 @@
 
   border-radius: 50%;
 
-  background: linear-gradient(135deg, var(--theme-primary-sidebar-logo-dark), var(--theme-primary-sidebar-logo-light));
+  background: linear-gradient(
+    135deg,
+    var(--theme-primary-sidebar-logo-dark),
+    var(--theme-primary-sidebar-logo-light)
+  );
 
   color: white;
 
@@ -135,9 +142,8 @@
 
 .sidebar-group {
   flex: 1;
-
-  padding: 17px 35px 0 43px;
-
+  min-height: 0;
+  padding: 17px 35px 24px 43px;
   box-sizing: border-box;
 }
 
@@ -222,6 +228,18 @@
 :host:has(hlm-sidebar[data-state='collapsed']) .collapse-arrow {
   display: flex;
 }
+:host:has(hlm-sidebar[data-state='collapsed']) .sidebar-header {
+  height: 100px;
+  min-height: 100px;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .sidebar-menu {
+  gap: 2px;
+}
+
+:host:has(hlm-sidebar[data-state='collapsed']) .nav-item {
+  padding: 8px 0;
+}
 
 .nav-item {
   width: 100%;
@@ -285,21 +303,21 @@
 
 .nav-item:hover {
   background: #fafafa;
-  color: var(  --theme-primary-sidebar-hover);
+  color: var(--theme-primary-sidebar-hover);
 }
 
 .nav-item:hover .nav-icon,
 .nav-item:hover .nav-arrow {
-  color: var( --theme-primary-sidebar-hover);
+  color: var(--theme-primary-sidebar-hover);
 }
 
 .nav-item.active {
-  color: var( --theme-primary-sidebar-hover);
+  color: var(--theme-primary-sidebar-hover);
 }
 
 .nav-item.active .nav-icon,
 .nav-item.active .nav-arrow {
-  color: var( --theme-primary-sidebar-hover);
+  color: var(--theme-primary-sidebar-hover);
 }
 
 :host:has(hlm-sidebar[data-state='collapsed']) .sidebar-header {
