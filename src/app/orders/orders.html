@@ -3,6 +3,12 @@
 
   <main class="orders-main flex-1 min-w-0">
     <app-header title="Order Management"></app-header>
+     @if (loading) {
+      <div class="page-loader" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Loading orders...</p>
+      </div>
+    }
 
     @if (toast) {
       <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ toast }}</div>

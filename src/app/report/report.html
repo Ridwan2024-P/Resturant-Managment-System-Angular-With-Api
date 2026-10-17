@@ -3,6 +3,12 @@
 
   <main class="reports-main flex-1 min-w-0">
     <app-header title="Report & Analytics"></app-header>
+     @if (loading) {
+      <div class="page-loader" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Loading reports...</p>
+      </div>
+    }
 
     <div class="page-body" [class.is-loading]="loading">
       @if (errorMessage) {

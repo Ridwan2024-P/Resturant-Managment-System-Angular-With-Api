@@ -3,6 +3,12 @@
 
   <main class="food-main flex-1 min-w-0">
     <app-header title="Food Item Management"></app-header>
+     @if (loading) {
+      <div class="page-loader" role="status" aria-live="polite">
+        <div class="spinner"></div>
+        <p>Loading foods...</p>
+      </div>
+    }
 
     <div class="page-body">
       @if (successMessage) {
