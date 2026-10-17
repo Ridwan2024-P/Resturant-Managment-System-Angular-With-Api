@@ -56,10 +56,13 @@ interface NavItem {
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
+  host: { '[class.no-anim]': '!ready' },
 })
 export class Sidebar {
   @Output()
   navSelected = new EventEmitter<string>();
+
+  ready = false;
 
   activeView = 'POS';
 
@@ -136,6 +139,13 @@ export class Sidebar {
       }
       return true;
     });
+    requestAnimationFrame(() =>
+      requestAnimationFrame(() => {
+        this.ready = true;
+        this.cdr.markForCheck();
+      }),
+    );
+
     this.updateActiveView(this.router.url);
     this.router.events.subscribe(() => {
       this.updateActiveView(this.router.url);

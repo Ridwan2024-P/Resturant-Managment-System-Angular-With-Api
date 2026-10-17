@@ -81,3 +81,8 @@
     @apply bg-background text-foreground;
   }
 }
+app-sidebar.no-anim,
+app-sidebar.no-anim * {
+  transition: none !important;
+  animation: none !important;
+}
