@@ -61,7 +61,6 @@ export class Tables implements OnInit {
   totalItems = 0;
   serverLastPage = 1;
 
- 
   showModal = false;
   submitted = false;
   editingId: string | number | null = null;
@@ -70,7 +69,6 @@ export class Tables implements OnInit {
   imagePreview = '';
   existingImageName = '';
 
- 
   showAssign = false;
   assignTable: TableRow | null = null;
   assignLoading = false;
@@ -86,8 +84,6 @@ export class Tables implements OnInit {
   ngOnInit(): void {
     this.loadTables();
   }
-
- 
 
   private pick(obj: any, keys: string[]): any {
     if (!obj || typeof obj !== 'object') {
@@ -209,7 +205,6 @@ export class Tables implements OnInit {
     return '-';
   }
 
-  
   private findEmployees(t: any): any[] {
     const known = this.pick(t, [
       'employees',
@@ -225,7 +220,6 @@ export class Tables implements OnInit {
       return known;
     }
 
-   
     for (const [key, value] of Object.entries(t ?? {})) {
       if (/order|booking|reservation|image/i.test(key)) {
         continue;
@@ -269,7 +263,6 @@ export class Tables implements OnInit {
     return fallback;
   }
 
- 
   loadTables(): void {
     this.loading = true;
     this.errorMessage = '';
@@ -316,7 +309,6 @@ export class Tables implements OnInit {
     });
   }
 
-  
   private enrichEmployees(): void {
     const needs = this.tables.some((t) =>
       t.employees.some((e) => !e.image || e.name === 'Employee'),
@@ -373,11 +365,11 @@ export class Tables implements OnInit {
         apply();
       },
 
-      error: (error: HttpErrorResponse) => console.warn('Could not load employees for photos', error),
+      error: (error: HttpErrorResponse) =>
+        console.warn('Could not load employees for photos', error),
     });
   }
 
- 
   private mergeEmployeesFromGet(): void {
     this.service.getAllTables().subscribe({
       next: (response: any) => {
@@ -461,8 +453,6 @@ export class Tables implements OnInit {
   isAvailable(status: string): boolean {
     return status.trim().toLowerCase() === 'available';
   }
-
-  
 
   openAdd(): void {
     this.editingId = null;
@@ -549,6 +539,17 @@ export class Tables implements OnInit {
     }
 
     return !value;
+  }
+
+  /** Message shown under a field after the form was submitted with an invalid value. */
+  fieldError(field: keyof TableForm): string {
+    const value = String(this.form[field] ?? '').trim();
+
+    if (field === 'tableNumber') {
+      return 'Table number is required.';
+    }
+
+    return value ? 'Seats must be a whole number of 1 or more.' : 'Number of seats is required.';
   }
 
   get formValid(): boolean {
@@ -679,8 +680,6 @@ export class Tables implements OnInit {
       },
     });
   }
-
- 
 
   openAssign(table: TableRow): void {
     if (table.id === null || table.id === undefined || table.id === '') {

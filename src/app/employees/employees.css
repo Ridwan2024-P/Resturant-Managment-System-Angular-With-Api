@@ -340,6 +340,7 @@ app-header {
   display: flex;
   align-items: center;
   justify-content: center;
+  
   min-height: 220px;
   border: 1px dashed #d4d4dc;
   border-radius: 8px;

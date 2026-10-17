@@ -196,6 +196,9 @@
                 [(ngModel)]="form.tableNumber"
                 [class.invalid]="invalid('tableNumber')"
               />
+                @if (invalid('tableNumber')) {
+                <small class="field-error">{{ fieldError('tableNumber') }}</small>
+              }
             </div>
 
             <div class="field">
@@ -207,6 +210,9 @@
                 [(ngModel)]="form.numberOfSeats"
                 [class.invalid]="invalid('numberOfSeats')"
               />
+               @if (invalid('numberOfSeats')) {
+                <small class="field-error">{{ fieldError('numberOfSeats') }}</small>
+              }
             </div>
           </div>
 
