@@ -320,6 +320,24 @@ export class Foods implements OnInit {
     return false;
   }
 
+  /** Message shown under a field after the form was submitted with an invalid value. */
+  errorText(field: keyof FoodForm): string {
+    const value = String(this.form[field] ?? '').trim();
+
+    switch (field) {
+      case 'name':
+        return 'Food name is required.';
+      case 'description':
+        return 'Description is required.';
+      case 'price':
+        return value ? 'Price must be greater than 0.' : 'Price is required.';
+      case 'discount':
+        return this.discountError();
+      default:
+        return '';
+    }
+  }
+
   private discountError(): string {
     if (this.form.discountType === 'None') return '';
     const d = Number(this.form.discount);

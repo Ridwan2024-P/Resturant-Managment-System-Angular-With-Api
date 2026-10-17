@@ -3,13 +3,12 @@
 
   <main class="food-main flex-1 min-w-0">
     <app-header title="Food Item Management"></app-header>
-     @if (loading) {
+    @if (loading) {
       <div class="page-loader" role="status" aria-live="polite">
         <div class="spinner"></div>
         <p>Loading foods...</p>
       </div>
     }
-
     <div class="page-body">
       @if (successMessage) {
         <div class="notice success">{{ successMessage }}</div>
@@ -162,6 +161,9 @@
                 [(ngModel)]="form.name"
                 [class.invalid]="invalid('name')"
               />
+              @if (invalid('name')) {
+                <small class="field-error">{{ errorText('name') }}</small>
+              }
             </div>
 
             <div class="field grow">
@@ -171,6 +173,9 @@
                 [(ngModel)]="form.description"
                 [class.invalid]="invalid('description')"
               ></textarea>
+              @if (invalid('description')) {
+                <small class="field-error">{{ errorText('description') }}</small>
+              }
             </div>
           </div>
 
@@ -183,7 +188,12 @@
               (change)="onFileSelected($event)"
             />
 
-            <button type="button" class="upload-box" (click)="fileInput.click()">
+            <button
+              type="button"
+              class="upload-box"
+              [class.has-image]="!!imagePreview"
+              (click)="fileInput.click()"
+            >
               @if (imagePreview) {
                 <img [src]="imagePreview" alt="Food" />
               } @else {
@@ -204,6 +214,9 @@
               [(ngModel)]="form.price"
               [class.invalid]="invalid('price')"
             />
+            @if (invalid('price')) {
+              <small class="field-error">{{ errorText('price') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -224,6 +237,9 @@
               [(ngModel)]="form.discount"
               [class.invalid]="invalid('discount')"
             />
+            @if (invalid('discount')) {
+              <small class="field-error">{{ errorText('discount') }}</small>
+            }
           </div>
 
           <div class="field">
