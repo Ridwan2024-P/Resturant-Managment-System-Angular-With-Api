@@ -235,6 +235,24 @@ export class Expenses implements OnInit {
     return !value;
   }
 
+  /** Message shown under a field after the form was submitted with an invalid value. */
+  errorText(field: keyof ExpenseForm): string {
+    const value = String(this.form[field] ?? '').trim();
+
+    switch (field) {
+      case 'title':
+        return 'Title is required.';
+      case 'amount':
+        return value ? 'Amount must be greater than 0.' : 'Amount is required.';
+      case 'category':
+        return 'Please select a category.';
+      case 'expenseDate':
+        return 'Expense date is required.';
+      default:
+        return '';
+    }
+  }
+
   get formValid(): boolean {
     const amount = Number(this.form.amount);
     return (

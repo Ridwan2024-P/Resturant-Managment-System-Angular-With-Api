@@ -143,6 +143,9 @@
               [(ngModel)]="form.title"
               [class.invalid]="invalid('title')"
             />
+            @if (invalid('title')) {
+              <small class="field-error">{{ errorText('title') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -154,6 +157,9 @@
               [(ngModel)]="form.amount"
               [class.invalid]="invalid('amount')"
             />
+            @if (invalid('amount')) {
+              <small class="field-error">{{ errorText('amount') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -164,6 +170,9 @@
                 <option [value]="c">{{ c }}</option>
               }
             </select>
+            @if (invalid('category')) {
+              <small class="field-error">{{ errorText('category') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -173,6 +182,9 @@
               [(ngModel)]="form.expenseDate"
               [class.invalid]="invalid('expenseDate')"
             />
+            @if (invalid('expenseDate')) {
+              <small class="field-error">{{ errorText('expenseDate') }}</small>
+            }
           </div>
         </div>
 
