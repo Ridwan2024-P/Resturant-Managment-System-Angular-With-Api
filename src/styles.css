@@ -144,3 +144,10 @@ app-sidebar.no-anim * {
     opacity: 0.45;
   }
 }
+/* Error text  */
+.field-error {
+  color: #c74662;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}

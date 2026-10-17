@@ -3,12 +3,6 @@
 
   <main class="employee-main flex-1 min-w-0">
     <app-header title="Employee Management"></app-header>
-     @if (loading) {
-      <div class="page-loader" role="status" aria-live="polite">
-        <div class="spinner"></div>
-        <p>Loading employees...</p>
-      </div>
-    }
 
     <div class="page-body">
       @if (successMessage) {
@@ -168,6 +162,9 @@
                 [(ngModel)]="form.firstName"
                 [class.invalid]="invalid('firstName')"
               />
+              @if (invalid('firstName')) {
+                <small class="field-error">{{ errorText('firstName') }}</small>
+              }
             </div>
 
             <div class="field">
@@ -183,6 +180,9 @@
                 [(ngModel)]="form.lastName"
                 [class.invalid]="invalid('lastName')"
               />
+              @if (invalid('lastName')) {
+                <small class="field-error">{{ errorText('lastName') }}</small>
+              }
             </div>
           </div>
 
@@ -215,6 +215,9 @@
               [(ngModel)]="form.spouseName"
               [class.invalid]="invalid('spouseName')"
             />
+            @if (invalid('spouseName')) {
+              <small class="field-error">{{ errorText('spouseName') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -225,6 +228,9 @@
               [(ngModel)]="form.fatherName"
               [class.invalid]="invalid('fatherName')"
             />
+            @if (invalid('fatherName')) {
+              <small class="field-error">{{ errorText('fatherName') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -235,6 +241,9 @@
               [(ngModel)]="form.motherName"
               [class.invalid]="invalid('motherName')"
             />
+            @if (invalid('motherName')) {
+              <small class="field-error">{{ errorText('motherName') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -245,6 +254,9 @@
               [(ngModel)]="form.designation"
               [class.invalid]="invalid('designation')"
             />
+            @if (invalid('designation')) {
+              <small class="field-error">{{ errorText('designation') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -255,6 +267,9 @@
               [(ngModel)]="form.email"
               [class.invalid]="invalid('email')"
             />
+            @if (invalid('email')) {
+              <small class="field-error">{{ errorText('email') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -265,6 +280,9 @@
               [(ngModel)]="form.phoneNumber"
               [class.invalid]="invalid('phoneNumber')"
             />
+            @if (invalid('phoneNumber')) {
+              <small class="field-error">{{ errorText('phoneNumber') }}</small>
+            }
           </div>
         </div>
 
@@ -277,6 +295,9 @@
               <option value="2">Female</option>
               <option value="3">Other</option>
             </select>
+            @if (invalid('gender')) {
+              <small class="field-error">{{ errorText('gender') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -286,6 +307,9 @@
               [(ngModel)]="form.dateOfBirth"
               [class.invalid]="invalid('dateOfBirth')"
             />
+            @if (invalid('dateOfBirth')) {
+              <small class="field-error">{{ errorText('dateOfBirth') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -295,6 +319,9 @@
               [(ngModel)]="form.dateOfJoin"
               [class.invalid]="invalid('dateOfJoin')"
             />
+            @if (invalid('dateOfJoin')) {
+              <small class="field-error">{{ errorText('dateOfJoin') }}</small>
+            }
           </div>
 
           <div class="field">
@@ -305,6 +332,9 @@
               [(ngModel)]="form.nidCardNumber"
               [class.invalid]="invalid('nidCardNumber')"
             />
+            @if (invalid('nidCardNumber')) {
+              <small class="field-error">{{ errorText('nidCardNumber') }}</small>
+            }
           </div>
         </div>
       </div>

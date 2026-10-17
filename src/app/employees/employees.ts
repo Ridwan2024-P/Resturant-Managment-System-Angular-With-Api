@@ -507,11 +507,54 @@ export class Employees implements OnInit {
       return !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
     }
 
+    if (field === 'phoneNumber') {
+      return !value || !this.isValidBdPhone(value);
+    }
+
     if (field === 'gender') {
       return !['1', '2', '3'].includes(value);
     }
 
     return !value;
+  }
+
+  private readonly fieldLabels: Record<string, string> = {
+    firstName: 'First name',
+    lastName: 'Last name',
+    spouseName: 'Spouse name',
+    fatherName: "Father's name",
+    motherName: "Mother's name",
+    designation: 'Designation',
+    email: 'Email address',
+    phoneNumber: 'Phone number',
+    gender: 'Gender',
+    dateOfBirth: 'Date of birth',
+    dateOfJoin: 'Date of join',
+    nidCardNumber: 'NID card number',
+  };
+
+
+  errorText(field: keyof EmployeeForm): string {
+    const value = String(this.form[field] ?? '').trim();
+    const label = this.fieldLabels[field] ?? 'This field';
+
+    if (field === 'gender') {
+      return 'Please select a gender.';
+    }
+
+    if (!value) {
+      return `${label} is required.`;
+    }
+
+    if (field === 'email') {
+      return 'Enter a valid email address.';
+    }
+
+    if (field === 'phoneNumber') {
+      return 'Enter a valid Bangladesh phone number (e.g. 01712345678).';
+    }
+
+    return `${label} is not valid.`;
   }
 
   get formValid(): boolean {
