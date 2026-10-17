@@ -76,6 +76,9 @@
           formControlName="email"
           placeholder="demo@example.com"
           autocomplete="username"
+          [class.invalid-input]="
+            loginForm.controls.email.invalid && loginForm.controls.email.touched
+          "
         />
         @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('required')) {
           <p class="error">Email is required.</p>
@@ -94,6 +97,7 @@
             formControlName="password"
             placeholder="••••••"
             autocomplete="current-password"
+            [class.invalid-input]="loginForm.controls.password.invalid && loginForm.controls.password.touched"
           />
           <button
             type="button"
