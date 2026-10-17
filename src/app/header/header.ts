@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, computed, inject } from '@angular/core';
+import { Component, ElementRef, HostListener, Input, OnInit, computed, inject } from '@angular/core';
 
 import { Router } from '@angular/router';
 import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
@@ -20,7 +20,28 @@ export class Header implements OnInit {
   private host = inject(ElementRef<HTMLElement>);
   private adminHeaderService = inject(AdminHeaderService);
   private sidebarService = inject(HlmSidebarService);
-  
+    @Input() title = '';
+ 
+  private readonly routeTitles: Record<string, string> = {
+    dashboard: 'Dashboard',
+    employee: 'Employee Management',
+    tables: 'Table Management',
+    food: 'Food Item Management',
+    expense: 'Expense Management',
+    'new-order': 'Create New Order',
+    order: 'Order Management',
+    report: 'Report & Analytics',
+    profile: 'My Profile',
+  };
+ 
+  /** Page title shown in the header, e.g. "Employee Management" on the Employee page. */
+  get pageTitle(): string {
+    if (this.title) return this.title;
+ 
+    const segment = this.router.url.split(/[?#]/)[0].split('/').filter(Boolean)[0] ?? '';
+    return this.routeTitles[segment] ?? 'Dashboard';
+  }
+ 
 
   collapsed = computed(
     () => !this.sidebarService.isMobile() && this.sidebarService.state() === 'collapsed',
@@ -81,13 +102,7 @@ export class Header implements OnInit {
 
   logout(): void {
     this.adminHeaderService.clearUser();
-  localStorage.removeItem('token');
-localStorage.removeItem('refreshToken');
-localStorage.removeItem('refreshTokenExpiryTime');
-localStorage.removeItem('user');
-localStorage.removeItem('role');
-localStorage.removeItem('admin');
-localStorage.removeItem('employee');
+    localStorage.clear();
     this.router.navigate(['/login']);
   }
 }
