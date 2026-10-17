@@ -81,7 +81,13 @@ export class Header implements OnInit {
 
   logout(): void {
     this.adminHeaderService.clearUser();
-    localStorage.clear();
+  localStorage.removeItem('token');
+localStorage.removeItem('refreshToken');
+localStorage.removeItem('refreshTokenExpiryTime');
+localStorage.removeItem('user');
+localStorage.removeItem('role');
+localStorage.removeItem('admin');
+localStorage.removeItem('employee');
     this.router.navigate(['/login']);
   }
 }
