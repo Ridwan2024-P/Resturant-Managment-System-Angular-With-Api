@@ -174,3 +174,17 @@ app-sidebar.no-anim * {
   color: var(--theme-primary);
   margin-right: 6px;
 }
+@media (max-width: 767px) {
+  [data-slot='sidebar-wrapper'] > app-sidebar {
+    flex: 0 0 0 !important;
+    width: 0 !important;
+    min-width: 0 !important;
+    overflow: hidden;
+  }
+}
+app-sidebar.is-mobile {
+  flex: 0 0 0 !important;
+  width: 0 !important;
+  min-width: 0 !important;
+  overflow: hidden;
+}

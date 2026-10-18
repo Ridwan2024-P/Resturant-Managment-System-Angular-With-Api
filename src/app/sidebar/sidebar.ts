@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, effect, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { HlmButtonImports } from '@spartan-ng/helm/button';
-import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
+import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ChangeDetectorRef } from '@angular/core';
 import {
@@ -56,13 +56,26 @@ interface NavItem {
   ],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.css',
-  host: { '[class.no-anim]': '!ready' },
+  host: { '[class.no-anim]': '!ready', '[class.is-mobile]': 'isMobile()' },
 })
 export class Sidebar {
   @Output()
   navSelected = new EventEmitter<string>();
 
+  // Each page creates its own sidebar. Without this, the sidebar animates from
+  // expanded to collapsed on every route change. Transitions stay off for the
+  // first frames, then are enabled so the toggle button still animates.
   ready = false;
+
+  /** True for a moment after the user opens/closes the sidebar (drives the premium animation). */
+  animating = signal(false);
+
+  private readonly sidebarService = inject(HlmSidebarService);
+
+  /** True on phones, where the sidebar opens as a slide-over sheet. */
+  readonly isMobile = this.sidebarService.isMobile;
+  private lastState: string | null = null;
+  private animTimer: ReturnType<typeof setTimeout> | null = null;
 
   activeView = 'POS';
 
@@ -139,6 +152,22 @@ export class Sidebar {
       }
       return true;
     });
+    effect(() => {
+      const state = this.sidebarService.state();
+
+      if (this.lastState !== null && this.lastState !== state && this.ready) {
+        this.animating.set(true);
+
+        if (this.animTimer) {
+          clearTimeout(this.animTimer);
+        }
+
+        this.animTimer = setTimeout(() => this.animating.set(false), 1200);
+      }
+
+      this.lastState = state;
+    });
+
     requestAnimationFrame(() =>
       requestAnimationFrame(() => {
         this.ready = true;
@@ -160,6 +189,10 @@ export class Sidebar {
     }
     this.cdr.markForCheck();
   }
+  closeMobile(): void {
+    this.sidebarService.setOpenMobile(false);
+  }
+
   selectNav(id: string): void {
     const selectedItem = this.visibleNavItems.find((item) => item.id === id);
 
@@ -169,8 +202,11 @@ export class Sidebar {
 
     this.activeView = id;
     this.cdr.detectChanges();
-
     this.navSelected.emit(id);
+
+    if (this.sidebarService.isMobile()) {
+      this.closeMobile();
+    }
 
     if (this.router.url !== selectedItem.route) {
       void this.router.navigateByUrl(selectedItem.route);
