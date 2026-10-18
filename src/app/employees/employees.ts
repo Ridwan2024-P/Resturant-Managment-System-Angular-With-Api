@@ -1,14 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
-
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
-
 import { EmployeeService, EmployeePayload } from '../services/employee.service';
+import { ConfirmService } from '../services/confirm.service';
 
 interface EmployeeRow {
   id: string | number | null;
@@ -50,6 +48,7 @@ const IMAGE_FOLDER = '/images/user/';
 export class Employees implements OnInit {
   private readonly service = inject(EmployeeService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly confirmDialog = inject(ConfirmService);
 
   loading = true;
   saving = false;
@@ -533,7 +532,7 @@ export class Employees implements OnInit {
     nidCardNumber: 'NID card number',
   };
 
-
+  /** Message shown under a field once the form was submitted with an invalid value. */
   errorText(field: keyof EmployeeForm): string {
     const value = String(this.form[field] ?? '').trim();
     const label = this.fieldLabels[field] ?? 'This field';
@@ -734,14 +733,19 @@ export class Employees implements OnInit {
     }
   }
 
-  remove(emp: EmployeeRow): void {
+  async remove(emp: EmployeeRow): Promise<void> {
     if (emp.id === null || emp.id === undefined || emp.id === '') {
       this.errorMessage =
         'Cannot delete this employee because the API response has no employee ID.';
       return;
     }
 
-    if (!confirm(`Delete ${emp.name}?`)) {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete employee?',
+      message: `Are you sure you want to delete ${emp.name}? This cannot be undone.`,
+    });
+
+    if (!confirmed) {
       return;
     }
 
