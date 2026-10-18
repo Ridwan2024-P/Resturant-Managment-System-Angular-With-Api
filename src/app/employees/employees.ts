@@ -5,8 +5,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
+
 import { EmployeeService, EmployeePayload } from '../services/employee.service';
 import { ConfirmService } from '../services/confirm.service';
+import { deleteErrorMessage } from '../alertbox/delete-error';
 
 interface EmployeeRow {
   id: string | number | null;
@@ -191,7 +193,6 @@ export class Employees implements OnInit {
       return `${API_HOST}${IMAGE_FOLDER}${encodeURIComponent(image)}`;
     }
 
-    // Absolute path on the API host.
     if (image.startsWith('/')) {
       return `${API_HOST}${image}`;
     }
@@ -768,11 +769,10 @@ export class Employees implements OnInit {
 
         console.error('API RESPONSE:', error.error);
 
-        this.errorMessage =
-          error.error?.message ??
-          (error.status === 401
-            ? 'Unauthorized. Please log in again.'
-            : 'Could not delete the employee. Please try again.');
+        void this.confirmDialog.alert({
+          title: 'Cannot delete employee',
+          message: deleteErrorMessage(error, 'employee', 'Could not delete the employee. Please try again.'),
+        });
 
         this.cdr.detectChanges();
       },

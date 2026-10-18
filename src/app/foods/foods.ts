@@ -5,9 +5,9 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
-
 import { DiscountType, FoodPayload, FoodService } from '../services/food.service';
 import { ConfirmService } from '../services/confirm.service';
+import { deleteErrorMessage } from '../alertbox/delete-error';
 
 interface FoodRow {
   id: string | number | null;
@@ -472,11 +472,10 @@ export class Foods implements OnInit {
         this.loadFoods();
       },
       error: (error: HttpErrorResponse) => {
-        this.errorMessage =
-          error.error?.message ??
-          (error.status === 401
-            ? 'Unauthorized. Please log in again.'
-            : 'Could not delete the food item. Please try again.');
+        void this.confirmDialog.alert({
+          title: 'Cannot delete food item',
+          message: deleteErrorMessage(error, 'food item', 'Could not delete the food item. Please try again.'),
+        });
         this.cdr.detectChanges();
       },
     });

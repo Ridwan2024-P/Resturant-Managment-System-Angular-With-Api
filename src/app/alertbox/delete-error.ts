@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 
-export type DeletedEntity = 'table' | 'employee' | 'food item' | 'expense' | 'order';
+export type DeletedEntity = 'table' | 'employee' | 'food item';
 
 const IN_USE_MESSAGES: Record<DeletedEntity, string> = {
   table:
@@ -8,8 +8,6 @@ const IN_USE_MESSAGES: Record<DeletedEntity, string> = {
   employee:
     'This employee cannot be deleted because they are in use. They are assigned to a table or linked to existing orders.',
   'food item': 'This food item cannot be deleted because it is used in existing orders.',
-  expense: 'This expense cannot be deleted because it is linked to other records.',
-  order: 'This order cannot be deleted because it has related records.',
 };
 
 function rawText(error: HttpErrorResponse): string {
