@@ -3,7 +3,7 @@
 
   <main class="orders-main flex-1 min-w-0">
     <app-header title="Order Management"></app-header>
-     @if (loading) {
+    @if (loading) {
       <div class="page-loader" role="status" aria-live="polite">
         <div class="spinner"></div>
         <p>Loading orders...</p>
@@ -64,7 +64,10 @@
                     @if (statusMenuFor === order.id) {
                       <ul class="menu status-menu" (click)="$event.stopPropagation()">
                         @for (s of statuses; track s.label; let i = $index) {
-                          <li [class.active]="order.status === i" (click)="changeStatus(order, i, $event)">
+                          <li
+                            [class.active]="order.status === i"
+                            (click)="changeStatus(order, i, $event)"
+                          >
                             {{ s.label }}
                           </li>
                         }
@@ -76,7 +79,12 @@
                     <i class="fa-regular fa-pen-to-square"></i>
                   </button>
 
-                  <button type="button" class="icon-btn danger" title="Delete" (click)="remove(order)">
+                  <button
+                    type="button"
+                    class="icon-btn danger"
+                    title="Delete"
+                    (click)="remove(order)"
+                  >
                     <i class="fa-regular fa-trash-can"></i>
                   </button>
                 </div>
@@ -110,14 +118,18 @@
 
               <footer class="card-foot">
                 <div class="foot-left">
-                  <span class="small">Total Quantity: <strong>{{ totalQuantity(order) }}</strong></span>
+                  <span class="small"
+                    >Total Quantity: <strong>{{ totalQuantity(order) }}</strong></span
+                  >
                   <span class="amount">
                     Total Amount (৳): <strong>{{ totalAmount(order) }}৳</strong>
                   </span>
                 </div>
 
                 <div class="foot-right">
-                  <span class="status-text" [attr.data-status]="order.status">{{ statusLabel(order) }}</span>
+                  <span class="status-text" [attr.data-status]="order.status">{{
+                    statusLabel(order)
+                  }}</span>
                   <span class="table-no">{{ order.tableNumber }}</span>
                 </div>
               </footer>
@@ -197,7 +209,12 @@
                 <option [ngValue]="f.id">{{ f.name }} - {{ f.finalPrice }} ৳</option>
               }
             </select>
-            <button type="button" class="btn-add" (click)="addFood()" [disabled]="addFoodId === null">
+            <button
+              type="button"
+              class="btn-add"
+              (click)="addFood()"
+              [disabled]="addFoodId === null"
+            >
               <i class="fa-solid fa-plus"></i> Add
             </button>
           </div>
@@ -205,6 +222,12 @@
 
         <div class="field">
           <label>Order Items</label>
+          @if (loading) {
+            <div class="page-loader" role="status" aria-live="polite">
+              <div class="spinner"></div>
+              <p>Loading orders...</p>
+            </div>
+          }
           <div class="edit-items">
             @for (item of editItems; track $index) {
               <div class="edit-row">
@@ -241,11 +264,15 @@
           </div>
         </div>
 
-        <div class="edit-total">Total Amount: <strong>{{ editTotal }} ৳</strong></div>
+        <div class="edit-total">
+          Total Amount: <strong>{{ editTotal }} ৳</strong>
+        </div>
       </div>
 
       <div class="modal-foot">
-        <button type="button" class="btn-cancel" (click)="closeEdit()" [disabled]="saving">Cancel</button>
+        <button type="button" class="btn-cancel" (click)="closeEdit()" [disabled]="saving">
+          Cancel
+        </button>
         <button type="button" class="btn-primary" (click)="saveEdit()" [disabled]="saving">
           {{ saving ? 'Saving...' : 'Update Order' }}
         </button>
