@@ -61,47 +61,60 @@
     <p class="subtitle">Sign in by entering information below</p>
 
     @if (errorMessage) {
-      <div class="alert" role="alert">
-        <strong>Login failed</strong>
-        <span>{{ errorMessage }}</span>
+      <div hlmAlert variant="destructive" class="mt-4" role="alert">
+        <div hlmAlertTitle>Login failed</div>
+        <div hlmAlertDesc>{{ errorMessage }}</div>
       </div>
     }
 
-    <form id="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()" novalidate>
-      <div class="field">
-        <label for="email">Email <span class="req">*</span></label>
+    <form
+      id="login-form"
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      novalidate
+      class="mt-7 space-y-5"
+    >
+      <div class="space-y-2">
+        <label hlmLabel for="email">Email <span class="req">*</span></label>
         <input
+          hlmInput
+          class="h-12 w-full"
           type="email"
           id="email"
           formControlName="email"
           placeholder="demo@example.com"
           autocomplete="username"
-          [class.invalid-input]="
-            loginForm.controls.email.invalid && loginForm.controls.email.touched
-          "
+          [attr.aria-invalid]="loginForm.controls.email.invalid && loginForm.controls.email.touched"
         />
         @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('required')) {
-          <p class="error">Email is required.</p>
+          <p class="text-destructive text-xs">Email is required.</p>
         }
         @if (loginForm.controls.email.touched && loginForm.controls.email.hasError('email')) {
-          <p class="error">Enter a valid email address.</p>
+          <p class="text-destructive text-xs">Enter a valid email address.</p>
         }
       </div>
 
-      <div class="field">
-        <label for="password">Password <span class="req">*</span></label>
-        <div class="password-wrap">
+      <div class="space-y-2">
+        <label hlmLabel for="password">Password <span class="req">*</span></label>
+        <div class="relative">
           <input
+            hlmInput
+            class="h-12 w-full pr-12"
             [type]="showPassword ? 'text' : 'password'"
             id="password"
             formControlName="password"
             placeholder="••••••"
             autocomplete="current-password"
-            [class.invalid-input]="loginForm.controls.password.invalid && loginForm.controls.password.touched"
+            [attr.aria-invalid]="
+              loginForm.controls.password.invalid && loginForm.controls.password.touched
+            "
           />
           <button
+            hlmBtn
             type="button"
-            class="eye"
+            variant="ghost"
+            size="icon"
+            class="absolute top-1/2 right-1.5 size-8 -translate-y-1/2"
             (click)="togglePassword()"
             [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'"
           >
@@ -130,12 +143,13 @@
         @if (
           loginForm.controls.password.touched && loginForm.controls.password.hasError('required')
         ) {
-          <p class="error">Password is required.</p>
+          <p class="text-destructive text-xs">Password is required.</p>
         }
       </div>
 
-      <button type="submit" class="submit">Sign in</button>
+      <button hlmBtn type="submit" class="h-12 w-full text-[15px]">Sign in</button>
     </form>
+
     <div class="demo">
       <p class="demo-title">Demo login</p>
       <p><span>Admin:</span> admin&#64;mail.com / Admin&#64;123</p>

@@ -1,11 +1,21 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { HlmButtonImports } from '@spartan-ng/helm/button';
+import { HlmInputImports } from '@spartan-ng/helm/input';
+import { HlmLabelImports } from '@spartan-ng/helm/label';
+import { HlmAlertImports } from '@spartan-ng/helm/alert';
 import { AuthService } from '../services/auth';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [
+    ReactiveFormsModule,
+    HlmButtonImports,
+    HlmInputImports,
+    HlmLabelImports,
+    HlmAlertImports,
+  ],
   styleUrl: './login.css',
   templateUrl: './login.html',
 })
