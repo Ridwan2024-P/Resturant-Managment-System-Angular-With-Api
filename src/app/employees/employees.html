@@ -64,19 +64,64 @@
                       }
                     </td>
 
-                    <td>
+                    <td
+                      class="cell"
+                      [class.open]="isCellOpen(i, 'name')"
+                      tabindex="0"
+                      [attr.title]="isCellOpen(i, 'name') ? null : emp.name"
+                      (click)="toggleCell(i, 'name')"
+                      (keydown.enter)="toggleCell(i, 'name')"
+                    >
                       <div class="name-cell">
-                        <span>{{ emp.name }}</span>
-                        <i class="fa-solid fa-star star"></i>
+                        <span class="cell-text">{{ emp.name }}</span>
+                        <button
+                          type="button"
+                          class="star-btn"
+                          [attr.aria-label]="isCellOpen(i, 'name') ? 'Hide full name' : 'Show full name'"
+                          [attr.aria-expanded]="isCellOpen(i, 'name')"
+                          (keydown.enter)="$event.stopPropagation()"
+                        >
+                          <i class="fa-solid fa-star star"></i>
+                        </button>
                       </div>
                     </td>
 
-                    <td>{{ emp.email }}</td>
-                    <td>{{ emp.designation }}</td>
-                    <td>
-                      {{ emp.joinDate ? (emp.joinDate | date: 'MMM dd, y') : '-' }}
+                    <td
+                      class="cell"
+                      [class.open]="isCellOpen(i, 'email')"
+                      tabindex="0"
+                      [attr.title]="isCellOpen(i, 'email') ? null : emp.email"
+                      (click)="toggleCell(i, 'email')"
+                      (keydown.enter)="toggleCell(i, 'email')"
+                    ><span class="cell-text">{{ emp.email }}</span></td>
+                    <td
+                      class="cell"
+                      [class.open]="isCellOpen(i, 'designation')"
+                      tabindex="0"
+                      [attr.title]="isCellOpen(i, 'designation') ? null : emp.designation"
+                      (click)="toggleCell(i, 'designation')"
+                      (keydown.enter)="toggleCell(i, 'designation')"
+                    ><span class="cell-text">{{ emp.designation }}</span></td>
+                    <td
+                      class="cell"
+                      [class.open]="isCellOpen(i, 'join')"
+                      tabindex="0"
+                      [attr.title]="isCellOpen(i, 'join') ? null : (emp.joinDate ? (emp.joinDate | date: 'MMM dd, y') : '-')"
+                      (click)="toggleCell(i, 'join')"
+                      (keydown.enter)="toggleCell(i, 'join')"
+                    >
+                      <span class="cell-text">{{
+                        emp.joinDate ? (emp.joinDate | date: 'MMM dd, y') : '-'
+                      }}</span>
                     </td>
-                    <td>{{ emp.phone }}</td>
+                    <td
+                      class="cell"
+                      [class.open]="isCellOpen(i, 'phone')"
+                      tabindex="0"
+                      [attr.title]="isCellOpen(i, 'phone') ? null : emp.phone"
+                      (click)="toggleCell(i, 'phone')"
+                      (keydown.enter)="toggleCell(i, 'phone')"
+                    ><span class="cell-text">{{ emp.phone }}</span></td>
 
                     <td class="col-actions">
                       <div class="actions">

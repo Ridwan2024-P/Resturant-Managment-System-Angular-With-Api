@@ -58,3 +58,125 @@ app-header {
   background: #fdecef;
   color: #c0304f;
 }
+/* ---------- layout (same as dashboard) ---------- */
+.employee-wrapper {
+  display: flex !important;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: #f8f9fb;
+}
+
+.employee-wrapper > app-sidebar {
+  display: block;
+  flex: 0 0 345px;
+  width: 345px;
+  min-width: 345px;
+  transition:
+    width 0.25s ease,
+    min-width 0.25s ease,
+    flex-basis 0.25s ease;
+}
+
+.employee-wrapper:has(> app-sidebar hlm-sidebar[data-state='collapsed']) > app-sidebar {
+  flex: 0 0 80px;
+  width: 80px;
+  min-width: 80px;
+}
+
+.employee-main {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+app-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.page-body {
+  padding: 30px 40px 40px;
+  box-sizing: border-box;
+}
+
+/* ---------- notices ---------- */
+.notice {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  font-size: 14px;
+}
+.notice.success {
+  background: #e8f7ee;
+  color: #1f7a45;
+}
+.notice.error {
+  background: #fdecef;
+  color: #c0304f;
+}
+
+/* Employee Table Style Ar */
+.employee-main {
+  position: relative;
+}
+
+.emp-table {
+  table-layout: fixed;
+
+}
+
+
+.emp-table td.cell {
+  overflow: hidden;
+  cursor: pointer;
+}
+.emp-table td.cell:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: -2px;
+}
+
+.cell-text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+.emp-table td.cell.open {
+  background: rgba(0, 0, 0, 0.025);
+}
+.emp-table td.cell.open .cell-text {
+  white-space: normal;
+  overflow: visible;
+  overflow-wrap: anywhere;
+}
+.name-cell {
+  min-width: 0;
+}
+.star-btn {
+  flex-shrink: 0;
+  padding: 6px;
+  margin: -6px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  line-height: 1;
+  cursor: pointer;
+}
+.star {
+  flex-shrink: 0;
+  transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.star-btn:hover .star {
+  transform: scale(1.25);
+}
+.emp-table td.cell.open .star {
+  transform: rotate(72deg) scale(1.2);
+}

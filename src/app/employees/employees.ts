@@ -84,6 +84,21 @@ export class Employees implements OnInit {
 
   failedImages = new Set<string>();
 
+  /** Truncated table cells the user clicked open (key = page-row-column). */
+  openCells = new Set<string>();
+
+  isCellOpen(row: number, column: string): boolean {
+    return this.openCells.has(`${this.page}-${row}-${column}`);
+  }
+
+  /** Click (or Enter) on a truncated cell, or on the star, shows / hides its full text. */
+  toggleCell(row: number, column: string): void {
+    const key = `${this.page}-${row}-${column}`;
+
+    if (this.openCells.has(key)) this.openCells.delete(key);
+    else this.openCells.add(key);
+  }
+
   ngOnInit(): void {
     this.loadEmployees();
   }
@@ -347,6 +362,7 @@ export class Employees implements OnInit {
   }
 
   goTo(page: number): void {
+    this.openCells.clear();
     if (page < 1 || page > this.totalPages || page === this.page) {
       return;
     }
@@ -356,6 +372,7 @@ export class Employees implements OnInit {
   }
 
   changePageSize(size: number | string): void {
+    this.openCells.clear();
     const parsed = Number(size);
 
     if (!this.pageSizes.includes(parsed)) {
