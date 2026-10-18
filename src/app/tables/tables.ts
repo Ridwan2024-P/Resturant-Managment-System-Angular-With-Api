@@ -8,6 +8,7 @@ import { Header } from '../header/header';
 import { TablePayload, TableService } from '../services/Tables.service';
 import { EmployeeService } from '../services/employee.service';
 import { ConfirmService } from '../services/confirm.service';
+import { deleteErrorMessage } from '../alertbox/delete-error';
 
 interface AssignedEmployee {
   id: string | null;
@@ -145,7 +146,7 @@ export class Tables implements OnInit {
     return image.startsWith('/') ? `${API_HOST}${image}` : `${API_HOST}/${image}`;
   }
 
-  
+ 
   private findImage(candidates: any[]): string | undefined {
     for (const obj of candidates) {
       if (!obj || typeof obj !== 'object') {
@@ -167,7 +168,7 @@ export class Tables implements OnInit {
   }
 
   private normalizeEmployee(item: any): AssignedEmployee {
-   
+  
     const e = item?.employee ?? item;
     const user = e?.user ?? e;
 
@@ -663,6 +664,21 @@ export class Tables implements OnInit {
       return;
     }
 
+    const assigned = table.employees ?? [];
+
+    if (assigned.length) {
+      const names = assigned.map((e) => e.name).filter(Boolean).join(', ');
+
+      await this.confirmDialog.alert({
+        title: 'Cannot delete table',
+        message:
+          `Table ${table.tableNumber} has ${assigned.length} assigned employee` +
+          `${assigned.length > 1 ? 's' : ''}${names ? ` (${names})` : ''}, ` +
+          'so it cannot be deleted.',
+      });
+      return;
+    }
+
     const confirmed = await this.confirmDialog.confirm({
       title: 'Delete table?',
       message: `Are you sure you want to delete table ${table.tableNumber}? This cannot be undone.`,
@@ -689,7 +705,10 @@ export class Tables implements OnInit {
       error: (error: HttpErrorResponse) => {
         console.error('DELETE TABLE ERROR:', error, error.error);
 
-        this.errorMessage = this.errorText(error, 'Could not delete the table. Please try again.');
+        void this.confirmDialog.alert({
+          title: 'Cannot delete table',
+          message: deleteErrorMessage(error, 'table', 'Could not delete the table. Please try again.'),
+        });
         this.cdr.detectChanges();
       },
     });

@@ -7,18 +7,19 @@ export interface ConfirmOptions {
   cancelText?: string;
 }
 
-/**
- * Replacement for window.confirm(). Usage:
- *
- *   const ok = await this.confirmService.confirm({ message: 'Delete David?' });
- *   if (!ok) return;
- *
- * The dialog itself is rendered once by <app-confirm-dialog> in app.html.
- */
+export interface AlertOptions {
+  title?: string;
+  message: string;
+  okText?: string;
+}
+
+type DialogOptions = Required<ConfirmOptions> & { variant: 'confirm' | 'alert' };
+
 @Injectable({ providedIn: 'root' })
 export class ConfirmService {
   readonly open = signal(false);
-  readonly options = signal<Required<ConfirmOptions>>({
+  readonly options = signal<DialogOptions>({
+    variant: 'confirm',
     title: 'Are you sure?',
     message: '',
     confirmText: 'Delete',
@@ -28,19 +29,22 @@ export class ConfirmService {
   private resolver: ((result: boolean) => void) | null = null;
 
   confirm(options: ConfirmOptions): Promise<boolean> {
-    // A new request while one is open counts as "cancel" for the old one.
-    this.resolver?.(false);
-
-    this.options.set({
+    return this.show({
+      variant: 'confirm',
       title: options.title ?? 'Are you sure?',
       message: options.message,
       confirmText: options.confirmText ?? 'Delete',
       cancelText: options.cancelText ?? 'Cancel',
     });
-    this.open.set(true);
+  }
 
-    return new Promise<boolean>((resolve) => {
-      this.resolver = resolve;
+  async alert(options: AlertOptions): Promise<void> {
+    await this.show({
+      variant: 'alert',
+      title: options.title ?? 'Notice',
+      message: options.message,
+      confirmText: options.okText ?? 'OK',
+      cancelText: '',
     });
   }
 
@@ -50,5 +54,14 @@ export class ConfirmService {
     const resolver = this.resolver;
     this.resolver = null;
     resolver?.(result);
+  }
+
+  private show(options: DialogOptions): Promise<boolean> {
+    this.resolver?.(false);
+    this.options.set(options);
+    this.open.set(true);
+    return new Promise<boolean>((resolve) => {
+      this.resolver = resolve;
+    });
   }
 }

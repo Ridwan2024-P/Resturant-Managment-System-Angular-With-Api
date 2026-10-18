@@ -1,13 +1,19 @@
-```html
+
 <hlm-alert-dialog
   [state]="confirm.open() ? 'open' : 'closed'"
   (stateChanged)="onStateChanged($event)"
 >
   <hlm-alert-dialog-content *hlmAlertDialogPortal="let ctx">
     <hlm-alert-dialog-header>
-      <hlm-alert-dialog-media class="bg-destructive/10 text-destructive">
-        <ng-icon name="lucideTrash2" size="24" />
-      </hlm-alert-dialog-media>
+      @if (confirm.options().variant === 'alert') {
+        <hlm-alert-dialog-media class="bg-amber-100 text-amber-600">
+          <ng-icon name="lucideTriangleAlert" size="24" />
+        </hlm-alert-dialog-media>
+      } @else {
+        <hlm-alert-dialog-media class="bg-destructive/10 text-destructive">
+          <ng-icon name="lucideTrash2" size="24" />
+        </hlm-alert-dialog-media>
+      }
 
       <h2 hlmAlertDialogTitle>
         {{ confirm.options().title }}
@@ -19,21 +25,29 @@
     </hlm-alert-dialog-header>
 
     <hlm-alert-dialog-footer>
-      <button
-        hlmAlertDialogCancel
-        (click)="confirm.resolve(false)"
-      >
-        {{ confirm.options().cancelText }}
-      </button>
+      @if (confirm.options().variant === 'alert') {
+        <button
+          hlmAlertDialogAction
+          (click)="confirm.resolve(true)"
+        >
+          {{ confirm.options().confirmText }}
+        </button>
+      } @else {
+        <button
+          hlmAlertDialogCancel
+          (click)="confirm.resolve(false)"
+        >
+          {{ confirm.options().cancelText }}
+        </button>
 
-      <button
-        hlmAlertDialogAction
-        variant="destructive"
-        (click)="confirm.resolve(true)"
-      >
-        {{ confirm.options().confirmText }}
-      </button>
+        <button
+          hlmAlertDialogAction
+          variant="destructive"
+          (click)="confirm.resolve(true)"
+        >
+          {{ confirm.options().confirmText }}
+        </button>
+      }
     </hlm-alert-dialog-footer>
   </hlm-alert-dialog-content>
 </hlm-alert-dialog>
-```
