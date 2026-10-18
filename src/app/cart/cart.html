@@ -1,0 +1,110 @@
+<button
+  type="button"
+  class="header-cart"
+  (click)="cart.openCart()"
+  aria-label="Open cart"
+  title="Open cart"
+>
+  <i class="fa-solid fa-cart-shopping"></i>
+  <span class="cart-badge" [class.zero]="cart.count() === 0">{{ cart.count() }}</span>
+</button>
+
+@if (cart.successMessage() && !onNewOrderPage) {
+  <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ cart.successMessage() }}</div>
+}
+
+@if (cart.open()) {
+  <div class="drawer-backdrop" (click)="cart.closeCart()"></div>
+}
+<aside class="drawer" [class.open]="cart.open()">
+  <div class="drawer-head">
+    <h3><i class="fa-solid fa-cart-shopping"></i> Order Cart</h3>
+    <button type="button" class="close-btn" (click)="cart.closeCart()" aria-label="Close">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+
+  <div class="drawer-body">
+    @for (line of cart.lines(); track line.food.id) {
+      <div class="cart-line">
+        @if (line.food.image && !failedImages.has(line.food.id)) {
+          <img
+            class="cart-img"
+            [src]="line.food.image"
+            [alt]="line.food.name"
+            (error)="failedImages.add(line.food.id)"
+          />
+        } @else {
+          <div class="cart-img placeholder"><i class="fa-solid fa-utensils"></i></div>
+        }
+
+        <div class="cart-info">
+          <div class="cart-top">
+            <span class="cart-name">{{ line.food.name }}</span>
+            <button
+              type="button"
+              class="icon-btn"
+              title="Remove"
+              (click)="cart.remove(line.food.id)"
+            >
+              <i class="fa-regular fa-trash-can"></i>
+            </button>
+          </div>
+
+          <div class="cart-bottom">
+            <label>
+              Qty.
+              <input
+                type="number"
+                min="1"
+                [ngModel]="line.quantity"
+                (ngModelChange)="cart.setQuantity(line.food.id, $event)"
+              />
+            </label>
+            <span class="cart-price">Price: {{ line.food.finalPrice * line.quantity }} ৳</span>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="empty">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <p>Your cart is empty</p>
+      </div>
+    }
+  </div>
+
+  <div class="drawer-foot">
+    <div class="subtotal">
+      <span>Sub-Total</span>
+      <strong>{{ cart.subTotal() }} ৳</strong>
+    </div>
+
+    <div class="checkout">
+      @if (cart.selectedTable(); as table) {
+        <p class="for-table">
+          Table: <strong>{{ table.number }}</strong>
+        </p>
+      }
+
+      @if (cart.error()) {
+        <div class="notice error">{{ cart.error() }}</div>
+      }
+      <label class="phone-label">Phone Number (Optional)</label>
+      <input
+        type="tel"
+        class="phone-input"
+        placeholder="Enter customer phone number"
+        [ngModel]="cart.phone()"
+        (ngModelChange)="cart.phone.set($event)"
+      />
+      <button
+        type="button"
+        class="confirm-btn"
+        (click)="cart.confirmOrder()"
+        [disabled]="cart.placing()"
+      >
+        {{ cart.placing() ? 'Placing order...' : 'Confirm Order' }}
+      </button>
+    </div>
+  </div>
+</aside>

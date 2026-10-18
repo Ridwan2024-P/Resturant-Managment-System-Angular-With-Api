@@ -1,7 +1,12 @@
 <header class="top-header">
   <div class="header-left">
     <div class="nav-toggle">
-      <button hlmSidebarTrigger type="button" class="nav-toggle-btn" aria-label="Toggle menu"></button>
+      <button
+        hlmSidebarTrigger
+        type="button"
+        class="nav-toggle-btn"
+        aria-label="Toggle menu"
+      ></button>
       @if (collapsed()) {
         <div class="collapse-arrow"><span>→</span></div>
       } @else {
@@ -12,7 +17,6 @@
         </div>
       }
     </div>
-
     <div class="page-title">
       <h2>{{ pageTitle }}</h2>
       <p>Welcome To {{ userName }}</p>
@@ -20,7 +24,10 @@
   </div>
 
   <div class="header-right">
-   
+    @if (showCart) {
+      <app-cart></app-cart>
+    }
+
     <div class="profile-wrap">
       <button
         type="button"
@@ -34,7 +41,6 @@
         } @else {
           <span class="avatar-fallback">{{ initials }}</span>
         }
-
         <div class="profile-info">
           <h4>{{ userName }}</h4>
           <!-- <span>{{ userRole }}</span> -->

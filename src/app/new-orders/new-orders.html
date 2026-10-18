@@ -3,8 +3,6 @@
 
   <main class="order-main flex-1 min-w-0">
     <app-header title="Create New Order"></app-header>
-    
-    
 
     <div class="page-body">
       @if (successMessage) {
@@ -14,9 +12,7 @@
       @if (errorMessage) {
         <div class="notice error">{{ errorMessage }}</div>
       }
-
       <div class="order-card">
-        <!-- Tables -->
         <section class="tables-col">
           <h4 class="col-title">SELECT A TABLE ({{ tables.length }})</h4>
 
@@ -151,93 +147,5 @@
         }
       </div>
     </div>
-
-    <button type="button" class="cart-fab" (click)="openCart()" aria-label="Open cart">
-      <i class="fa-solid fa-cart-shopping"></i>
-      <span class="cart-badge">{{ cartCount }}</span>
-    </button>
   </main>
 </div>
-
-@if (cartOpen) {
-  <div class="drawer-backdrop" (click)="closeCart()"></div>
-}
-
-<aside class="drawer" [class.open]="cartOpen">
-  <div class="drawer-head">
-    <h3><i class="fa-solid fa-cart-shopping"></i> Order Cart</h3>
-    <button type="button" class="close-btn" (click)="closeCart()" aria-label="Close">
-      <i class="fa-solid fa-xmark"></i>
-    </button>
-  </div>
-
-  <div class="drawer-body">
-    @for (line of cart; track line.food.id) {
-      <div class="cart-line">
-        @if (line.food.image && !failedImages.has('f' + line.food.id)) {
-          <img class="cart-img" [src]="line.food.image" [alt]="line.food.name" />
-        } @else {
-          <div class="cart-img placeholder"><i class="fa-solid fa-utensils"></i></div>
-        }
-
-        <div class="cart-info">
-          <div class="cart-top">
-            <span class="cart-name">{{ line.food.name }}</span>
-            <button type="button" class="icon-btn" title="Remove" (click)="removeLine(line)">
-              <i class="fa-regular fa-trash-can"></i>
-            </button>
-          </div>
-
-          <div class="cart-bottom">
-            <label>
-              Qty.
-              <input
-                type="number"
-                min="1"
-                [ngModel]="line.quantity"
-                (ngModelChange)="setQuantity(line, $event)"
-              />
-            </label>
-            <span class="cart-price">Price: {{ line.food.finalPrice * line.quantity }} ৳</span>
-          </div>
-        </div>
-      </div>
-    } @empty {
-      <div class="empty">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <p>Your cart is empty</p>
-      </div>
-    }
-  </div>
-
-  <div class="drawer-foot">
-    <div class="subtotal">
-      <span>Sub-Total</span>
-      <strong>{{ subTotal }} ৳</strong>
-    </div>
-
-    <div class="checkout">
-      @if (selectedTable) {
-        <p class="for-table">
-          Table: <strong>{{ selectedTable.number }}</strong>
-        </p>
-      }
-
-      @if (cartError) {
-        <div class="notice error">{{ cartError }}</div>
-      }
-
-      <label class="phone-label">Phone Number (Optional)</label>
-      <input
-        type="tel"
-        class="phone-input"
-        placeholder="Enter customer phone number"
-        [(ngModel)]="phone"
-      />
-
-      <button type="button" class="confirm-btn" (click)="confirmOrder()" [disabled]="placing">
-        {{ placing ? 'Placing order...' : 'Confirm Order' }}
-      </button>
-    </div>
-  </div>
-</aside>

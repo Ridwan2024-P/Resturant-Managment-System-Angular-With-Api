@@ -2,14 +2,12 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
-
 import { FoodService } from '../services/food.service';
 import { TableService } from '../services/Tables.service';
-import { OrderPayload, OrderService } from '../services/orders.service';
+import { CartService } from '../services/cart.service';
 
 interface TableCard {
   id: number;
@@ -28,11 +26,6 @@ interface FoodCard {
   image?: string;
 }
 
-interface CartLine {
-  food: FoodCard;
-  quantity: number;
-}
-
 const API_HOST = 'https://bssrms.runasp.net';
 const FOOD_IMAGE_FOLDER = '/images/food/';
 const TABLE_IMAGE_FOLDER = '/images/table/';
@@ -47,26 +40,18 @@ const TABLE_IMAGE_FOLDER = '/images/table/';
 export class NewOrder implements OnInit {
   private readonly foodService = inject(FoodService);
   private readonly tableService = inject(TableService);
-  private readonly orderService = inject(OrderService);
+  readonly cart = inject(CartService);
   private readonly cdr = inject(ChangeDetectorRef);
 
   loadingTables = true;
   loadingFoods = true;
-  placing = false;
 
   errorMessage = '';
-  cartError = '';
-  successMessage = '';
 
   tables: TableCard[] = [];
   foods: FoodCard[] = [];
 
-  selectedTableId: number | null = null;
   search = '';
-
-  cart: CartLine[] = [];
-  cartOpen = false;
-  phone = '';
 
   failedImages = new Set<string>();
 
@@ -193,9 +178,16 @@ export class NewOrder implements OnInit {
     return error.status === 401 ? 'Unauthorized. Please log in again.' : fallback;
   }
 
+  get selectedTableId(): number | null {
+    return this.cart.selectedTable()?.id ?? null;
+  }
+
+  get successMessage(): string {
+    return this.cart.successMessage();
+  }
+
   selectTable(table: TableCard): void {
-    this.selectedTableId = table.id;
-    this.cartError = '';
+    this.cart.selectTable({ id: table.id, number: table.number });
   }
 
   get selectedTable(): TableCard | undefined {
@@ -219,138 +211,8 @@ export class NewOrder implements OnInit {
     this.cdr.detectChanges();
   }
 
-  get cartCount(): number {
-    return this.cart.reduce((sum, l) => sum + l.quantity, 0);
-  }
-
-  get subTotal(): number {
-    return this.cart.reduce((sum, l) => sum + l.food.finalPrice * l.quantity, 0);
-  }
-
   addToCart(food: FoodCard): void {
-    const line = this.cart.find((l) => l.food.id === food.id);
-
-    if (line) line.quantity++;
-    else this.cart.push({ food, quantity: 1 });
-
-    this.successMessage = '';
-    this.cartError = '';
-  }
-
-  setQuantity(line: CartLine, value: number | string): void {
-    const n = Math.floor(Number(value));
-    line.quantity = Number.isFinite(n) && n >= 1 ? n : 1;
-  }
-
-  removeLine(line: CartLine): void {
-    this.cart = this.cart.filter((l) => l !== line);
-  }
-
-  openCart(): void {
-    this.cartError = '';
-    this.cartOpen = true;
-  }
-
-  closeCart(): void {
-    if (this.placing) return;
-    this.cartOpen = false;
-  }
-
-  private makeOrderNumber(table: TableCard): string {
-    const now = new Date();
-    const yy = String(now.getFullYear()).slice(-2);
-    const mm = String(now.getMonth() + 1).padStart(2, '0');
-    const dd = String(now.getDate()).padStart(2, '0');
-    const rand = String(Math.floor(Math.random() * 10000)).padStart(4, '0');
-    return `${yy}${mm}${dd}-${table.number.replace(/\s+/g, '')}-${rand}`;
-  }
-
-  confirmOrder(): void {
-    this.cartError = '';
-
-    if (this.placing) return;
-
-    const table = this.selectedTable;
-
-    if (!table) {
-      this.cartError = 'Please select a table first.';
-      return;
-    }
-
-    if (!this.cart.length) {
-      this.cartError = 'Your cart is empty.';
-      return;
-    }
-
-    if (!Number.isFinite(table.id) || this.cart.some((l) => !Number.isFinite(l.food.id))) {
-      this.cartError =
-        'Table or food ID is missing from the API response, so the order cannot be sent.';
-      return;
-    }
-
-    const phone = this.phone.trim();
-
-    const payload: OrderPayload = {
-      tableId: table.id,
-      orderNumber: this.makeOrderNumber(table),
-      amount: Math.round(this.subTotal * 100) / 100,
-      items: this.cart.map((l) => ({
-        foodId: l.food.id,
-        quantity: l.quantity,
-        unitPrice: l.food.finalPrice,
-        totalPrice: Math.round(l.food.finalPrice * l.quantity * 100) / 100,
-      })),
-    };
-
-    if (phone) payload.phoneNumber = phone;
-
-    this.placing = true;
-
-    this.orderService.createOrder(payload).subscribe({
-      next: () => {
-        this.placing = false;
-        this.cartOpen = false;
-        this.cart = [];
-        this.phone = '';
-        this.errorMessage = '';
-        this.successMessage = `Order ${payload.orderNumber} placed for table ${table.number}.`;
-        this.cdr.detectChanges();
-
-        setTimeout(() => {
-          this.successMessage = '';
-          this.cdr.detectChanges();
-        }, 5000);
-      },
-      error: (error: HttpErrorResponse) => {
-        console.error('CREATE ORDER ERROR:', error.status, error.error);
-        console.error('ORDER PAYLOAD SENT:', payload);
-        this.placing = false;
-        this.cartError = this.orderErrorText(error);
-        this.cdr.detectChanges();
-      },
-    });
-  }
-
-  private orderErrorText(error: HttpErrorResponse): string {
-    if (error.status === 0) return 'Cannot reach the server. Check your internet connection.';
-    if (error.status === 401) return 'Unauthorized. Please log in again.';
-
-    const body: any = error.error;
-
-    if (typeof body === 'string' && body.trim()) return body.slice(0, 300);
-
-    if (body?.errors && typeof body.errors === 'object') {
-      const first = Object.entries(body.errors)[0] as [string, any];
-      if (first) {
-        const msg = Array.isArray(first[1]) ? first[1][0] : first[1];
-        return `${first[0]}: ${msg}`;
-      }
-    }
-
-    const message = body?.message ?? body?.title ?? body?.error ?? body?.detail;
-    if (message) return `${message} (HTTP ${error.status})`;
-
-    return `Could not place the order (HTTP ${error.status}). Open the browser console for details.`;
+    this.cart.add(food);
   }
 
   selectNav(_id: string): void {}

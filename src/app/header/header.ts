@@ -1,17 +1,23 @@
-import { Component, ElementRef, HostListener, Input, OnInit, computed, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  HostListener,
+  Input,
+  OnInit,
+  computed,
+  inject,
+} from '@angular/core';
 
 import { Router } from '@angular/router';
 import { HlmSidebarImports, HlmSidebarService } from '@spartan-ng/helm/sidebar';
-
 import { AdminHeaderService } from '../services/admin-header.service';
-
-
-
+import { CartService } from '../services/cart.service';
+import { Cart } from '../cart/cart';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [HlmSidebarImports],
+  imports: [HlmSidebarImports, Cart],
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
@@ -20,8 +26,9 @@ export class Header implements OnInit {
   private host = inject(ElementRef<HTMLElement>);
   private adminHeaderService = inject(AdminHeaderService);
   private sidebarService = inject(HlmSidebarService);
-    @Input() title = '';
- 
+  @Input() title = '';
+  @Input() showCart = true;
+  private cart = inject(CartService);
   private readonly routeTitles: Record<string, string> = {
     dashboard: 'Dashboard',
     employee: 'Employee Management',
@@ -33,15 +40,13 @@ export class Header implements OnInit {
     report: 'Report & Analytics',
     profile: 'My Profile',
   };
- 
-  /** Page title shown in the header, e.g. "Employee Management" on the Employee page. */
+
   get pageTitle(): string {
     if (this.title) return this.title;
- 
+
     const segment = this.router.url.split(/[?#]/)[0].split('/').filter(Boolean)[0] ?? '';
     return this.routeTitles[segment] ?? 'Dashboard';
   }
- 
 
   collapsed = computed(
     () => !this.sidebarService.isMobile() && this.sidebarService.state() === 'collapsed',
@@ -57,26 +62,22 @@ export class Header implements OnInit {
   get initials(): string {
     return this.adminHeaderService.getInitials();
   }
- private loadUser(): void {
+  private loadUser(): void {
+    const user = this.adminHeaderService.getUser();
 
-  const user =
-    this.adminHeaderService.getUser();
+    if (!user) {
+      this.userName = 'User';
+      this.avatarUrl = '';
 
-  if (!user) {
+      return;
+    }
 
-    this.userName = 'User';
-    this.avatarUrl = '';
+    this.userName = user.fullName;
 
-    return;
+    this.avatarUrl = user.image ?? '';
+
+    this.imageFailed = false;
   }
-
-  this.userName = user.fullName;
-
-  this.avatarUrl =
-    user.image ?? '';
-
-  this.imageFailed = false;
-}
 
   toggleMenu(): void {
     this.menuOpen = !this.menuOpen;
@@ -102,6 +103,7 @@ export class Header implements OnInit {
 
   logout(): void {
     this.adminHeaderService.clearUser();
+    this.cart.reset();
     localStorage.clear();
     this.router.navigate(['/login']);
   }
