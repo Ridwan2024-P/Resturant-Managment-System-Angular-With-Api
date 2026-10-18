@@ -13,7 +13,7 @@
 
     <div class="page-body">
       @if (successMessage) {
-        <div class="notice success">{{ successMessage }}</div>
+        <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ successMessage }}</div>
       }
 
       @if (errorMessage && !showModal) {
