@@ -146,52 +146,6 @@ app-header {
 }
 
 
-.add-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 9px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--theme-primary-border);
-  background: var(--theme-primary-addbutton-background);
-  color: var(--theme-primary-addbutton-color);
-  font-size: 13px;
-  font-weight: 600;
-  text-transform: none;
-  letter-spacing: 0;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.add-btn:hover {
-  background: var( --theme-primary-addbutton-hover);
-}
-
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.icon-btn {
-  width: 36px;
-  height: 36px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #eeeeee;
-  border-radius: 8px;
-  background: #ffffff;
-  color: #3a3a4a;
-  cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-}
-.icon-btn:hover {
-  color: var(--theme-primary);
-  border-color: var( --theme-primary-hover);
-}
-.icon-btn.danger:hover {
-  color: var( --theme-primary-hover);
-}
 
 
 .empty {
