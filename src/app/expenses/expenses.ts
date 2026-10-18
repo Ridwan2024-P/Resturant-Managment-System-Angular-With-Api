@@ -2,11 +2,11 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
 import { ExpensePayload, ExpenseService } from '../services/expenses.service';
+import { ConfirmService } from '../services/confirm.service';
 
 interface ExpenseRow {
   id: string | number | null;
@@ -36,8 +36,8 @@ interface ExpenseForm {
 export class Expenses implements OnInit {
   private readonly service = inject(ExpenseService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly confirmDialog = inject(ConfirmService);
 
-  // Change this list to match the categories your API accepts.
   categories = ['Ingredients', 'Salary', 'Utilities', 'Rent', 'Maintenance', 'Other'];
 
   loading = true;
@@ -62,8 +62,6 @@ export class Expenses implements OnInit {
   ngOnInit(): void {
     this.loadExpenses();
   }
-
-  /* ---------------- helpers ---------------- */
 
   private pick(obj: any, keys: string[]): any {
     if (!obj || typeof obj !== 'object') return undefined;
@@ -114,8 +112,6 @@ export class Expenses implements OnInit {
       raw: e,
     };
   }
-
-  /* ---------------- list / paging ---------------- */
 
   loadExpenses(): void {
     this.loading = true;
@@ -182,8 +178,6 @@ export class Expenses implements OnInit {
     this.loadExpenses();
   }
 
-  /* ---------------- modal / form ---------------- */
-
   private emptyForm(): ExpenseForm {
     return { title: '', amount: '', category: '', expenseDate: '', notes: '' };
   }
@@ -203,7 +197,6 @@ export class Expenses implements OnInit {
       return;
     }
 
-    // Make sure an unknown category from the API still shows in the dropdown.
     if (exp.category && exp.category !== '-' && !this.categories.includes(exp.category)) {
       this.categories = [...this.categories, exp.category];
     }
@@ -235,7 +228,6 @@ export class Expenses implements OnInit {
     return !value;
   }
 
-  /** Message shown under a field after the form was submitted with an invalid value. */
   errorText(field: keyof ExpenseForm): string {
     const value = String(this.form[field] ?? '').trim();
 
@@ -317,13 +309,18 @@ export class Expenses implements OnInit {
     });
   }
 
-  remove(exp: ExpenseRow): void {
+  async remove(exp: ExpenseRow): Promise<void> {
     if (exp.id === null || exp.id === undefined || exp.id === '') {
       this.errorMessage = 'Cannot delete this expense because the API response has no ID.';
       return;
     }
 
-    if (!confirm(`Delete ${exp.title}?`)) return;
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete expense?',
+      message: `Are you sure you want to delete ${exp.title}? This cannot be undone.`,
+    });
+
+    if (!confirmed) return;
 
     this.errorMessage = '';
     this.successMessage = '';

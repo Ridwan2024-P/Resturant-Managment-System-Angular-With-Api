@@ -2,12 +2,12 @@ import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
-
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
 
 import { DiscountType, FoodPayload, FoodService } from '../services/food.service';
+import { ConfirmService } from '../services/confirm.service';
 
 interface FoodRow {
   id: string | number | null;
@@ -42,6 +42,7 @@ const IMAGE_FOLDER = '/images/food/';
 export class Foods implements OnInit {
   private readonly service = inject(FoodService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly confirmDialog = inject(ConfirmService);
 
   loading = true;
   saving = false;
@@ -320,7 +321,6 @@ export class Foods implements OnInit {
     return false;
   }
 
-  /** Message shown under a field after the form was submitted with an invalid value. */
   errorText(field: keyof FoodForm): string {
     const value = String(this.form[field] ?? '').trim();
 
@@ -449,13 +449,18 @@ export class Foods implements OnInit {
     }
   }
 
-  remove(food: FoodRow): void {
+  async remove(food: FoodRow): Promise<void> {
     if (food.id === null || food.id === undefined || food.id === '') {
       this.errorMessage = 'Cannot delete this food item because the API response has no ID.';
       return;
     }
 
-    if (!confirm(`Delete ${food.name}?`)) return;
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete food item?',
+      message: `Are you sure you want to delete ${food.name}? This cannot be undone.`,
+    });
+
+    if (!confirmed) return;
 
     this.errorMessage = '';
     this.successMessage = '';

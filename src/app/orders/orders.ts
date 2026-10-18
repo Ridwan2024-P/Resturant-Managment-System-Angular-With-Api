@@ -4,14 +4,13 @@ import { FormsModule } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
-
 import { FoodService } from '../services/food.service';
 import { OrderPayload, OrderService } from '../services/orders.service';
 import { TableService } from '../services/Tables.service';
+import { ConfirmService } from '../services/confirm.service';
 
 interface OrderItemView {
   foodId: number | null;
@@ -65,6 +64,7 @@ export class Orders implements OnInit {
   private readonly foodService = inject(FoodService);
   private readonly tableService = inject(TableService);
   private readonly cdr = inject(ChangeDetectorRef);
+  private readonly confirmDialog = inject(ConfirmService);
 
   readonly statuses = STATUSES;
 
@@ -442,8 +442,13 @@ export class Orders implements OnInit {
     });
   }
 
-  remove(order: OrderView): void {
-    if (!confirm(`Delete order ${order.orderNumber}?`)) return;
+  async remove(order: OrderView): Promise<void> {
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Delete order?',
+      message: `Are you sure you want to delete order ${order.orderNumber}? This cannot be undone.`,
+    });
+
+    if (!confirmed) return;
 
     this.errorMessage = '';
 
