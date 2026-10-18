@@ -630,7 +630,7 @@ app-sidebar.is-mobile {
   }
 
   .page-body {
-    padding: 16px 12px 24px;
+    padding: 16px 12px 24px !important;
   }
 
   .top-grid,
