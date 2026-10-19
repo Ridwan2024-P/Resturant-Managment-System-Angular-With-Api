@@ -14,6 +14,9 @@ interface AssignedEmployee {
   id: string | null;
   name: string;
   image?: string;
+  /** id of the "employee <-> table" row itself. DELETE /api/EmployeeTable/delete/{id} expects this one. */
+  assignmentId?: string | null;
+  raw?: any;
 }
 
 interface TableRow {
@@ -76,6 +79,8 @@ export class Tables implements OnInit {
   assignTable: TableRow | null = null;
   assignLoading = false;
   assignError = '';
+  /** id of the employee currently being removed from the table (shows a spinner on its button). */
+  removingId: string | null = null;
   allEmployees: AssignedEmployee[] = [];
   alreadyAssigned = new Set<string>();
   selectedEmployees = new Set<string>();
@@ -183,10 +188,18 @@ export class Tables implements OnInit {
 
     const id = this.pick(e, ['id', 'employeeId', 'empId']) ?? this.pick(item, ['employeeId']);
 
+    // When the table sends "employee-table" rows ({ id, employeeId, tableId, employee: {...} })
+    // the row's own id is what the delete endpoint needs.
+    const assignment =
+      this.pick(item, ['employeeTableId', 'employeeTableID', 'tableEmployeeId']) ??
+      (item?.employee ? this.pick(item, ['id']) : undefined);
+
     return {
       id: id !== undefined ? String(id) : null,
       name: name || 'Employee',
       image: this.imageUrl(rawImage, USER_IMAGE_FOLDER),
+      assignmentId: assignment !== undefined ? String(assignment) : null,
+      raw: item,
     };
   }
 
@@ -674,7 +687,7 @@ export class Tables implements OnInit {
         message:
           `Table ${table.tableNumber} has ${assigned.length} assigned employee` +
           `${assigned.length > 1 ? 's' : ''}${names ? ` (${names})` : ''}, ` +
-          'so it cannot be deleted.',
+          'so it cannot be deleted. Remove them first (use the + button on the table).',
       });
       return;
     }
@@ -774,6 +787,61 @@ export class Tables implements OnInit {
     } else {
       this.selectedEmployees.add(id);
     }
+  }
+
+  /** Removes an already assigned employee from the table that is open in the assign dialog. */
+  async removeEmployee(employee: AssignedEmployee): Promise<void> {
+    const table = this.assignTable;
+
+    if (!table || !employee.id || this.removingId || this.saving) {
+      return;
+    }
+
+    const confirmed = await this.confirmDialog.confirm({
+      title: 'Remove employee?',
+      message: `Remove ${employee.name} from table ${table.tableNumber}?`,
+      confirmText: 'Remove',
+    });
+
+    if (!confirmed) {
+      return;
+    }
+
+    this.removingId = employee.id;
+    this.assignError = '';
+
+    // the id the API wants: the "employee-table" row id when we have it, else the employee id
+    const assigned = table.employees.find((e) => e.id === employee.id);
+    const deleteId = assigned?.assignmentId ?? employee.id;
+
+    this.service.unassignEmployee(deleteId).subscribe({
+        next: () => {
+          this.removingId = null;
+
+          // the employee is free again: not "assigned" any more, can be picked again
+          this.alreadyAssigned.delete(employee.id!);
+          table.employees = table.employees.filter((e) => e.id !== employee.id);
+
+          this.flash(`${employee.name} removed from table ${table.tableNumber}.`);
+          this.loadTables();
+        },
+
+        error: (error: HttpErrorResponse) => {
+          console.error('REMOVE EMPLOYEE ERROR:', error, error.error);
+          console.error('REMOVE EMPLOYEE: sent DELETE EmployeeTable/delete/' + deleteId, {
+            assignmentId: assigned?.assignmentId,
+            employeeId: employee.id,
+            rawItem: assigned?.raw,
+          });
+
+          this.removingId = null;
+          this.assignError = this.errorText(
+            error,
+            'Could not remove the employee. Please try again.',
+          );
+          this.cdr.detectChanges();
+        },
+      });
   }
 
   saveAssign(): void {

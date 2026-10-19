@@ -295,6 +295,21 @@
 
                 @if (alreadyAssigned.has(e.id!)) {
                   <em>assigned</em>
+
+                  <button
+                    type="button"
+                    class="remove-assigned"
+                    title="Remove from this table"
+                    aria-label="Remove {{ e.name }} from this table"
+                    [disabled]="removingId === e.id || saving"
+                    (click)="$event.stopPropagation(); removeEmployee(e)"
+                  >
+                    @if (removingId === e.id) {
+                      <i class="fa-solid fa-spinner fa-spin"></i>
+                    } @else {
+                      <i class="fa-regular fa-trash-can"></i>
+                    }
+                  </button>
                 }
               </li>
             } @empty {

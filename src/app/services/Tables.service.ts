@@ -85,4 +85,10 @@ export class TableService {
       headers: this.getHeaders(),
     });
   }
+
+  unassignEmployee(id: string | number): Observable<any> {
+    return this.http.delete<any>(`${this.EMP_TABLE_URL}/delete/${encodeURIComponent(String(id))}`, {
+      headers: this.getHeaders(),
+    });
+  }
 }
