@@ -282,33 +282,116 @@ app-sidebar.is-mobile {
 }
 
 /* ---------- empty / skeleton ---------- */
-.empty {
-  text-align: center;
-  padding: 50px 0 !important;
-  color: #a0a0ad;
-}
-.empty i {
-  font-size: 30px;
-  margin-bottom: 8px;
-}
-.empty p {
-  margin: 0;
-}
 
 .skeleton-row td {
   height: 64px;
-  background: linear-gradient(90deg, #f4f4f7 25%, #ececf1 37%, #f4f4f7 63%);
-  background-size: 400% 100%;
-  animation: shimmer 1.3s ease infinite;
+  padding: 12px 16px;
+  vertical-align: middle;
+  border-bottom: 1px solid #f0f0f4;
 }
-@keyframes shimmer {
+
+.skeleton {
+  display: block;
+  flex-shrink: 0;
+  background: linear-gradient(
+    90deg,
+    #f2f3f7 0%,
+    #e6e8ef 50%,
+    #f2f3f7 100%
+  );
+  background-size: 200% 100%;
+  animation: employee-shimmer 1.5s ease-in-out infinite;
+  border-radius: 6px;
+}
+
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+
+.skeleton-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.skeleton-name-main {
+  width: 105px;
+  max-width: 70%;
+  height: 13px;
+}
+
+.skeleton-star {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+
+.skeleton-email {
+  width: 150px;
+  max-width: 90%;
+  height: 13px;
+}
+
+
+.skeleton-designation {
+  width: 95px;
+  max-width: 85%;
+  height: 13px;
+}
+
+
+.skeleton-date {
+  width: 82px;
+  max-width: 90%;
+  height: 13px;
+}
+
+
+.skeleton-phone {
+  width: 100px;
+  max-width: 90%;
+  height: 13px;
+}
+
+
+.skeleton-actions {
+  display: flex;
+  align-items: right;
+  justify-content: end;
+  gap: 8px;
+}
+
+.skeleton-action {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+}
+
+
+@keyframes employee-shimmer {
   0% {
-    background-position: 100% 50%;
+    background-position: 100% 0;
   }
+
   100% {
-    background-position: 0 50%;
+    background-position: -100% 0;
   }
 }
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+    background: #eceef3;
+  }
+}
+
 
 /* ---------- pagination ---------- */
 .pagination {
