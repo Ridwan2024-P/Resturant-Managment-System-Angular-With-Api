@@ -5,8 +5,10 @@
     <app-header title="Create New Order"></app-header>
 
     <div class="page-body">
-      @if (successMessage) {
-        <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ successMessage }}</div>
+       @if (successMessage) {
+        @for (key of [toastKey]; track key) {
+          <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ successMessage }}</div>
+        }
       }
 
       @if (errorMessage) {

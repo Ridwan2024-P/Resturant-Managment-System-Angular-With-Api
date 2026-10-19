@@ -55,6 +55,12 @@ export class NewOrder implements OnInit {
 
   failedImages = new Set<string>();
 
+  /** Toast shown every time a food is added to the cart. */
+  addedMessage = '';
+  /** Changes on every add, so the toast is drawn fresh (and animates) on each click. */
+  toastKey = 0;
+  private addedTimer: ReturnType<typeof setTimeout> | null = null;
+
   ngOnInit(): void {
     this.loadTables();
     this.loadFoods();
@@ -182,8 +188,9 @@ export class NewOrder implements OnInit {
     return this.cart.selectedTable()?.id ?? null;
   }
 
+ 
   get successMessage(): string {
-    return this.cart.successMessage();
+    return this.addedMessage || this.cart.successMessage();
   }
 
   selectTable(table: TableCard): void {
@@ -213,6 +220,23 @@ export class NewOrder implements OnInit {
 
   addToCart(food: FoodCard): void {
     this.cart.add(food);
+
+    const quantity = this.cart.lines().find((l) => l.food.id === food.id)?.quantity ?? 1;
+    this.showAdded(`${food.name} added to cart${quantity > 1 ? ` (x${quantity})` : ''}.`);
+  }
+
+  private showAdded(message: string): void {
+    this.addedMessage = message;
+    this.toastKey++;
+
+    if (this.addedTimer) {
+      clearTimeout(this.addedTimer);
+    }
+
+    this.addedTimer = setTimeout(() => {
+      this.addedMessage = '';
+      this.cdr.detectChanges();
+    }, 2000);
   }
 
   selectNav(_id: string): void {}
