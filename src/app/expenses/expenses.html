@@ -136,7 +136,7 @@
 
         <div class="grid-2">
           <div class="field">
-            <label><span class="req">*</span> Title</label>
+            <label>Title<span class="req">*</span>  </label>
             <input
               type="text"
               placeholder="e.g. Monthly Rent, Vegetable Purchase"
@@ -149,7 +149,7 @@
           </div>
 
           <div class="field">
-            <label><span class="req">*</span> Amount (৳)</label>
+            <label> Amount (৳) <span class="req">*</span> </label>
             <input
               type="number"
               min="0"
@@ -163,7 +163,7 @@
           </div>
 
           <div class="field">
-            <label><span class="req">*</span> Category</label>
+            <label> Category <span class="req">*</span> </label>
             <select [(ngModel)]="form.category" [class.invalid]="invalid('category')">
               <option value="" disabled>Select a category</option>
               @for (c of categories; track c) {
@@ -176,7 +176,7 @@
           </div>
 
           <div class="field">
-            <label><span class="req">*</span> Expense Date</label>
+            <label> Expense Date <span class="req">*</span> </label>
             <input
               type="date"
               [(ngModel)]="form.expenseDate"
