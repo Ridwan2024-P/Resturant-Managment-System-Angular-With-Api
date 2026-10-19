@@ -3,14 +3,14 @@
 
   <main class="expense-main flex-1 min-w-0">
     <app-header title="Expense Management"></app-header>
-    @if (loading) {
+    <!-- @if (loading) {
       <div class="page-loader" role="status" aria-live="polite">
         <div class="spinner"></div>
         <p>Loading expenses...</p>
       </div>
-    }
+    } -->
     <div class="page-body">
-     @if (successMessage) {
+      @if (successMessage) {
         <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ successMessage }}</div>
       }
 
@@ -40,25 +40,62 @@
               @if (loading) {
                 @for (n of [1, 2, 3, 4, 5]; track n) {
                   <tr class="skeleton-row">
-                    <td colspan="6"></td>
+                    <td>
+                      <span class="skeleton skeleton-expense-title"></span>
+                    </td>
+
+                    <td>
+                      <span class="skeleton skeleton-expense-category"></span>
+                    </td>
+
+                    <td>
+                      <span class="skeleton skeleton-expense-amount"></span>
+                    </td>
+
+                    <td>
+                      <span class="skeleton skeleton-expense-date"></span>
+                    </td>
+
+                    <td>
+                      <div class="skeleton-notes">
+                        <span class="skeleton skeleton-note-main"></span>
+                        <span class="skeleton skeleton-note-sub"></span>
+                      </div>
+                    </td>
+
+                    <td class="col-actions">
+                      <div class="skeleton-actions">
+                        <span class="skeleton skeleton-action"></span>
+                        <span class="skeleton skeleton-action"></span>
+                      </div>
+                    </td>
                   </tr>
                 }
               } @else {
                 @for (exp of expenses; track $index) {
                   <tr>
                     <td class="title-cell">{{ exp.title }}</td>
+
                     <td>
                       <span class="chip">{{ exp.category }}</span>
                     </td>
+
                     <td class="amount-cell">৳ {{ exp.amount }}</td>
-                    <td>{{ exp.date ? (exp.date | date: 'MMM d, y') : '-' }}</td>
-                    <td class="notes-cell" [title]="exp.notes">{{ exp.notes || '-' }}</td>
+
+                    <td>
+                      {{ exp.date ? (exp.date | date: 'MMM d, y') : '-' }}
+                    </td>
+
+                    <td class="notes-cell" [title]="exp.notes">
+                      {{ exp.notes || '-' }}
+                    </td>
 
                     <td class="col-actions">
                       <div class="actions">
                         <button type="button" class="icon-btn" title="Edit" (click)="openEdit(exp)">
                           <i class="fa-regular fa-pen-to-square"></i>
                         </button>
+
                         <button
                           type="button"
                           class="icon-btn danger"
@@ -136,7 +173,7 @@
 
         <div class="grid-2">
           <div class="field">
-            <label>Title<span class="req">*</span>  </label>
+            <label>Title<span class="req">*</span> </label>
             <input
               type="text"
               placeholder="e.g. Monthly Rent, Vegetable Purchase"

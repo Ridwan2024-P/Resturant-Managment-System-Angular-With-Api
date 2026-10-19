@@ -3,15 +3,15 @@
 
   <main class="table-main flex-1 min-w-0">
     <app-header title="Table Management"></app-header>
-     @if (loading) {
+    <!-- @if (loading) {
       <div class="page-loader" role="status" aria-live="polite">
         <div class="spinner"></div>
         <p>Loading tables...</p>
       </div>
-    }
+    } -->
 
     <div class="page-body">
-     @if (successMessage) {
+      @if (successMessage) {
         <div class="toast"><i class="fa-regular fa-circle-check"></i> {{ successMessage }}</div>
       }
       @if (errorMessage && !showModal) {
@@ -40,7 +40,43 @@
               @if (loading) {
                 @for (n of [1, 2, 3, 4, 5]; track n) {
                   <tr class="skeleton-row">
-                    <td colspan="6"></td>
+                  
+                    <td class="col-avatar">
+                      <span class="skeleton skeleton-avatar"></span>
+                    </td>
+
+                  
+                    <td>
+                      <span class="skeleton skeleton-number"></span>
+                    </td>
+
+                    
+                    <td>
+                      <span class="skeleton skeleton-seats"></span>
+                    </td>
+
+                   
+                    <td>
+                      <span class="skeleton skeleton-status"></span>
+                    </td>
+
+                   
+                    <td>
+                      <div class="skeleton-emp-stack">
+                        <span class="skeleton skeleton-emp-avatar"></span>
+                        <span class="skeleton skeleton-emp-avatar"></span>
+                        <span class="skeleton skeleton-emp-avatar"></span>
+                        <span class="skeleton skeleton-emp-add"></span>
+                      </div>
+                    </td>
+
+                   
+                    <td class="col-actions">
+                      <div class="skeleton-actions">
+                        <span class="skeleton skeleton-action"></span>
+                        <span class="skeleton skeleton-action"></span>
+                      </div>
+                    </td>
                   </tr>
                 }
               } @else {
@@ -62,7 +98,9 @@
                     </td>
 
                     <td class="strong">{{ t.tableNumber }}</td>
+
                     <td>{{ t.seats }}</td>
+
                     <td>
                       <span
                         class="status"
@@ -165,7 +203,6 @@
   </main>
 </div>
 
-
 @if (showModal) {
   <div class="modal-backdrop" (click)="closeModal()">
     <div class="modal-box" (click)="$event.stopPropagation()">
@@ -195,7 +232,7 @@
                 [(ngModel)]="form.tableNumber"
                 [class.invalid]="invalid('tableNumber')"
               />
-                @if (invalid('tableNumber')) {
+              @if (invalid('tableNumber')) {
                 <small class="field-error">{{ fieldError('tableNumber') }}</small>
               }
             </div>
@@ -209,7 +246,7 @@
                 [(ngModel)]="form.numberOfSeats"
                 [class.invalid]="invalid('numberOfSeats')"
               />
-               @if (invalid('numberOfSeats')) {
+              @if (invalid('numberOfSeats')) {
                 <small class="field-error">{{ fieldError('numberOfSeats') }}</small>
               }
             </div>
