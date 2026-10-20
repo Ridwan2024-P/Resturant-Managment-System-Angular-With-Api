@@ -25,7 +25,6 @@ interface TopItem {
 }
 
 const API_HOST = 'https://bssrms.runasp.net';
-
 const IMAGE_FOLDER = '/images/food/';
 
 @Component({
@@ -70,10 +69,8 @@ export class Dashboard implements OnInit {
   totalTables = 0;
   tablesAvailable = 0;
   totalEmployees = 0;
-
   recentOrders: RecentOrder[] = [];
   topItems: TopItem[] = [];
-
   failedImages = new Set<string>();
 
   ngOnInit(): void {
@@ -87,16 +84,18 @@ export class Dashboard implements OnInit {
 
   loadDashboardStats(): void {
     const now = new Date();
-
     this.loading = true;
     this.errorMessage = '';
 
+    
     this.dashboardService.getDashboardStats(now.getMonth() + 1, now.getFullYear()).subscribe({
       next: (data: DashboardStats) => {
         this.applyStats(data);
         this.loading = false;
         this.cdr.detectChanges();
       },
+
+      
       error: (error: HttpErrorResponse) => {
         console.error('DASHBOARD STATS API ERROR:', error);
 

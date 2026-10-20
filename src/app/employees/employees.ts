@@ -5,7 +5,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { HlmSidebarImports } from '@spartan-ng/helm/sidebar';
 import { Sidebar } from '../sidebar/sidebar';
 import { Header } from '../header/header';
-
 import { EmployeeService, EmployeePayload } from '../services/employee.service';
 import { ConfirmService } from '../services/confirm.service';
 import { deleteErrorMessage } from '../alertbox/delete-error';
@@ -81,17 +80,12 @@ export class Employees implements OnInit {
 
     return /^(?:\+?88)?01[3-9]\d{8}$/.test(normalizedPhone);
   }
-
   failedImages = new Set<string>();
-
-  /** Truncated table cells the user clicked open (key = page-row-column). */
   openCells = new Set<string>();
 
   isCellOpen(row: number, column: string): boolean {
     return this.openCells.has(`${this.page}-${row}-${column}`);
   }
-
-  /** Click (or Enter) on a truncated cell, or on the star, shows / hides its full text. */
   toggleCell(row: number, column: string): void {
     const key = `${this.page}-${row}-${column}`;
 

@@ -152,9 +152,7 @@ export class Foods implements OnInit {
     this.service.getFoods(this.page, this.pageSize).subscribe({
       next: (response: any) => {
         const list = this.extractList(response);
-
         this.foods = list.filter((i: any) => i != null).map((i: any) => this.normalize(i));
-
         this.totalItems = Number(response?.total ?? this.foods.length);
         this.serverLastPage = Math.max(
           Number(response?.last_page ?? Math.ceil(this.totalItems / this.pageSize)),
